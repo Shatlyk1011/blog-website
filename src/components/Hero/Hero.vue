@@ -1,5 +1,5 @@
 <template>
-  <div class="hero">
+  <section class="hero">
     <div class="container">
       <div class="description">
         <h1>
@@ -7,17 +7,16 @@
           разработке
         </h1>
         <p>
-          Блог о веб разработке, дизайне и о многом другом. <br />
-          Просто о сложном!
+          Блог о веб разработке, дизайне и о многом другом. Просто о сложном!
         </p>
 
         <button class="btn">Перейти к постам</button>
       </div>
       <div class="img-container">
-        <img src="../../assets/images/hero.jpg" alt="" />
+        <img src="../../assets/images/hero.jpg" alt="Hero image" />
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

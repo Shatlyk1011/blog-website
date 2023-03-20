@@ -1,7 +1,9 @@
 <template>
   <div class="nav">
     <nav>
-      <div type="logo" class="logo">set-web</div>
+      <router-link :to="{ name: 'HomeView' }" type="logo" class="logo"
+        >set-web</router-link
+      >
       <ul>
         <li>Поиск</li>
         <li>Все посты</li>
