@@ -15,7 +15,7 @@ $color-gray-2: #495057;
 $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
-$ff-oswald: "Oswald", sans-serif;
+$ff-mserrat: "Montserrat", sans-serif;
 
 .footer {
   background-color: $color-gray-2;

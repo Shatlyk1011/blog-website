@@ -10,12 +10,15 @@ $color-gray-2: #495057;
 $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
-$ff-oswald: "Oswald", sans-serif;
+$ff-mserrat: "Montserrat", sans-serif;
 
 // transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
 
 /* 
 FONT-SIZES
+95.37px
+76.29px
+61px
 48.83px
 39.06px
 31.25px
@@ -43,4 +46,9 @@ body {
   box-sizing: border-box;
   background-color: $color-gray-1;
   color: $color-text;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
 }

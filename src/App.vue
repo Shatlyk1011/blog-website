@@ -23,5 +23,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .app {
   padding: 0 11rem;
+  max-width: 144rem; //??
+  margin: 0 auto;
 }
 </style>
