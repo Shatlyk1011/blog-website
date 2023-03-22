@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
 import PostView from "@/views/PostView.vue";
+import CreatePost from "@/views/CreatePost.vue";
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     path: "/post/:id",
     name: "PostView",
     component: PostView,
+  },
+  {
+    path: "/create-post",
+    name: "CreatePost",
+    component: CreatePost,
   },
 ];
 
