@@ -8,7 +8,6 @@ describe("Nav", () => {
       const allLists = screen.getAllByRole("listitem");
 
       const allListNames = allLists.map((i) => i.textContent);
-      console.log(allListNames);
       expect(allListNames).toEqual(["Поиск", "Все посты", "Обо мне"]);
     });
   });
