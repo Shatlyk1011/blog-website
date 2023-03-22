@@ -3,7 +3,7 @@
     <div class="container">
       <div class="description">
         <h1>
-          Все о <span>веб</span> <br />
+          Все о <span>{{ action }}</span> <br />
           разработке
         </h1>
         <p>
@@ -20,12 +20,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import nextElementList from "@/composables/nextElementList.ts";
+import { defineComponent, onBeforeMount, onBeforeUnmount, ref } from "vue";
 
 export default defineComponent({
   components: {},
   setup() {
-    return {};
+    const action = ref("веб");
+    let interval = ref();
+
+    const changeActionWord = () => {
+      interval.value = setInterval(() => {
+        const actions = ref(["веб", "дизайн", "лого?"]);
+        action.value = nextElementList(actions.value, action.value);
+        console.log("interval");
+      }, 2700);
+    };
+
+    onBeforeMount(changeActionWord);
+    onBeforeUnmount(() => {
+      clearInterval(interval.value);
+    });
+
+    return { action };
   },
 });
 </script>
@@ -49,7 +66,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   padding: 6rem 0rem;
   .container {
     display: flex;
-    gap: 6rem;
+    gap: 4.8rem;
     max-width: 120rem;
     margin: 0 auto;
     .description {
@@ -65,9 +82,10 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
       h1 {
         font-family: $ff-mserrat;
-        font-size: 7.63rem;
+        font-size: 6.1rem;
         font-weight: 600;
         line-height: 1;
+        letter-spacing: -2px;
         margin-left: -3px;
 
         span {

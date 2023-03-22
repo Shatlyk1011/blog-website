@@ -9,7 +9,11 @@
         <li>Все посты</li>
         <li>Обо мне</li>
       </ul>
+      <!-- show login-register or create-logout? -->
       <div class="btns">
+        <router-link class="link" :to="{ name: 'CreatePost' }"
+          >Создать блог</router-link
+        >
         <button>Войти</button>
       </div>
     </nav>
@@ -47,7 +51,7 @@ $ff-mserrat: "Montserrat", sans-serif;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 94rem;
+    max-width: 110rem;
     margin: 0 auto;
     padding: 1rem 3rem;
     .logo {
@@ -75,9 +79,17 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
 
     .btns {
+      display: flex;
+      gap: 2.4rem;
+      align-items: center;
+
+      .link {
+        background-color: $color-gray-2;
+        padding: 1rem;
+      }
       button {
-        align-items: center;
         padding: 1rem 3.2rem;
+        align-items: center;
         background-color: $color-main-1;
         line-height: 1.1;
       }
