@@ -89,7 +89,16 @@ $ff-mserrat: "Montserrat", sans-serif;
         margin-left: -3px;
 
         span {
-          color: $color-main-2;
+          font-size: 72px;
+          background: linear-gradient(180deg, $color-main-1, $color-main-2);
+          background: -webkit-linear-gradient(
+            180deg,
+            $color-main-1,
+            $color-main-2
+          );
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
       }
       p {
