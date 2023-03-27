@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import TipTap from "@/components/TipTap.vue";
+import TipTap from "@/components/TipTap/TipTap.vue";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
@@ -20,6 +20,5 @@ export default defineComponent({
   background-color: #ffe;
   color: #000;
   padding: 5rem;
-  background-color: brown;
 }
 </style>
