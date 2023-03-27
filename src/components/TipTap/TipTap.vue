@@ -1,8 +1,8 @@
 <template>
   <div class="toolbar">
-    <BaseToolsVue :editor="editor" />
+    <Tools :editor="editor" />
   </div>
-
+  <!-- Editor -->
   <editor-content class="editor" :editor="editor" />
 </template>
 
@@ -11,13 +11,14 @@ import { useEditor, EditorContent } from "@tiptap/vue-3";
 import Paragraph from "@tiptap/extension-paragraph";
 import StarterKit from "@tiptap/starter-kit";
 import Strike from "@tiptap/extension-strike";
+import Underline from "@tiptap/extension-underline";
 
-import BaseToolsVue from "@/components/TipTap/BaseTools.vue";
+import Tools from "@/components/TipTap/Tools.vue";
 
 export default {
   components: {
     EditorContent,
-    BaseToolsVue,
+    Tools,
   },
 
   setup() {
@@ -30,6 +31,11 @@ export default {
         Paragraph.configure({
           HTMLAttributes: {
             class: "custom-p",
+          },
+        }),
+        Underline.configure({
+          HTMLAttributes: {
+            class: "custom-underline",
           },
         }),
       ],
@@ -54,30 +60,32 @@ $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
-.ProseMirror {
-  height: 80rem;
-  outline: none;
-}
-.is-active {
-  color: red;
+
+.toolbar {
+  margin-bottom: 2.4rem;
 }
 
-.ProseMirror {
-  width: 100%;
-  height: 300px;
-}
+.editor {
+  color: $color-gray-1;
+  .ProseMirror {
+    outline: none;
+    height: 300px;
+    border: 1px solid $color-gray-3;
+    padding: 1.6rem;
+  }
 
-pre {
-  background-color: $color-gray-1;
-  border-radius: 6px;
-  color: $color-text;
-  padding: 1rem;
+  pre {
+    background-color: $color-gray-1;
+    border-radius: 6px;
+    color: $color-text;
+    padding: 1rem;
 
-  code {
-    color: inherit;
-    padding: 0;
-    background: none;
-    font-size: 1.4rem;
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 1.4rem;
+    }
   }
 }
 </style>

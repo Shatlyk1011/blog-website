@@ -1,6 +1,6 @@
 <template>
   <button class="btn">
-    <font-awesome-icon class="faIcon" :icon="faIcon" size="xs" />
+    <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
   </button>
 </template>
 
@@ -12,6 +12,11 @@ export default defineComponent({
     faIcon: {
       type: String,
       required: true,
+    },
+    size: {
+      type: String,
+      required: true,
+      default: "sm",
     },
   },
 
@@ -26,13 +31,18 @@ $color-gray-1: #212529;
 $color-gray-2: #495057;
 $color-gray-3: #868e96;
 
+$color-main-1: #d84f2a;
+
 .btn {
-  padding: 4px 6px;
   color: $color-gray-2;
 
   &:disabled {
     color: $color-gray-3;
     cursor: not-allowed;
   }
+}
+
+.isActive {
+  color: $color-main-1;
 }
 </style>
