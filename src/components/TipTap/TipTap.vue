@@ -12,6 +12,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import StarterKit from "@tiptap/starter-kit";
 import Strike from "@tiptap/extension-strike";
 import Underline from "@tiptap/extension-underline";
+import Image from "@tiptap/extension-image";
 
 import Tools from "@/components/TipTap/Tools.vue";
 
@@ -28,6 +29,7 @@ export default {
       extensions: [
         StarterKit,
         Strike,
+        Image,
         Paragraph.configure({
           HTMLAttributes: {
             class: "custom-p",
@@ -69,7 +71,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   color: $color-gray-1;
   .ProseMirror {
     outline: none;
-    height: 300px;
+    min-height: 300px;
     border: 1px solid $color-gray-3;
     padding: 1.6rem;
   }
@@ -86,6 +88,13 @@ $ff-mserrat: "Montserrat", sans-serif;
       background: none;
       font-size: 1.4rem;
     }
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
   }
 }
 </style>

@@ -2,16 +2,21 @@
   <div class="base-tools">
     <MarkTools :editor="editor" />
     <TextTools :editor="editor" />
+    <ImageTool :editor="editor" />
+    <RedoUndoTool :editor="editor" />
+    <p><span> Автор:</span> Шатлык. А</p>
   </div>
 </template>
 
 <script lang="ts">
 import MarkTools from "@/components/TipTap/MarkTools.vue";
 import TextTools from "@/components/TipTap/TextTools.vue";
+import ImageTool from "@/components/TipTap/ImageTool.vue";
+import RedoUndoTool from "@/components/TipTap/RedoUndoTool.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { TextTools, MarkTools },
+  components: { TextTools, MarkTools, ImageTool, RedoUndoTool },
   props: {
     editor: {
       required: true,
@@ -45,5 +50,19 @@ $ff-mserrat: "Montserrat", sans-serif;
   display: flex;
   gap: 5rem;
   padding: 1rem;
+}
+
+p {
+  // font-family: $ff-mserrat;
+  font-weight: 500;
+  color: $color-main-1;
+  font-size: 1.28rem;
+  align-self: center;
+  margin-left: auto;
+
+  span {
+    color: $color-gray-1;
+    font-weight: 700;
+  }
 }
 </style>

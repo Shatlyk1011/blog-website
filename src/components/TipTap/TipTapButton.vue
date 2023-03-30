@@ -15,7 +15,7 @@ export default defineComponent({
     },
     size: {
       type: String,
-      required: true,
+      required: false,
       default: "sm",
     },
   },

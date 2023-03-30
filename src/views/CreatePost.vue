@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import TipTap from "@/components/TipTap/TipTap.vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: { TipTap },
