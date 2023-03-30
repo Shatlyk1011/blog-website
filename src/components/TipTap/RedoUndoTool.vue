@@ -1,12 +1,12 @@
 <template>
   <div class="redo-undo">
     <TipTapButton
-      faIcon="fa-solid fa-backward-step"
+      faIcon="fa-solid fa-arrow-left"
       @click="editor ? editor.chain().focus().undo().run() : null"
       :disabled="editor ? !editor.can().chain().focus().undo().run() : null"
     />
     <TipTapButton
-      faIcon="fa-solid fa-forward-step"
+      faIcon="fa-solid fa-arrow-right"
       @click="editor ? editor.chain().focus().redo().run() : null"
       :disabled="editor ? !editor.can().chain().focus().redo().run() : null"
     />

@@ -1,6 +1,12 @@
 <template>
   <button class="btn">
-    <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
+    <font-awesome-icon
+      v-if="faIcon"
+      class="faIcon"
+      :icon="faIcon"
+      :size="size"
+    />
+    <slot />
   </button>
 </template>
 
@@ -11,7 +17,7 @@ export default defineComponent({
   props: {
     faIcon: {
       type: String,
-      required: true,
+      required: false,
     },
     size: {
       type: String,

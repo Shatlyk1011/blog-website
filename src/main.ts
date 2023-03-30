@@ -12,8 +12,9 @@ import {
   faParagraph,
   faListUl,
   faImage,
-  faStepBackward,
-  faStepForward,
+  faArrowLeft,
+  faArrowRight,
+  faListOl,
 } from "@fortawesome/free-solid-svg-icons";
 
 import router from "./router";
@@ -31,8 +32,9 @@ library.add(
   faParagraph,
   faListUl,
   faImage,
-  faStepBackward,
-  faStepForward
+  faArrowLeft,
+  faArrowRight,
+  faListOl
 );
 
 createApp(App)

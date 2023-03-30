@@ -13,6 +13,7 @@ import MarkTools from "@/components/TipTap/MarkTools.vue";
 import TextTools from "@/components/TipTap/TextTools.vue";
 import ImageTool from "@/components/TipTap/ImageTool.vue";
 import RedoUndoTool from "@/components/TipTap/RedoUndoTool.vue";
+
 import { defineComponent } from "vue";
 
 export default defineComponent({

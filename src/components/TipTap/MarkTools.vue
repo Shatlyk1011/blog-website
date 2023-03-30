@@ -26,15 +26,27 @@
     />
     <tip-tap-button
       faIcon="fa-solid fa-underline"
-      @click="editor.commands.toggleUnderline()"
+      @click="editor ? editor.chain().focus().toggleUnderline().run() : null"
       :class="{
-        isActive: editor ? editor.isActive() : null,
+        isActive: editor ? editor.isActive('underline') : null,
       }"
     />
     <tip-tap-button
       faIcon="fa-solid fa-code"
       @click="editor.chain().focus().toggleCodeBlock().run()"
       :class="{ isActive: editor ? editor.isActive('codeBlock') : null }"
+    />
+
+    <tip-tap-button
+      faIcon="fa-solid fa-list-ul"
+      @click="editor ? editor.commands.toggleBulletList() : null"
+      :class="{ isActive: editor ? editor.isActive('bulletList') : null }"
+    />
+
+    <tip-tap-button
+      faIcon="fa-solid fa-list-ol"
+      @click="editor ? editor.commands.toggleOrderedList() : null"
+      :class="{ isActive: editor ? editor.isActive('orderedList') : null }"
     />
   </div>
 </template>
@@ -53,10 +65,6 @@ export default defineComponent({
       type: Object,
     },
   },
-  async beforeCreate() {
-    await this.editor;
-  },
-
   setup() {
     return {};
   },

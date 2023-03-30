@@ -27,7 +27,13 @@ export default {
       content: "<p>Example Text</p>",
       autofocus: true,
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          bulletList: {
+            itemTypeName: "listItem",
+            keepMarks: true,
+            keepAttributes: true,
+          },
+        }),
         Strike,
         Image,
         Paragraph.configure({
@@ -96,5 +102,10 @@ $ff-mserrat: "Montserrat", sans-serif;
 
     object-fit: contain;
   }
+}
+
+ul,
+ol {
+  padding: 0 1rem;
 }
 </style>
