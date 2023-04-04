@@ -33,6 +33,6 @@ $ff-mserrat: "Montserrat", sans-serif;
   margin: 4.8rem auto;
   background-color: #ffe;
 
-  padding: 1rem;
+  padding: 2.4rem;
 }
 </style>

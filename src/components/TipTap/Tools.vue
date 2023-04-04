@@ -14,7 +14,7 @@ import TextTools from "@/components/TipTap/TextTools.vue";
 import ImageTool from "@/components/TipTap/ImageTool.vue";
 import RedoUndoTool from "@/components/TipTap/RedoUndoTool.vue";
 
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   components: { TextTools, MarkTools, ImageTool, RedoUndoTool },
@@ -23,9 +23,6 @@ export default defineComponent({
       required: true,
       type: Object,
     },
-  },
-  setup() {
-    return {};
   },
 });
 </script>

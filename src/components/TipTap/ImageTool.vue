@@ -34,4 +34,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.image-tool {
+  align-self: center;
+}
 </style>

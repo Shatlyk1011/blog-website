@@ -1,6 +1,6 @@
 <template>
   <div class="post-item">
-    <div class="container">
+    <!--     <div class="container">
       <div class="description">
         <div class="heading">Введение в Javascript</div>
         <ul class="tags">
@@ -24,15 +24,26 @@
       <div class="img-container">
         <img src="../../assets/images/sample2.jpg" alt="" />
       </div>
-    </div>
+    </div> -->
+    <div v-html="post.html"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+import Post from "../../assets/types/Post";
 
 export default defineComponent({
-  setup() {
+  name: "PostItem",
+  props: {
+    post: {
+      type: Object as PropType<Post>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    console.log(props.post);
     return {};
   },
 });
@@ -73,6 +84,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       .tags {
         display: flex;
         gap: 1rem;
+        list-style: none;
         .tag {
           padding: 6px 18px;
           background-color: $color-gray-2;

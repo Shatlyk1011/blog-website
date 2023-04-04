@@ -2,15 +2,16 @@
   <div class="single-posts">
     <div class="heading">{{ heading }}</div>
     <div class="container">
-      <PostItem />
-      <PostItem />
-      <PostItem />
+      <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import PostItem from "./PostItem.vue";
+
+import getCollection from "@/composables/getCollection.ts";
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -23,7 +24,8 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const { documents: posts } = getCollection("posts");
+    return { posts };
   },
 });
 </script>
