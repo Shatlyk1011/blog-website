@@ -2,23 +2,48 @@
   <div class="toolbar">
     <Tools :editor="editor" />
   </div>
-  <div id="base">
-    <input
-      id="title"
-      v-model="title"
-      type="text"
-      required
-      placeholder="Загаловок вашего поста..."
-    />
-    <label for="image">Выберите обложку (рекомендуем 5:2)</label>
-    <input id="image" type="file" required @input="handleImage" />
-  </div>
+  <form @submit.prevent="createPost">
+    <div id="base">
+      <input
+        id="title"
+        v-model="title"
+        type="text"
+        required
+        placeholder="Загаловок вашего поста..."
+      />
+      <label id="selectLabel" for="image" v-if="!imagePreviewUrl">
+        <span>Выберите обложку</span>
+        <input @input="handleImage" id="image" type="file" required />
+      </label>
+      <div class="imagePreview" v-if="imagePreviewUrl">
+        <img :src="imagePreviewUrl" alt="" />
+        <div class="options">
+          <label
+            id="changeLabel"
+            for="image"
+            class="options__btn options--change"
+            @input="handleImage"
+          >
+            <span>Изменить</span>
+            <input id="image" @input="handleImage" type="file" />
+          </label>
+          <button
+            class="options__btn options--delete"
+            @click="clearImageValues"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+      <div v-if="imageTypeError">{{ imageTypeError }}</div>
+    </div>
 
-  <button @click="showHtml">SHOW HTML</button>
-  <!-- Editor -->
-  <editor-content class="editor" :editor="editor" />
+    <button @click="showHtml">SHOW HTML</button>
+    <!-- Editor -->
+    <editor-content class="editor" :editor="editor" />
 
-  <button style="color: red" @click="createPost">create post</button>
+    <button style="color: red">create post</button>
+  </form>
 </template>
 
 <script lang="ts">
@@ -42,8 +67,13 @@ export default defineComponent({
 
   setup() {
     const { addDocument } = useDocument();
-    const title = ref("");
 
+    const title = ref("");
+    const imageTypeError = ref<string>();
+    let imagePreviewUrl = ref("");
+    let image = ref();
+
+    // editor configuration
     const editor = useEditor({
       content: "<p>Example Text</p>",
       autofocus: true,
@@ -70,7 +100,28 @@ export default defineComponent({
       ],
     });
 
-    const handleImage = () => {};
+    const allowedImageTypes = ["image/png", "image/jpeg", "image/gif"];
+    const handleImage = (e: Event) => {
+      let selected = e.target as HTMLInputElement;
+      if (
+        selected.files?.length &&
+        allowedImageTypes.includes(selected.files[0].type)
+      ) {
+        let img = selected.files[0];
+        image.value = img;
+        imagePreviewUrl.value = URL.createObjectURL(img);
+      } else {
+        imageTypeError.value = "Только png/jpen/gif форматы";
+        setTimeout(() => {
+          imageTypeError.value = "";
+        }, 2000);
+      }
+    };
+
+    const clearImageValues = () => {
+      image.value = null;
+      imagePreviewUrl.value = "";
+    };
 
     const showHtml = () => {
       console.log(editor.value?.getHTML());
@@ -83,7 +134,17 @@ export default defineComponent({
       }
     };
 
-    return { editor, createPost, title, handleImage, showHtml };
+    return {
+      editor,
+      createPost,
+      title,
+      handleImage,
+      showHtml,
+      image,
+      imageTypeError,
+      imagePreviewUrl,
+      clearImageValues,
+    };
   },
 });
 </script>
@@ -129,80 +190,92 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
   }
 
-  label {
-    color: $color-black;
-    background-color: $color-main-2;
-    padding: 6px 12px;
-    border-radius: 6px;
+  #selectLabel {
+    position: relative;
+
+    padding: 1rem 1.6rem;
+    border-radius: 4px;
     text-align: center;
     font-weight: 600;
-    font-size: 1.28rem;
+    font-size: 1.4rem;
     cursor: pointer;
+    color: $color-black;
+    background-color: $color-main-2;
 
     transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
 
     &:hover {
       background-color: $color-main-1;
     }
-  }
 
-  #image {
-    opacity: 0;
-    transform: translate(-100%);
-    position: absolute;
-  }
-}
-
-/* .editor {
-  color: $color-gray-1;
-  .ProseMirror {
-    outline: none;
-    min-height: 60vh;
-    border: 1px solid rgba($color-black, 0.2);
-    border-radius: 2px;
-    padding: 1.6rem;
-    font-family: $ff-roboto;
-    font-size: 2rem;
-
-    p {
-      margin: 6px 0;
-      line-height: 1.3;
+    span {
+      z-index: 10;
+      width: 100%;
     }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-      font-family: $ff-mserrat;
-      line-height: 1.1;
+    #image {
+      cursor: pointer;
+      // opacity: 0;
+      z-index: -1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
-
-  pre {
-    background-color: $color-gray-1;
-    border-radius: 6px;
-    color: $color-text;
-    padding: 1rem;
-
-    code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 1.4rem;
-    }
-  }
-
-  img {
-    max-width: 100%;
+  .imagePreview {
+    max-width: 20%;
     max-height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6.1rem;
 
-    object-fit: contain;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .options {
+      color: $color-gray-1;
+      display: flex;
+      gap: 2rem;
+
+      #changeLabel {
+        z-index: 10;
+        #image {
+          opacity: 0;
+          top: -100px;
+          left: 0;
+          position: absolute;
+          z-index: -2;
+        }
+      }
+
+      &__btn {
+        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        padding: 1rem;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      &--change {
+        border: 1px solid $color-gray-1;
+      }
+
+      &--delete {
+        color: $color-main-1;
+        border-radius: 2px;
+
+        &:hover {
+          background-color: $color-main-1;
+          color: $color-white;
+          box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.22);
+        }
+        &:active {
+          transform: translateY(4px) scale(0.98);
+        }
+      }
+    }
   }
 }
-
-ul,
-ol {
-  padding: 0 2rem;
-} */
 </style>
