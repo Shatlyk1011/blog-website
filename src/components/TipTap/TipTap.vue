@@ -1,20 +1,20 @@
 <template>
-  <div class="toolbar">
-    <Tools :editor="editor" />
-  </div>
   <form @submit.prevent="createPost">
     <div id="base">
-      <input
-        id="title"
-        v-model="title"
-        type="text"
-        required
-        placeholder="Загаловок вашего поста..."
-      />
-      <label id="selectLabel" for="image" v-if="!imagePreviewUrl">
+      <label id="coverSelect" for="image" v-if="!imagePreviewUrl">
         <span>Выберите обложку</span>
-        <input @input="handleImage" id="image" type="file" required />
+        <Input @input="handleImage" id="image" type="file" required />
       </label>
+
+      <Input
+        v-model="title"
+        placeholder="Загаловок вашего поста..."
+        id="title"
+        required
+      />
+      <div class="toolbar">
+        <Tools :editor="editor" />
+      </div>
       <div class="imagePreview" v-if="imagePreviewUrl">
         <img :src="imagePreviewUrl" alt="" />
         <div class="options">
@@ -25,7 +25,7 @@
             @input="handleImage"
           >
             <span>Изменить</span>
-            <input id="image" @input="handleImage" type="file" />
+            <Input @input="handleImage" id="image" type="file" />
           </label>
           <button
             class="options__btn options--delete"
@@ -35,10 +35,10 @@
           </button>
         </div>
       </div>
-      <div v-if="imageTypeError">{{ imageTypeError }}</div>
+      <div class="error" v-if="imageTypeError">{{ imageTypeError }}</div>
     </div>
 
-    <button @click="showHtml">SHOW HTML</button>
+    <button style="color: red" @click="showHtml">SHOW HTML</button>
     <!-- Editor -->
     <editor-content class="editor" :editor="editor" />
 
@@ -58,18 +58,20 @@ import Image from "@tiptap/extension-image";
 import { Post } from "@/assets/types/Post.ts";
 import useDocument from "@/composables/useDocument.ts";
 import Tools from "@/components/TipTap/Tools.vue";
+import Input from "@/components/Shared/Input.vue";
 
 export default defineComponent({
   components: {
     EditorContent,
     Tools,
+    Input,
   },
 
   setup() {
     const { addDocument } = useDocument();
 
     const title = ref("");
-    const imageTypeError = ref<string>();
+    const imageTypeError = ref<string>("");
     let imagePreviewUrl = ref("");
     let image = ref();
 
@@ -114,7 +116,7 @@ export default defineComponent({
         imageTypeError.value = "Только png/jpen/gif форматы";
         setTimeout(() => {
           imageTypeError.value = "";
-        }, 2000);
+        }, 3000);
       }
     };
 
@@ -164,115 +166,113 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
-.toolbar {
-  margin-bottom: 2.4rem;
-}
-
-#base {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-
-  input {
-    // all: unset;
-  }
-
-  #title {
-    padding: 1rem;
-    font-size: 2rem;
-    background-color: transparent;
-
-    &::placeholder {
-      font-family: $ff-mserrat;
-
-      font-weight: 500;
-    }
-  }
-
-  #selectLabel {
-    position: relative;
-
-    padding: 1rem 1.6rem;
-    border-radius: 4px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1.4rem;
-    cursor: pointer;
-    color: $color-black;
-    background-color: $color-main-2;
-
-    transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
-
-    &:hover {
-      background-color: $color-main-1;
-    }
-
-    span {
-      z-index: 10;
-      width: 100%;
-    }
-    #image {
-      cursor: pointer;
-      // opacity: 0;
-      z-index: -1;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-  .imagePreview {
-    max-width: 20%;
-    max-height: 100%;
+form {
+  #base {
     display: flex;
-    align-items: center;
-    gap: 6.1rem;
+    flex-direction: column;
+    gap: 2rem;
 
-    img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+    #coverSelect {
+      position: relative;
+      align-self: flex-start;
+      padding: 1rem 1.6rem;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: $color-black;
+      background-color: $color-main-2;
+
+      transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
+
+      &:hover {
+        background-color: $color-main-1;
+      }
+
+      span {
+        z-index: 10;
+        width: 100%;
+      }
+      #image {
+        cursor: pointer;
+        opacity: 0;
+        z-index: -1;
+        position: absolute;
+        top: 50%;
+        left: 90%;
+        transform: translate(-50%, -50%);
+      }
     }
 
-    .options {
-      color: $color-gray-1;
+    #title {
+      padding: 1rem;
+      font-size: 2rem;
+      background-color: transparent;
+
+      &::placeholder {
+        font-family: $ff-mserrat;
+
+        font-weight: 500;
+      }
+    }
+
+    .toolbar {
+      margin-top: 1.6rem;
+    }
+
+    .imagePreview {
+      max-width: 20%;
+      max-height: 100%;
       display: flex;
-      gap: 2rem;
+      align-items: center;
+      gap: 6.1rem;
 
-      #changeLabel {
-        z-index: 10;
-        #image {
-          opacity: 0;
-          top: -100px;
-          left: 0;
-          position: absolute;
-          z-index: -2;
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      .options {
+        color: $color-gray-1;
+        display: flex;
+        gap: 2rem;
+
+        #changeLabel {
+          z-index: 10;
+          #image {
+            opacity: 0;
+            top: -100px;
+            left: 0;
+            position: absolute;
+            z-index: -2;
+          }
         }
-      }
 
-      &__btn {
-        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-        padding: 1rem;
-        cursor: pointer;
-        user-select: none;
-      }
-
-      &--change {
-        border: 1px solid $color-gray-1;
-      }
-
-      &--delete {
-        color: $color-main-1;
-        border-radius: 2px;
-
-        &:hover {
-          background-color: $color-main-1;
-          color: $color-white;
-          box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.22);
+        &__btn {
+          transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+          padding: 1rem;
+          cursor: pointer;
+          user-select: none;
         }
-        &:active {
-          transform: translateY(4px) scale(0.98);
+
+        &--change {
+          border: 1px solid $color-gray-1;
+        }
+
+        &--delete {
+          color: $color-main-1;
+          border-radius: 2px;
+
+          &:hover {
+            background-color: $color-main-1;
+            color: $color-white;
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.22);
+          }
+          &:active {
+            transform: translateY(4px) scale(0.98);
+          }
         }
       }
     }

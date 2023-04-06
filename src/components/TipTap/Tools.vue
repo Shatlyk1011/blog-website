@@ -4,7 +4,7 @@
     <TextTools :editor="editor" />
     <ImageTool :editor="editor" />
     <RedoUndoTool :editor="editor" />
-    <p><span> Автор:</span> Шатлык. А</p>
+    <!-- options? -->
   </div>
 </template>
 
@@ -50,7 +50,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   padding: 1rem;
 }
 
-p {
+/* p {
   // font-family: $ff-mserrat;
   font-weight: 500;
   color: $color-main-1;
@@ -62,5 +62,5 @@ p {
     color: $color-gray-1;
     font-weight: 700;
   }
-}
+} */
 </style>
