@@ -1,6 +1,6 @@
 <template>
   <div class="post-item">
-    <!--     <div class="container">
+    <!-- <div class="container">
       <div class="description">
         <div class="heading">Введение в Javascript</div>
         <ul class="tags">

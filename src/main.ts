@@ -16,6 +16,7 @@ import {
   faArrowRight,
   faListOl,
   faImagePortrait,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 
 import router from "./router";
@@ -36,7 +37,8 @@ library.add(
   faArrowLeft,
   faArrowRight,
   faListOl,
-  faImagePortrait
+  faImagePortrait,
+  faEye
 );
 
 createApp(App)

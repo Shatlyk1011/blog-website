@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Hero from "@/components/Hero/Hero.vue";
-import Posts from "@/components/Posts/Posts.vue";
+import Posts from "@/components/LatestPosts/Posts.vue";
 
 export default defineComponent({
   name: "HomeView",

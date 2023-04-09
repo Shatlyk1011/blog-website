@@ -1,20 +1,26 @@
 <template>
   <div class="nav">
     <nav>
-      <router-link :to="{ name: 'HomeView' }" type="logo" class="logo"
+      <router-link :to="{ name: 'Home' }" type="logo" class="logo"
         >set-web</router-link
       >
       <ul>
-        <li>Поиск</li>
-        <li>Все посты</li>
-        <li>Обо мне</li>
+        <router-link class="link" to="#">Поиск</router-link>
+        <router-link class="link" to="/all-posts">Все посты</router-link>
+        <router-link class="link" to="#">Обо мне</router-link>
       </ul>
       <!-- show login-register or create-logout? -->
       <div class="btns">
-        <router-link class="link" :to="{ name: 'CreatePost' }"
+        <router-link class="create-btn" :to="{ name: 'CreatePost' }"
           >Создать блог</router-link
         >
-        <button>Войти</button>
+        <router-link class="login-btn" to="/signin" v-if="!user"
+          >Войти</router-link
+        >
+        <router-link class="profile-btn" to="/" v-if="user">
+          <p>{{ user.displayName }}</p>
+        </router-link>
+        <button class="logout-btn" @click="handleLogout">Logout</button>
       </div>
     </nav>
   </div>
@@ -23,9 +29,22 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+import getUser from "@/composables/getUser";
+import useLogout from "@/composables/useLogout";
+import router from "@/router";
+
 export default defineComponent({
   setup() {
-    return {};
+    const { user } = getUser();
+    const { logout, error, isPending } = useLogout();
+
+    const handleLogout = async () => {
+      await logout();
+      if (!error.value) {
+        router.push("/");
+      }
+    };
+    return { user, handleLogout };
   },
 });
 </script>
@@ -65,15 +84,16 @@ $ff-mserrat: "Montserrat", sans-serif;
       display: flex;
       align-items: center;
       gap: 2rem;
-      li {
+      .link {
         border-bottom: 1px solid transparent;
         padding: 4px 0;
         cursor: pointer;
 
-        transition: border-bottom 0.3s cubic-bezier(0.83, 0, 0.17, 1);
+        transition: border-bottom 0.2s cubic-bezier(0.83, 0, 0.17, 1);
         &:hover {
           border-bottom: 1px solid $color-main-1;
           color: $color-main-2;
+          font-weight: 500;
         }
       }
     }
@@ -83,15 +103,20 @@ $ff-mserrat: "Montserrat", sans-serif;
       gap: 2.4rem;
       align-items: center;
 
-      .link {
+      .create-btn {
         background-color: $color-gray-2;
         padding: 1rem;
       }
-      button {
+      .login-btn {
         padding: 1rem 3.2rem;
         align-items: center;
         background-color: $color-main-1;
         line-height: 1.1;
+      }
+      .profile-btn {
+        p {
+          color: $color-white;
+        }
       }
     }
   }

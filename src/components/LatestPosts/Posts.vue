@@ -1,6 +1,6 @@
 <template>
   <div class="single-posts">
-    <div class="heading">{{ heading }}</div>
+    <div class="heading">Последние посты</div>
     <div class="container">
       <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
@@ -8,21 +8,15 @@
 </template>
 
 <script lang="ts">
-import PostItem from "./PostItem.vue";
+import PostItem from "@/components/LatestPosts/PostItem.vue";
 
-import getCollection from "@/composables/getCollection.ts";
+import getCollection from "@/composables/getCollection";
 
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Post",
   components: { PostItem },
-  props: {
-    heading: {
-      required: true,
-      type: String,
-    },
-  },
   setup() {
     const { documents: posts } = getCollection("posts");
     return { posts };

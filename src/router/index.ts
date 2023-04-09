@@ -1,24 +1,36 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
-import PostView from "@/views/PostView.vue";
-import CreatePost from "@/views/CreatePost.vue";
+import AllPosts from "@/views/AllPostsView.vue";
+import CreatePostView from "@/views/CreatePostView.vue";
+import SigninView from "@/views/authentication/SigninView.vue";
+import SignupView from "@/views/authentication/SignupView.vue";
 
 const routes = [
   {
     path: "/",
-    name: "HomeView",
+    name: "Home",
     component: HomeView,
   },
   {
-    path: "/post/:id",
-    name: "PostView",
-    component: PostView,
+    path: "/all-posts/",
+    name: "AllPosts",
+    component: AllPosts,
   },
   {
     path: "/create-post",
     name: "CreatePost",
-    component: CreatePost,
+    component: CreatePostView,
+  },
+  {
+    path: "/signin",
+    name: "Signin",
+    component: SigninView,
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: SignupView,
   },
 ];
 
