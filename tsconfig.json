@@ -14,16 +14,10 @@
     "noEmit": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@": ["/src"]
-    }
+      "@/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "src/components/Hero/moveActionWord.js",
-    "src/components/Hero/moveActionWord.js"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
