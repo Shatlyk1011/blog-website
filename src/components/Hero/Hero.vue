@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import nextElementList from "@/composables/nextElementList.ts";
+import nextElementList from "@/composables/nextElementList";
 import { defineComponent, onBeforeMount, onBeforeUnmount, ref } from "vue";
 
 export default defineComponent({

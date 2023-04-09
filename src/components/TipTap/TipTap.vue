@@ -55,10 +55,10 @@ import Strike from "@tiptap/extension-strike";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 
-import { Post } from "@/assets/types/Post.ts";
-import useDocument from "@/composables/useDocument.ts";
+import useDocument from "@/composables/useDocument";
 import Tools from "@/components/TipTap/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
+import getInputImage from "@/composables/getInputImage";
 
 export default defineComponent({
   components: {
@@ -71,9 +71,6 @@ export default defineComponent({
     const { addDocument } = useDocument();
 
     const title = ref("");
-    const imageTypeError = ref<string>("");
-    let imagePreviewUrl = ref("");
-    let image = ref();
 
     // editor configuration
     const editor = useEditor({
@@ -102,23 +99,8 @@ export default defineComponent({
       ],
     });
 
-    const allowedImageTypes = ["image/png", "image/jpeg", "image/gif"];
-    const handleImage = (e: Event) => {
-      let selected = e.target as HTMLInputElement;
-      if (
-        selected.files?.length &&
-        allowedImageTypes.includes(selected.files[0].type)
-      ) {
-        let img = selected.files[0];
-        image.value = img;
-        imagePreviewUrl.value = URL.createObjectURL(img);
-      } else {
-        imageTypeError.value = "Только png/jpen/gif форматы";
-        setTimeout(() => {
-          imageTypeError.value = "";
-        }, 3000);
-      }
-    };
+    const { handleImage, image, imageTypeError, imagePreviewUrl } =
+      getInputImage();
 
     const clearImageValues = () => {
       image.value = null;
