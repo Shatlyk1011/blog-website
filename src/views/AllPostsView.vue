@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>все посты</div>
 </template>
 
 <script lang="ts">

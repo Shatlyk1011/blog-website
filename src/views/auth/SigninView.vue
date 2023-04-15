@@ -47,6 +47,7 @@ import Input from "@/components/Shared/Input.vue";
 
 import { ref } from "vue";
 import { defineComponent } from "vue";
+import router from "@/router";
 
 export default defineComponent({
   components: { Input },
@@ -59,6 +60,9 @@ export default defineComponent({
 
     const handleSignin = async () => {
       await login(email.value, password.value);
+      if (!error.value) {
+        router.push("/");
+      }
     };
 
     return { email, password, passwordBool, isPending, error, handleSignin };

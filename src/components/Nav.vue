@@ -11,23 +11,43 @@
       </ul>
       <!-- show login-register or create-logout? -->
       <div class="btns">
-        <router-link class="create-btn" :to="{ name: 'CreatePost' }"
-          >Создать блог</router-link
+        <router-link
+          v-if="user"
+          class="btn create-btn"
+          :to="{ name: 'CreatePost' }"
+          >Создать пост</router-link
         >
-        <router-link class="login-btn" to="/signin" v-if="!user"
+        <router-link class="btn login-btn" to="/signup" v-if="!user"
           >Войти</router-link
         >
-        <router-link class="profile-btn" to="/" v-if="user">
-          <p>{{ user.displayName }}</p>
-        </router-link>
-        <button class="logout-btn" @click="handleLogout">Logout</button>
+        <div class="profile" v-if="user">
+          <div class="info" @click="toggleDropdown">
+            <img :src="user.photoURL" alt="" v-if="user.photoURL" />
+            <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
+          </div>
+          <div class="dropdown" v-if="dropdown">
+            <ul>
+              <li class="li-info">
+                <div>{{ user.displayName }}</div>
+                <p class="email">{{ user.email }}</p>
+              </li>
+              <li>
+                <router-link to="/create-post">Cоздать пост</router-link>
+              </li>
+              <li class="li-myposts">Мои посты</li>
+              <li class="li-logout" @click="handleLogout">
+                <p>Выйти</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </nav>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 import getUser from "@/composables/getUser";
 import useLogout from "@/composables/auth/useLogout";
@@ -37,14 +57,22 @@ export default defineComponent({
   setup() {
     const { user } = getUser();
     const { logout, error, isPending } = useLogout();
+    const dropdown = ref(false);
 
     const handleLogout = async () => {
+      dropdown.value = false;
       await logout();
       if (!error.value) {
         router.push("/");
       }
     };
-    return { user, handleLogout };
+    const toggleDropdown = () => {
+      if (user.value) {
+        dropdown.value = !dropdown.value;
+      }
+    };
+
+    return { user, handleLogout, dropdown, toggleDropdown };
   },
 });
 </script>
@@ -103,9 +131,12 @@ $ff-mserrat: "Montserrat", sans-serif;
       gap: 2.4rem;
       align-items: center;
 
+      .btn {
+        padding: 1rem 1.6rem;
+      }
+
       .create-btn {
-        background-color: $color-gray-2;
-        padding: 1rem;
+        background-color: $color-black;
       }
       .login-btn {
         padding: 1rem 3.2rem;
@@ -113,9 +144,79 @@ $ff-mserrat: "Montserrat", sans-serif;
         background-color: $color-main-1;
         line-height: 1.1;
       }
-      .profile-btn {
-        p {
-          color: $color-white;
+      .profile {
+        position: relative;
+
+        .info {
+          width: 4rem;
+          height: 4rem;
+          cursor: pointer;
+
+          img,
+          p {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+          }
+
+          p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $color-main-1;
+            font-weight: 500;
+            font-size: 2rem;
+            font-family: $ff-mserrat;
+          }
+        }
+
+        .dropdown {
+          position: absolute;
+          background-color: $color-gray-2;
+          right: 0;
+          padding: 1rem;
+          margin-top: 4px;
+          width: 23rem;
+          border-radius: 4px;
+
+          ul {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            color: $color-white;
+
+            li {
+              width: 90%;
+              padding: 6px;
+              cursor: pointer;
+
+              &:not(:first-child):hover {
+                background-color: $color-main-1;
+                border-radius: 4px;
+              }
+            }
+
+            .li-info {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+              border-bottom: 1px solid $color-gray-3;
+              .email {
+                font-weight: 500;
+                font-size: 1.28rem;
+                color: $color-gray-3;
+                margin-bottom: 4px;
+              }
+            }
+
+            .li-logout {
+              border-top: 1px solid $color-gray-3;
+              P {
+              }
+            }
+          }
         }
       }
     }
