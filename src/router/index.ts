@@ -3,8 +3,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import AllPosts from "@/views/AllPostsView.vue";
 import CreatePostView from "@/views/CreatePostView.vue";
-import SigninView from "@/views/authentication/SigninView.vue";
-import SignupView from "@/views/authentication/SignupView.vue";
+import SigninView from "@/views/auth/SigninView.vue";
+import SignupView from "@/views/auth/SignupView.vue";
 
 const routes = [
   {

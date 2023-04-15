@@ -1,6 +1,6 @@
 import { ref, watchEffect } from "vue";
 
-import { auth } from "../firebase/config";
+import { auth } from "@/firebase/config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const error = ref<string | null>(null);

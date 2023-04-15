@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-import { auth } from "../firebase/config";
+import { auth } from "@/firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const error = ref<string | null>(null);

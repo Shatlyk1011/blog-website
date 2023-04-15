@@ -30,7 +30,7 @@
 import { defineComponent } from "vue";
 
 import getUser from "@/composables/getUser";
-import useLogout from "@/composables/useLogout";
+import useLogout from "@/composables/auth/useLogout";
 import router from "@/router";
 
 export default defineComponent({

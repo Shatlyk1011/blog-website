@@ -1,8 +1,28 @@
 <template>
   <div class="signup">
+    <div class="img-container"></div>
     <div class="form-container">
-      <h2>Войдите</h2>
-      <form @submit.prevent="handleSignin">
+      <h2>Создайте аккаунт</h2>
+      <div class="sign-btns">
+        <button @click="handleGoogleSignin">
+          <img src="@/assets/images/google-logo.svg" alt="Google icon" />
+          <span>Google</span>
+        </button>
+        <button @click="handleGithubSignin">
+          <img src="@/assets/images/github-logo.svg" alt="Google icon" />
+          <span>Github</span>
+        </button>
+      </div>
+
+      <h3>-или-</h3>
+
+      <form @submit.prevent="handleSignup">
+        <Input
+          class="input"
+          v-model="userName"
+          placeholder="Ваше имя"
+          required
+        />
         <Input
           type="email"
           class="input"
@@ -26,13 +46,12 @@
             icon="fa-solid fa-eye"
           />
         </div>
-        <div class="error" v-if="error">{{ error }}</div>
-        <button>Войти</button>
+        <button>Регистрация</button>
 
         <span>
-          Нету аккаунта?
-          <router-link class="link" :to="{ name: 'Signup' }">
-            Регистрация</router-link
+          Есть аккаунт?
+          <router-link class="link" :to="{ name: 'Signin' }">
+            Войдите</router-link
           >
         </span>
       </form>
@@ -41,9 +60,12 @@
 </template>
 
 <script lang="ts">
-import useSignin from "@/composables/useSignin";
-
+import router from "@/router";
 import Input from "@/components/Shared/Input.vue";
+
+import useSignup from "@/composables/auth/useSignup";
+import useSigninWithGoogle from "@/composables/auth/useSigninWithGoogle";
+import useSigninWithGithub from "@/composables/auth/useSigninWithGithub";
 
 import { ref } from "vue";
 import { defineComponent } from "vue";
@@ -51,17 +73,45 @@ import { defineComponent } from "vue";
 export default defineComponent({
   components: { Input },
   setup() {
+    const userName = ref("");
     const email = ref("");
     const password = ref("");
     let passwordBool = ref(false);
 
-    const { error, isPending, login } = useSignin();
+    const { error, isPending, signup } = useSignup();
+    const { error: googleAuthError, signinWithGoogle } = useSigninWithGoogle();
+    const { error: githubAuthError, signinWithGithub } = useSigninWithGithub();
 
-    const handleSignin = async () => {
-      await login(email.value, password.value);
+    const handleSignup = () => {
+      signup(email.value, password.value, userName.value);
+      if (!error.value) {
+        router.push("/");
+      }
     };
 
-    return { email, password, passwordBool, isPending, error, handleSignin };
+    const handleGoogleSignin = async () => {
+      await signinWithGoogle();
+      if (!googleAuthError.value) {
+        router.push("/");
+      }
+    };
+
+    const handleGithubSignin = async () => {
+      await signinWithGithub();
+      if (!githubAuthError.value) {
+        router.push("/");
+      }
+    };
+
+    return {
+      userName,
+      email,
+      password,
+      passwordBool,
+      handleSignup,
+      handleGoogleSignin,
+      handleGithubSignin,
+    };
   },
 });
 </script>
@@ -83,17 +133,27 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 .signup {
   margin: 6.4rem 0;
+  display: grid;
+  grid-template-columns: 6fr 7fr;
   height: 65%;
   width: 100%;
   text-align: center;
   border-radius: 4px;
+  border: 1px solid $color-gray-2;
+
+  .img-container {
+    background-image: url("@/assets/images/login.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: 50% 50%;
+  }
 
   .form-container {
     padding: 4.8rem 3.2rem;
     border-radius: 4px;
+    margin-left: -0.8rem;
     background-color: $color-gray-1;
-    width: 45%;
-    margin: 0 auto;
+
     h2 {
       font-size: 3.1rem;
       font-weight: 600;
@@ -104,7 +164,7 @@ $ff-mserrat: "Montserrat", sans-serif;
     .sign-btns {
       display: flex;
       gap: 3.2rem;
-      margin-top: 4.2rem;
+
       justify-content: center;
 
       & button {
@@ -137,6 +197,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       gap: 4.8rem;
       text-align: left;
       width: 100%;
+      // border: 1px solid $color-gray-2;
 
       .input {
         all: unset;
