@@ -14,6 +14,7 @@ const handleImage = (e: Event) => {
   ) {
     let img = selected.files[0];
     image.value = img;
+    console.log("image", image.value);
     imagePreviewUrl.value = URL.createObjectURL(img);
   } else {
     imageTypeError.value = "Только png/jpen/gif форматы";

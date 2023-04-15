@@ -2,7 +2,7 @@ import { ref, watchEffect } from "vue";
 
 import { db } from "@/firebase/config.ts";
 import { collection, onSnapshot } from "firebase/firestore";
-import Post from "../assets/types/Post";
+import Post from "../../assets/types/Post";
 
 const getCollection = (coll: string) => {
   const documents = ref<Post[] | null>(null);

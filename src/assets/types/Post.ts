@@ -1,7 +1,13 @@
 interface Post {
   html: String;
   title: string;
-  id?: string;
+  imageUrl: string;
+  imageRef: string;
+  createdAt: Date;
+  comments: string[];
+  author: string;
+  userUid: string;
+  readonly id?: string;
   timestamp?: string;
 }
 

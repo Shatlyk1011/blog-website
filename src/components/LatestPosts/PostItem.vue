@@ -1,16 +1,14 @@
 <template>
   <div class="post-item">
-    <!-- <div class="container">
+    <div class="container">
       <div class="description">
-        <div class="heading">Введение в Javascript</div>
+        <div class="heading">{{ post.title }}</div>
         <ul class="tags">
           <li class="tag">javascript</li>
           <li class="tag">react</li>
         </ul>
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam
-          ipsum quae tempora blanditiis harum vitae deserunt quibusdam? Ex ad
-          aut ipsum eligendi, consequatur sint obcaecati.
+          {{ post.html }}
         </p>
 
         <div class="credentials">
@@ -18,14 +16,13 @@
             <div class="posted">Опубликовано: <span>13.06.23</span></div>
             <div class="author">Автор: <span>Shatlyk Abdullayev</span></div>
           </div>
-          <div class="source">Источник: <span>google.com</span></div>
         </div>
       </div>
       <div class="img-container">
-        <img src="../../assets/images/sample2.jpg" alt="" />
+        <!-- <img :src="post.coverImage" alt="" /> -->
       </div>
-    </div> -->
-    <div v-html="post.html"></div>
+    </div>
+    <!-- <div v-html="post.html"></div> -->
   </div>
 </template>
 

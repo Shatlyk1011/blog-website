@@ -10,7 +10,7 @@
 <script lang="ts">
 import PostItem from "@/components/LatestPosts/PostItem.vue";
 
-import getCollection from "@/composables/getCollection";
+import getCollection from "@/composables/firestore/getCollection";
 
 import { defineComponent } from "vue";
 

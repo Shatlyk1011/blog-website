@@ -5,16 +5,6 @@
         <span>Выберите обложку</span>
         <Input @input="handleImage" id="image" type="file" required />
       </label>
-
-      <Input
-        v-model="title"
-        placeholder="Загаловок вашего поста..."
-        id="title"
-        required
-      />
-      <div class="toolbar">
-        <Tools :editor="editor" />
-      </div>
       <div class="imagePreview" v-if="imagePreviewUrl">
         <img :src="imagePreviewUrl" alt="" />
         <div class="options">
@@ -36,9 +26,19 @@
         </div>
       </div>
       <div class="error" v-if="imageTypeError">{{ imageTypeError }}</div>
+
+      <Input
+        v-model="title"
+        placeholder="Загаловок вашего поста..."
+        id="title"
+        required
+      />
+
+      <div class="toolbar">
+        <Tools :editor="editor" />
+      </div>
     </div>
 
-    <button style="color: red" @click="showHtml">SHOW HTML</button>
     <!-- Editor -->
     <editor-content class="editor" :editor="editor" />
 
@@ -55,10 +55,14 @@ import Strike from "@tiptap/extension-strike";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 
-import useDocument from "@/composables/useDocument";
 import Tools from "@/components/TipTap/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
+
+import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
+import useStorage from "@/composables/storage/useStorage";
+import getUser from "@/composables/getUser";
+import router from "@/router";
 
 export default defineComponent({
   components: {
@@ -71,6 +75,7 @@ export default defineComponent({
     const { addDocument } = useDocument();
 
     const title = ref("");
+    const isPending = ref(false);
 
     // editor configuration
     const editor = useEditor({
@@ -99,22 +104,38 @@ export default defineComponent({
       ],
     });
 
-    const { handleImage, image, imageTypeError, imagePreviewUrl } =
-      getInputImage();
+    const { user } = getUser();
+
+    const {
+      handleImage,
+      image: coverImage,
+      imageTypeError,
+      imagePreviewUrl,
+    } = getInputImage();
+
+    const { error, imageRef, imageUrl, uploadImage } = useStorage();
 
     const clearImageValues = () => {
-      image.value = null;
+      coverImage.value = null;
       imagePreviewUrl.value = "";
     };
 
-    const showHtml = () => {
-      console.log(editor.value?.getHTML());
-    };
-
-    const createPost = () => {
-      if (editor.value) {
+    const createPost = async () => {
+      if (editor.value && user.value) {
+        await uploadImage("covers", coverImage.value);
         const html = editor.value.getHTML();
-        addDocument("posts", { html, title: title.value });
+        addDocument("posts", {
+          html,
+          title: title.value,
+          imageUrl: imageUrl.value,
+          imageRef: imageRef.value,
+          createdAt: new Date(),
+          comments: [],
+          author: user.value.displayName ? user.value.displayName : "Анонимный",
+          userUid: user.value.uid,
+        });
+      } else if (!user.value) {
+        router.push("/signin");
       }
     };
 
@@ -123,8 +144,7 @@ export default defineComponent({
       createPost,
       title,
       handleImage,
-      showHtml,
-      image,
+      coverImage,
       imageTypeError,
       imagePreviewUrl,
       clearImageValues,
