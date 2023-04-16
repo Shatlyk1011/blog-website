@@ -5,6 +5,7 @@ interface Post {
   imageRef: string;
   createdAt: Date;
   comments: string[];
+  tags: string[];
   author: string;
   userUid: string;
   readonly id?: string;

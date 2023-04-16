@@ -6,23 +6,26 @@
         <ul class="tags">
           <li class="tag">javascript</li>
           <li class="tag">react</li>
+          <li class="tag">react</li>
         </ul>
-        <p>
-          {{ post.html }}
-        </p>
-
-        <div class="credentials">
-          <div style="display: flex; justify-content: space-between">
-            <div class="posted">Опубликовано: <span>13.06.23</span></div>
-            <div class="author">Автор: <span>Shatlyk Abdullayev</span></div>
+      </div>
+      <div class="img-container">
+        <img :src="post.imageUrl" alt="" />
+        <span class="read">
+          <router-link class="link" :to="{ name: 'AllPosts' }"
+            >Прочитать</router-link
+          >
+        </span>
+      </div>
+      <div class="credentials">
+        <div style="display: flex; justify-content: space-between">
+          <div class="posted">Опубликовано: <span>12.05.2002</span></div>
+          <div class="author">
+            Автор: <span>{{ post.author }}</span>
           </div>
         </div>
       </div>
-      <div class="img-container">
-        <!-- <img :src="post.coverImage" alt="" /> -->
-      </div>
     </div>
-    <!-- <div v-html="post.html"></div> -->
   </div>
 </template>
 
@@ -40,7 +43,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    console.log(props.post);
     return {};
   },
 });
@@ -63,9 +65,10 @@ $ff-mserrat: "Montserrat", sans-serif;
 .post-item {
   .container {
     display: grid;
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: repeat(1, 1fr);
+
     gap: 4rem;
-    padding: 2rem 3rem;
+    padding: 1.6rem;
     box-shadow: 0 0 4rem rgba(0, 0, 0, 0.12);
 
     .description {
@@ -73,6 +76,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       flex-direction: column;
       gap: 1.6rem;
       justify-content: center;
+      // grid-column: 1 / span 7;
       .heading {
         font-size: 2.4rem;
         font-family: $ff-mserrat;
@@ -82,6 +86,7 @@ $ff-mserrat: "Montserrat", sans-serif;
         display: flex;
         gap: 1rem;
         list-style: none;
+        padding: 0;
         .tag {
           padding: 6px 18px;
           background-color: $color-gray-2;
@@ -89,49 +94,57 @@ $ff-mserrat: "Montserrat", sans-serif;
           border-radius: 2rem;
         }
       }
+      .html {
+        width: 100%;
+
+        & p {
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
+        }
+      }
       p {
         font-size: 1.6rem;
         line-height: 1.4;
       }
-      .credentials {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-top: auto;
-        color: rgba($color-gray-3, 0.7);
-        .posted {
-          span {
-            font-weight: 600;
-          }
-        }
-        .author {
-          span {
-            color: $color-main-1;
-            cursor: pointer;
-
-            &:hover {
-              border-bottom: 1px solid currentColor;
-            }
-          }
-        }
-        .source {
-          span {
-            color: $color-main-2;
-            border-bottom: 1px solid currentColor;
-            cursor: pointer;
-
-            &:hover {
-              border-bottom: 1px solid transparent;
-            }
-          }
-        }
-      }
     }
     .img-container {
       width: 100%;
-      min-height: 21rem;
+      min-height: 22rem;
       position: relative;
-      object-fit: contain;
+
+      span {
+        opacity: 0;
+        position: absolute;
+        cursor: pointer;
+        z-index: 1000;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.8);
+
+        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+        &:hover {
+          opacity: 1;
+        }
+
+        .link {
+          font-size: 1.28rem;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          padding: 1rem 1.4rem;
+          background-color: $color-main-1;
+          border-radius: 6px;
+          line-height: 1;
+          color: rgba($color-white, 0.8);
+        }
+      }
 
       img {
         position: absolute;
@@ -142,6 +155,41 @@ $ff-mserrat: "Montserrat", sans-serif;
         margin: auto;
         width: 100%;
         max-height: 100%;
+        object-fit: cover;
+        z-index: 500;
+      }
+    }
+    .credentials {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: auto;
+      color: rgba($color-gray-3, 0.7);
+      .posted {
+        span {
+          font-weight: 600;
+        }
+      }
+      .author {
+        span {
+          color: $color-main-1;
+          cursor: pointer;
+
+          &:hover {
+            border-bottom: 1px solid currentColor;
+          }
+        }
+      }
+      .source {
+        span {
+          color: $color-main-2;
+          border-bottom: 1px solid currentColor;
+          cursor: pointer;
+
+          &:hover {
+            border-bottom: 1px solid transparent;
+          }
+        }
       }
     }
   }

@@ -178,6 +178,7 @@ $ff-mserrat: "Montserrat", sans-serif;
           margin-top: 4px;
           width: 23rem;
           border-radius: 4px;
+          user-select: none;
 
           ul {
             padding: 0;

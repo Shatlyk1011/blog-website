@@ -53,11 +53,6 @@ button {
   all: unset;
   cursor: pointer;
 }
-/* 
-ul,
-li {
-  list-style: none;
-} */
 
 a {
   text-decoration: none;
@@ -65,10 +60,12 @@ a {
 }
 
 .editor {
-  color: $color-gray-1;
+  color: $color-text;
   .ProseMirror {
     outline: none;
-    min-height: 60vh;
+    min-height: 40vh;
+    max-height: 60vh;
+    overflow: scroll;
     border: 1px solid rgba($color-black, 0.2);
     border-radius: 2px;
     padding: 1.6rem;

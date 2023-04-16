@@ -3,6 +3,7 @@
     <div class="heading">Последние посты</div>
     <div class="container">
       <PostItem v-for="post in posts" :key="post.id" :post="post" />
+      <PostItem v-for="post in posts" :key="post.id" :post="post" />
     </div>
   </div>
 </template>
@@ -50,8 +51,9 @@ $ff-mserrat: "Montserrat", sans-serif;
   }
 
   .container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    // flex-direction: column;
     gap: 4rem;
   }
 }

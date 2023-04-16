@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import TipTap from "@/components/TipTap/TipTap.vue";
+import TipTap from "@/components/TipTap/TipTapMain.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -31,8 +31,7 @@ $ff-mserrat: "Montserrat", sans-serif;
 .post-view {
   max-width: 100rem;
   margin: 4.8rem auto;
-  background-color: #ffe;
-
+  background-color: $color-gray-2;
   padding: 2.4rem;
 }
 </style>
