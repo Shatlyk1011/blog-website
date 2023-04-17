@@ -1,10 +1,11 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
-import AllPosts from "@/views/AllPostsView.vue";
+import AllPostsview from "@/views/AllPostsView.vue";
 import CreatePostView from "@/views/CreatePostView.vue";
 import SigninView from "@/views/auth/SigninView.vue";
 import SignupView from "@/views/auth/SignupView.vue";
+import PostView from "@/views/PostView.vue";
 
 const routes = [
   {
@@ -15,7 +16,7 @@ const routes = [
   {
     path: "/all-posts/",
     name: "AllPosts",
-    component: AllPosts,
+    component: AllPostsview,
   },
   {
     path: "/create-post",
@@ -31,6 +32,12 @@ const routes = [
     path: "/signup",
     name: "Signup",
     component: SignupView,
+  },
+  {
+    path: "/post/:id",
+    name: "Post",
+    component: PostView,
+    props: true,
   },
 ];
 

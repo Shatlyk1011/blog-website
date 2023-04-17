@@ -2,11 +2,10 @@ import { ref, watchEffect } from "vue";
 
 import { db } from "@/firebase/config.ts";
 import { collection, onSnapshot } from "firebase/firestore";
-import Post from "../../assets/types/Post";
+import Post from "@/assets/types/Post";
 
 const getCollection = (coll: string) => {
   const documents = ref<Post[] | null>(null);
-  //collection reference
   let colRef = collection(db, coll);
 
   const unSub = onSnapshot(colRef, (snap) => {
@@ -14,6 +13,7 @@ const getCollection = (coll: string) => {
     snap.docs.forEach((doc) => {
       results.push({
         ...(doc.data() as Post),
+        id: doc.id,
       });
     });
     documents.value = results;
