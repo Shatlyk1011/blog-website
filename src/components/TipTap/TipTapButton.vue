@@ -7,6 +7,7 @@
       :size="size"
     />
     <slot />
+    <div class="tooltip">{{ tooltip }}</div>
   </button>
 </template>
 
@@ -24,6 +25,10 @@ export default defineComponent({
       required: false,
       default: "sm",
     },
+    tooltip: {
+      type: String,
+      default: "Подсказка",
+    },
   },
 
   setup() {
@@ -33,22 +38,53 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+$color-text: #e9ecef;
+
 $color-gray-1: #212529;
 $color-gray-2: #495057;
 $color-gray-3: #868e96;
 
 $color-main-1: #d84f2a;
 
+$ff-mserrat: "Montserrat", sans-serif;
+
 .btn {
   color: $color-gray-2;
+  position: relative;
 
   &:disabled {
     color: $color-gray-3;
     cursor: not-allowed;
   }
+  &:hover > .tooltip {
+    opacity: 1;
+    transform: translate(-50%, 6px);
+  }
 }
 
 .isActive {
   color: $color-main-1;
+}
+
+.tooltip {
+  opacity: 0;
+  z-index: 100;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: $color-gray-1;
+  color: $color-text;
+  font-size: 1.28rem;
+  font-weight: 400;
+  min-width: 4rem;
+  max-width: 6.7rem;
+  height: auto;
+  text-align: center;
+  overflow-wrap: break-word;
+  letter-spacing: -0.4px;
+
+  transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
 }
 </style>

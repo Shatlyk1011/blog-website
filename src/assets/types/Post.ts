@@ -1,15 +1,17 @@
+import { Timestamp } from "firebase/firestore";
 interface Post {
   html: String;
   title: string;
   imageUrl: string;
   imageRef: string;
-  createdAt: Date;
   comments: string[];
   tags: string[];
-  author: string;
-  userUid: string;
+  userInfo: {
+    author: string;
+    userUid: string;
+  };
+  createdAt: Timestamp;
   readonly id?: string;
-  timestamp?: string;
 }
 
 export default Post;

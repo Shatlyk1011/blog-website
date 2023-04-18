@@ -179,6 +179,7 @@ $ff-mserrat: "Montserrat", sans-serif;
           width: 23rem;
           border-radius: 4px;
           user-select: none;
+          z-index: 2000;
 
           ul {
             padding: 0;
@@ -191,11 +192,16 @@ $ff-mserrat: "Montserrat", sans-serif;
             li {
               width: 90%;
               padding: 6px;
-              cursor: pointer;
 
-              &:not(:first-child):hover {
+              &:not(:first-child) {
+                cursor: pointer;
+                &:hover {
+                  background-color: $color-main-2;
+                  border-radius: 4px;
+                }
+              }
+              &:last-child:hover {
                 background-color: $color-main-1;
-                border-radius: 4px;
               }
             }
 
