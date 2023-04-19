@@ -2,7 +2,7 @@ import { ref } from "vue";
 
 const allowedImageTypes = ["image/png", "image/jpeg", "image/gif"];
 
-const imageTypeError = ref<string>("");
+let imageTypeError = ref<string>("");
 let imagePreviewUrl = ref("");
 let image = ref();
 

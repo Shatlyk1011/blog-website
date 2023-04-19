@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import { Editor } from "@tiptap/vue-3";
-import { shallowRef, ShallowRef } from "vue";
 
 import MarkTools from "@/components/TipTap/TipTapTools/MarkTools.vue";
 import TextTools from "@/components/TipTap/TipTapTools/TextTools.vue";
@@ -22,7 +21,7 @@ export default defineComponent({
   components: { TextTools, MarkTools, ImageTool, RedoUndoTool },
   props: {
     editor: {
-      type: Editor,
+      type: Editor || undefined,
     },
   },
 });

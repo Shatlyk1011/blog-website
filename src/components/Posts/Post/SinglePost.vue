@@ -36,8 +36,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    console.log("DATEEE", props.post.createdAt.toDate());
+  setup() {
     return {};
   },
 });
@@ -95,6 +94,9 @@ $ff-mserrat: "Montserrat", sans-serif;
       .tag {
         font-weight: 500;
         display: flex;
+        color: $color-main-2;
+        padding: 4px 1rem;
+        border-radius: 4px;
       }
     }
     /* "HTML" classes */

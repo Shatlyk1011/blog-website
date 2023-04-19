@@ -1,5 +1,4 @@
 <template>
-  <button style="color: blue" @click="getHtml">GET HTML</button>
   <form @submit.prevent="createPost">
     <div id="base">
       <!-- Cover Image -->
@@ -40,8 +39,7 @@
 
       <!-- Tags -->
       <Input
-        @keydown.enter.prevent="addTag"
-        v-model="tag"
+        @keydown.enter.prevent="addTag($event.target.value)"
         id="Itag"
         placeholder="Добавьте теги (max 3)"
       />
@@ -74,26 +72,21 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
-import { useEditor, EditorContent } from "@tiptap/vue-3";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { lowlight } from "lowlight/lib/core";
+import { ref, defineComponent, onBeforeUnmount } from "vue";
+import router from "@/router";
+import { EditorContent } from "@tiptap/vue-3";
 
 import { Timestamp } from "firebase/firestore";
 
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 
+import getUser from "@/composables/getUser";
+import useTiptapEditor from "@/composables/useTiptapEditor";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
-import getUser from "@/composables/getUser";
-import router from "@/router";
+import useTags from "@/composables/useTags";
 
 export default defineComponent({
   name: "TipTapMain",
@@ -105,67 +98,12 @@ export default defineComponent({
   },
 
   setup() {
-    lowlight.registerLanguage("html", html);
-    lowlight.registerLanguage("css", css);
-    lowlight.registerLanguage("js", js);
-    lowlight.registerLanguage("ts", ts);
-
     const title = ref("");
     const isPending = ref(false);
-    const tag = ref("");
-    const tags = ref<string[]>([]);
-
-    // editor configuration
-    const editor = useEditor({
-      content: "<p>Example Text</p>",
-
-      autofocus: true,
-      extensions: [
-        StarterKit.configure({
-          bulletList: {
-            HTMLAttributes: {
-              class: "E-bulletList",
-            },
-          },
-          codeBlock: {
-            HTMLAttributes: {
-              class: "E-codeBlock",
-            },
-          },
-          paragraph: {
-            HTMLAttributes: {
-              class: "E-paragraph",
-            },
-          },
-          code: {},
-        }),
-        Underline.configure({
-          HTMLAttributes: {
-            class: "E-underline",
-          },
-        }),
-        Image.configure({
-          HTMLAttributes: {
-            class: "E-image",
-          },
-        }),
-        Link.configure({
-          HTMLAttributes: {
-            class: "E-link",
-            rel: null,
-            target: null,
-          },
-        }),
-        CodeBlockLowlight.configure({
-          lowlight,
-          HTMLAttributes: {
-            class: "E-codeLowlight",
-          },
-        }),
-      ],
-    });
 
     const { user } = getUser();
+
+    const { editor } = useTiptapEditor();
 
     const { addDocument } = useDocument();
 
@@ -183,20 +121,7 @@ export default defineComponent({
       imagePreviewUrl.value = "";
     };
 
-    const addTag = () => {
-      if (!tags.value.includes(tag.value) && tags.value.length < 3) {
-        tag.value = tag.value.trim();
-        tags.value.push(tag.value);
-      }
-      tag.value = "";
-    };
-
-    const removeTag = (tag: string) => {
-      const tgs = tags.value.filter((t) => {
-        return t != tag;
-      });
-      tags.value = tgs;
-    };
+    const { addTag, removeTag, tags } = useTags();
 
     const createPost = async () => {
       if (editor.value && user.value) {
@@ -225,11 +150,14 @@ export default defineComponent({
       }
     };
 
+    onBeforeUnmount(() => {
+      editor.value?.destroy();
+    });
+
     return {
       editor,
       createPost,
       title,
-      tag,
       tags,
       isPending,
       handleImage,
@@ -239,7 +167,6 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
-      getHtml,
     };
   },
 });

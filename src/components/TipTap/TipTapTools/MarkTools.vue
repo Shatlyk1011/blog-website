@@ -72,7 +72,7 @@ export default defineComponent({
   props: {
     editor: {
       required: true,
-      type: Editor,
+      type: Editor as PropType<Editor>,
     },
   },
   setup(props) {

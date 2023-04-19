@@ -59,8 +59,9 @@
 </template>
 
 <script lang="ts">
-import TipTapButton from "@/components/TipTap/TipTapButton.vue";
 import { defineComponent } from "vue";
+import TipTapButton from "@/components/TipTap/TipTapButton.vue";
+import { Editor } from "@tiptap/vue-3";
 
 export default defineComponent({
   name: "TextTools",
@@ -69,7 +70,7 @@ export default defineComponent({
 
   props: {
     editor: {
-      type: Object,
+      type: Editor || undefined,
       required: true,
     },
   },
