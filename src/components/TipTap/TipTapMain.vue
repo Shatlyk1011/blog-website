@@ -1,4 +1,5 @@
 <template>
+  <button style="color: blue" @click="getHtml">GET HTML</button>
   <form @submit.prevent="createPost">
     <div id="base">
       <!-- Cover Image -->
@@ -78,6 +79,10 @@ import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { lowlight } from "lowlight/lib/core";
 
 import { Timestamp } from "firebase/firestore";
 
@@ -100,6 +105,11 @@ export default defineComponent({
   },
 
   setup() {
+    lowlight.registerLanguage("html", html);
+    lowlight.registerLanguage("css", css);
+    lowlight.registerLanguage("js", js);
+    lowlight.registerLanguage("ts", ts);
+
     const title = ref("");
     const isPending = ref(false);
     const tag = ref("");
@@ -127,6 +137,7 @@ export default defineComponent({
               class: "E-paragraph",
             },
           },
+          code: {},
         }),
         Underline.configure({
           HTMLAttributes: {
@@ -136,6 +147,19 @@ export default defineComponent({
         Image.configure({
           HTMLAttributes: {
             class: "E-image",
+          },
+        }),
+        Link.configure({
+          HTMLAttributes: {
+            class: "E-link",
+            rel: null,
+            target: null,
+          },
+        }),
+        CodeBlockLowlight.configure({
+          lowlight,
+          HTMLAttributes: {
+            class: "E-codeLowlight",
           },
         }),
       ],
@@ -215,6 +239,7 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
+      getHtml,
     };
   },
 });
@@ -342,7 +367,7 @@ form {
 
         #changeLabel {
           z-index: 10;
-          border: 1px solid $color-gray-3;
+          border: 1px solid -gray-3;
           #image {
             opacity: 0;
             top: -100px;
@@ -360,7 +385,7 @@ form {
         }
 
         &--change {
-          border: 1px solid $color-gray-1;
+          border: 1px solid -gray-1;
         }
 
         &--delete {
@@ -397,6 +422,10 @@ form {
     &:active {
       transform: translateY(4px) scale(0.98);
     }
+  }
+
+  .isPending {
+    background-color: $color-gray-3;
   }
 }
 </style>

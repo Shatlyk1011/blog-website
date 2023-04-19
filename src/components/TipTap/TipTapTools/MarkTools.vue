@@ -49,6 +49,13 @@
       @click="editor.commands.toggleOrderedList()"
       :class="{ isActive: editor?.isActive('orderedList') }"
     />
+
+    <tip-tap-button
+      faIcon="fa-solid fa-link"
+      tooltip=" Добавить ссылку"
+      @click="setLink"
+      :class="{ isActive: editor?.isActive('orderedList') }"
+    />
   </div>
 </template>
 
@@ -68,8 +75,32 @@ export default defineComponent({
       type: Editor,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const setLink = () => {
+      const previousUrl = props.editor.getAttributes("link").href;
+      const url = window.prompt("URL", previousUrl);
+
+      // cancelled
+      if (url === null) {
+        return;
+      }
+
+      // empty
+      if (url === "") {
+        props.editor.chain().focus().extendMarkRange("link").unsetLink().run();
+
+        return;
+      }
+
+      // update link
+      props.editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
+    };
+    return { setLink };
   },
 });
 </script>

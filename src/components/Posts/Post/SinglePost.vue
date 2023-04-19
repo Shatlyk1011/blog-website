@@ -135,6 +135,9 @@ $ff-mserrat: "Montserrat", sans-serif;
         object-fit: contain;
         display: block;
       }
+
+      .E-link {
+      }
     }
   }
 }

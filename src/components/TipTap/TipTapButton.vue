@@ -7,7 +7,7 @@
       :size="size"
     />
     <slot />
-    <div class="tooltip">{{ tooltip }}</div>
+    <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>
   </button>
 </template>
 
@@ -26,8 +26,8 @@ export default defineComponent({
       default: "sm",
     },
     tooltip: {
+      required: false,
       type: String,
-      default: "Подсказка",
     },
   },
 
@@ -51,6 +51,8 @@ $ff-mserrat: "Montserrat", sans-serif;
 .btn {
   color: $color-gray-2;
   position: relative;
+  padding: 2px;
+  user-select: none;
 
   &:disabled {
     color: $color-gray-3;
@@ -58,6 +60,8 @@ $ff-mserrat: "Montserrat", sans-serif;
   }
   &:hover > .tooltip {
     opacity: 1;
+    user-select: auto;
+    visibility: visible;
     transform: translate(-50%, 6px);
   }
 }
@@ -68,6 +72,8 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 .tooltip {
   opacity: 0;
+  user-select: none;
+  visibility: hidden;
   z-index: 100;
   position: absolute;
   left: 50%;

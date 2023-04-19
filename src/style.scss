@@ -52,6 +52,10 @@ body {
 button {
   all: unset;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 a {
@@ -100,7 +104,7 @@ ol {
   padding: 0 2rem;
 }
 
-.E-codeBlock {
+.E-codeLowlight {
   background-color: $color-gray-1;
   border-radius: 6px;
   color: $color-text;
@@ -125,4 +129,10 @@ ol {
 }
 
 .E-image {
+}
+
+.E-link {
+  color: #56cfe1;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
 }
