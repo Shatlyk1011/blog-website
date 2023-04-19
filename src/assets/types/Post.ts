@@ -6,6 +6,7 @@ interface Post {
   imageRef: string;
   comments: string[];
   tags: string[];
+  timeToRead: number;
   userInfo: {
     author: string;
     userUid: string;

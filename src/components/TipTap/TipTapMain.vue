@@ -81,12 +81,13 @@ import { Timestamp } from "firebase/firestore";
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 
-import getUser from "@/composables/getUser";
+import getUser from "@/composables/auth/getUser";
 import useTiptapEditor from "@/composables/useTiptapEditor";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
+import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
 export default defineComponent({
   name: "TipTapMain",
@@ -116,18 +117,19 @@ export default defineComponent({
 
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
 
+    const { addTag, removeTag, tags } = useTags();
+
     const clearImageValues = () => {
       coverImage.value = null;
       imagePreviewUrl.value = "";
     };
-
-    const { addTag, removeTag, tags } = useTags();
 
     const createPost = async () => {
       if (editor.value && user.value) {
         isPending.value = true;
         await uploadImage("covers", coverImage.value);
         const html = editor.value.getHTML();
+        const { avgTimeToRead } = getAvgTimeToRead(html);
         await addDocument("posts", {
           html,
           title: title.value,
@@ -135,6 +137,7 @@ export default defineComponent({
           imageRef: imageRef.value,
           comments: [],
           tags: tags.value,
+          timeToRead: avgTimeToRead.value,
           userInfo: {
             author: user.value.displayName
               ? user.value.displayName

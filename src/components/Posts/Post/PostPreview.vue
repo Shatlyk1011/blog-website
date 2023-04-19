@@ -23,11 +23,11 @@
         </div>
       </div>
       <div class="credentials">
-        <div style="display: flex; justify-content: space-between">
-          <div class="posted">Опубликовано: <span>12.05.2002</span></div>
-          <div class="author">
-            Автор: <span>{{ post.userInfo.author }}</span>
-          </div>
+        <div class="posted">
+          Опубликовано: <span>{{ post.createdAt }}</span>
+        </div>
+        <div class="author">
+          Автор: <span>{{ post.userInfo.author }}</span>
         </div>
       </div>
     </div>
@@ -189,18 +189,20 @@ $ff-mserrat: "Montserrat", sans-serif;
     .credentials {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 4px;
       margin-top: auto;
       color: rgba($color-gray-3, 0.7);
       .posted {
         span {
           font-weight: 600;
+          line-height: 1.2;
         }
       }
       .author {
         span {
           color: $color-main-1;
           cursor: pointer;
+          line-height: 1.2;
 
           &:hover {
             border-bottom: 1px solid currentColor;

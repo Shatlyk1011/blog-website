@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { storage } from "@/firebase/config";
 import { uploadBytes, ref as FBref, getDownloadURL } from "firebase/storage";
-import getUser from "@/composables/getUser";
+import getUser from "@/composables/auth/getUser";
 
 const { user } = getUser();
 

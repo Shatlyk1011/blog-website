@@ -9,7 +9,6 @@ const getDocument = async (collection: string, id: string) => {
   const docRef = doc(db, collection, id);
 
   const docSnap = await getDoc(docRef);
-  console.log("docSnap", docSnap.data());
   if (docSnap.exists()) {
     document.value = docSnap.data();
   }

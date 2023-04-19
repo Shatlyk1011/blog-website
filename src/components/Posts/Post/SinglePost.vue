@@ -1,5 +1,5 @@
 <template>
-  <div class="single-post">
+  <div class="single-post" v-if="post">
     <div class="cover-image">
       <img class="img" :src="post.imageUrl" alt="" />
     </div>
@@ -11,6 +11,7 @@
         <li class="tag" v-for="t in post.tags" :key="t">
           # <span>{{ t }}</span>
         </li>
+        <div class="time">{{ post.timeToRead }}</div>
       </ul>
 
       <div class="html" v-html="post.html"></div>
@@ -24,6 +25,7 @@ import { defineComponent, PropType } from "vue";
 import Post from "@/assets/types/Post";
 
 import UserData from "@/components/Shared/userData.vue";
+import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
 export default defineComponent({
   name: "SinglePost",
@@ -36,8 +38,10 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const { avgTimeToRead } = getAvgTimeToRead(props.post?.html);
+
+    return { avgTimeToRead };
   },
 });
 </script>

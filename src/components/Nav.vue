@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import getUser from "@/composables/getUser";
+import getUser from "@/composables/auth/getUser";
 import useLogout from "@/composables/auth/useLogout";
 import router from "@/router";
 

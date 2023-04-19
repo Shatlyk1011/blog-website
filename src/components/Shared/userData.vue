@@ -7,7 +7,7 @@
     <div class="info">
       <div class="name">{{ user?.displayName }}</div>
       <!-- <div class="date">{{ date }}</div> -->
-      <div class="date">12.02.2002</div>
+      <div class="date">{{ date?.toDate() }}</div>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 import { defineComponent } from "vue";
 import { Timestamp } from "firebase/firestore";
 
-import getUser from "@/composables/getUser";
+import getUser from "@/composables/auth/getUser";
 
 export default defineComponent({
   name: "UserData",
