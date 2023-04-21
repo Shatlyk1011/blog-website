@@ -1,14 +1,15 @@
 import { ref, watchEffect } from "vue";
 
 import { db } from "@/firebase/config.ts";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Post from "@/assets/types/Post";
 
 const getCollection = (coll: string) => {
   const documents = ref<Post[] | null>(null);
   let colRef = collection(db, coll);
+  const q = query(colRef, orderBy("createdAt", "desc"));
 
-  const unSub = onSnapshot(colRef, (snap) => {
+  const unSub = onSnapshot(q, (snap) => {
     let results: Post[] = [];
     snap.docs.forEach((doc) => {
       results.push({

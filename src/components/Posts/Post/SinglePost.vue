@@ -11,7 +11,10 @@
         <li class="tag" v-for="t in post.tags" :key="t">
           # <span>{{ t }}</span>
         </li>
-        <div class="time">{{ post.timeToRead }}</div>
+        <div class="time">
+          <font-awesome-icon icon="fa-solid fa-book-open" />
+          <span>{{ post.timeToRead }} минут</span>
+        </div>
       </ul>
 
       <div class="html" v-html="post.html"></div>
@@ -91,10 +94,13 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
     .tags {
       display: flex;
+      align-items: center;
       gap: 1.4rem;
       list-style: none;
       padding: 0;
       margin-top: 1.6rem;
+      width: 100%;
+
       .tag {
         font-weight: 500;
         display: flex;
@@ -102,8 +108,21 @@ $ff-mserrat: "Montserrat", sans-serif;
         padding: 4px 1rem;
         border-radius: 4px;
       }
+
+      .time {
+        display: flex;
+        margin-left: auto;
+        align-items: center;
+        background-color: $color-gray-3;
+        gap: 1rem;
+        padding: 6px 10px;
+
+        span {
+          font-size: 1.28rem;
+          font-weight: 500;
+        }
+      }
     }
-    /* "HTML" classes */
     .html {
       margin-top: 2rem;
 
