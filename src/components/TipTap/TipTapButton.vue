@@ -1,9 +1,9 @@
 <template>
-  <button class="btn">
+  <div class="btn">
     <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
     <slot />
     <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>
-  </button>
+  </div>
 </template>
 
 <script lang="ts">

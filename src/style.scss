@@ -122,6 +122,8 @@ ol {
   padding: 1rem;
   code {
     color: inherit;
+    display: block;
+    white-space: pre-wrap;
     padding: 0;
     background: none;
     font-size: 1.4rem;
@@ -181,7 +183,7 @@ ol {
 }
 
 .E-paragraph {
-  margin: 1rem 0;
+  margin: 1.4rem 0;
   font-size: 2rem;
   line-height: 1.6;
 }
@@ -210,5 +212,9 @@ blockquote {
 }
 
 .E-image {
-  width: 100%;
+  max-width: 100%;
+  max-height: 30rem;
+  display: block;
+  margin: 0 auto;
+  border-radius: px;
 }

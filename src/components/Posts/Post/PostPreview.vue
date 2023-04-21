@@ -90,13 +90,11 @@ $ff-mserrat: "Montserrat", sans-serif;
         font-weight: 600;
         align-self: flex-start;
         cursor: pointer;
-        border-bottom: 1px solid transparent;
         padding-bottom: 4px;
 
         transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
         &:hover {
           color: $color-main-1;
-          border-bottom: 1px solid currentColor;
         }
       }
       .tags {

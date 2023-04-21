@@ -31,6 +31,11 @@ const useTiptapEditor = () => {
             class: "E-bulletList",
           },
         },
+        code: {
+          HTMLAttributes: {
+            spellcheck: false,
+          },
+        },
         codeBlock: {
           HTMLAttributes: {
             class: "E-codeBlock",

@@ -67,7 +67,6 @@
       faIcon="fa-solid fa-link"
       tooltip=" Добавить ссылку"
       @click="setLink"
-      :class="{ isActive: editor?.isActive('orderedList') }"
     />
   </div>
 </template>

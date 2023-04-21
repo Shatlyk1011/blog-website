@@ -53,6 +53,7 @@ library.add(
 );
 
 const pinia = createPinia();
+
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(router)

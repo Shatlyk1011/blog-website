@@ -74,21 +74,24 @@ $ff-mserrat: "Montserrat", sans-serif;
   .cover-image {
     width: 100%;
     // height: 42rem;
-    position: relative;
+    // position: relative;
     .img {
       width: 100%;
       max-height: 32rem;
       object-fit: cover;
+      position: relative;
+      top: 0;
     }
   }
   .container {
-    background-color: $color-gray-2;
+    background-color: rgba($color-gray-2, 0.8);
+    // border: 1px solid $color-gray-2;
     padding: 3.2rem 6.4rem;
 
     .title {
       font-size: 4.8rem;
       font-family: $ff-mserrat;
-      font-weight: 500;
+      font-weight: 700;
       color: white;
       margin-top: 2rem;
     }
@@ -133,6 +136,8 @@ $ff-mserrat: "Montserrat", sans-serif;
       h5 {
         font-family: $ff-mserrat;
         line-height: 1.1;
+        font-weight: 700;
+        color: $color-white;
       }
     }
   }

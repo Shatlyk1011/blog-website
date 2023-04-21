@@ -1,4 +1,5 @@
 <template>
+  <button @click="html">SHOW HTML</button>
   <form @submit.prevent="createPost">
     <div id="base">
       <!-- Cover Image -->
@@ -89,6 +90,11 @@ import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
+// import highlight.js
+import hljs from "highlight.js";
+// import style
+import "highlight.js/styles/googlecode.css";
+
 export default defineComponent({
   name: "TipTapMain",
 
@@ -125,10 +131,14 @@ export default defineComponent({
     };
 
     const createPost = async () => {
-      if (editor.value && user.value) {
+      const prose = document.querySelector(".ProseMirror") as HTMLElement;
+      const html = prose.innerHTML;
+
+      if (editor.value && user.value && prose) {
         isPending.value = true;
         await uploadImage("covers", coverImage.value);
-        const html = editor.value.getHTML();
+        // const html = editor.value.getHTML();
+
         const { avgTimeToRead } = getAvgTimeToRead(html);
         await addDocument("posts", {
           html,
@@ -153,6 +163,14 @@ export default defineComponent({
       }
     };
 
+    const html = () => {
+      // const ht = editor.value?.getHTML();
+      const prose = document.querySelector(".ProseMirror") as HTMLElement;
+      const html = prose.innerHTML;
+
+      console.log("html", html);
+    };
+
     onBeforeUnmount(() => {
       editor.value?.destroy();
     });
@@ -170,6 +188,7 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
+      html,
     };
   },
 });
