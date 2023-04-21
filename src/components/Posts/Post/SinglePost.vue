@@ -107,51 +107,13 @@ $ff-mserrat: "Montserrat", sans-serif;
     .html {
       margin-top: 2rem;
 
-      .E-paragraph {
-        margin: 1rem 0;
-        font-size: 2rem;
-        line-height: 1.6;
-      }
-      .E-bulletList,
-      ol {
-        padding: 0 2rem;
-      }
-
-      .E-codeBlock {
-        background-color: $color-gray-1;
-        border-radius: 6px;
-        color: $color-text;
-        padding: 1rem;
-        code {
-          color: inherit;
-          padding: 0;
-          background: none;
-          font-size: 1.4rem;
-        }
-      }
-
-      .E-underline {
-      }
-
-      .E-listItem {
-      }
-
-      .E-image {
-        width: 100%;
-        object-fit: contain;
-        display: block;
-      }
-
-      .E-link {
-      }
-
-      .E-code {
-        background-color: $color-gray-1;
-        font-size: 80%;
-        border-radius: 4px;
-        // max-width: 100%;
-        display: inline-block;
-        padding: 2px 5px;
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: $ff-mserrat;
+        line-height: 1.1;
       }
     }
   }

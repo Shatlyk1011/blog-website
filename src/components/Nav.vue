@@ -121,7 +121,6 @@ $ff-mserrat: "Montserrat", sans-serif;
         &:hover {
           border-bottom: 1px solid $color-main-1;
           color: $color-main-2;
-          font-weight: 500;
         }
       }
     }

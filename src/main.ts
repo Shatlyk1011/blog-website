@@ -26,6 +26,8 @@ import {
 import router from "./router";
 import "./style.scss";
 import App from "./App.vue";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/config";
 
 library.add(
   faBold,
@@ -49,7 +51,13 @@ library.add(
   faQuoteLeft
 );
 
-createApp(App)
-  .component("font-awesome-icon", FontAwesomeIcon)
-  .use(router)
-  .mount("#app");
+let app: any;
+
+onAuthStateChanged(auth, () => {
+  if (!app) {
+    createApp(App)
+      .component("font-awesome-icon", FontAwesomeIcon)
+      .use(router)
+      .mount("#app");
+  }
+});

@@ -1,4 +1,9 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteLocationNormalized,
+  NavigationGuardNext,
+} from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
 import AllPostsview from "@/views/AllPostsView.vue";
@@ -7,6 +12,21 @@ import SigninView from "@/views/auth/SigninView.vue";
 import SignupView from "@/views/auth/SignupView.vue";
 import PostView from "@/views/PostView.vue";
 
+import { auth } from "@/firebase/config";
+
+const requireAuth = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) => {
+  let user = auth.currentUser;
+
+  if (!user) {
+    next({ name: "Signup" });
+  } else {
+    next();
+  }
+};
 const routes = [
   {
     path: "/",
@@ -22,6 +42,7 @@ const routes = [
     path: "/create-post",
     name: "CreatePost",
     component: CreatePostView,
+    beforeEnter: requireAuth,
   },
   {
     path: "/signin",

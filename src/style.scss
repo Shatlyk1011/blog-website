@@ -182,16 +182,12 @@ ol {
 
 .E-paragraph {
   margin: 1rem 0;
-  line-height: 1.3;
+  font-size: 2rem;
+  line-height: 1.6;
 }
 
-.E-underline {
-}
-
-.E-listItem {
-}
-
-.E-image {
+u {
+  padding-bottom: 3px;
 }
 
 .E-link {
@@ -200,10 +196,7 @@ ol {
   cursor: pointer;
 }
 
-.E-codeLowlight {
-}
-
-.E-code {
+code {
   background-color: $color-gray-1;
   font-size: 80%;
   border-radius: 6px;
@@ -214,4 +207,8 @@ ol {
 blockquote {
   padding-left: 1rem;
   border-left: 4px solid rgba($color-gray-3, 0.6);
+}
+
+.E-image {
+  width: 100%;
 }

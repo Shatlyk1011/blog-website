@@ -41,17 +41,8 @@ const useTiptapEditor = () => {
             class: "E-paragraph",
           },
         },
-        code: {
-          HTMLAttributes: {
-            class: "E-code",
-          },
-        },
       }),
-      Underline.configure({
-        HTMLAttributes: {
-          class: "E-underline",
-        },
-      }),
+
       Image.configure({
         HTMLAttributes: {
           class: "E-image",

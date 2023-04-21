@@ -24,8 +24,12 @@ const signup = async (email: string, password: string, userName: string) => {
     error.value = null;
     isPending.value = false;
   } catch (err: any) {
-    error.value = "Что то пошло не так. Попробуйте позже";
-    console.log("signuperror", err.message);
+    if (err.code === "auth/email-already-in-use") {
+      error.value = `Ошибка. ${email} email уже используется`;
+    } else {
+      error.value = "Что то пошло не так. Попробуйте позже";
+    }
+    console.log("signuperror", err.code);
     isPending.value = false;
   }
 };

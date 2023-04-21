@@ -46,6 +46,9 @@
             icon="fa-solid fa-eye"
           />
         </div>
+        <div class="error" v-if="error">{{ error }}</div>
+        <div class="error" v-if="googleAuthError">{{ googleAuthError }}</div>
+        <div class="error" v-if="githubAuthError">{{ githubAuthError }}</div>
         <button>Регистрация</button>
 
         <span>
@@ -82,8 +85,8 @@ export default defineComponent({
     const { error: googleAuthError, signinWithGoogle } = useSigninWithGoogle();
     const { error: githubAuthError, signinWithGithub } = useSigninWithGithub();
 
-    const handleSignup = () => {
-      signup(email.value, password.value, userName.value);
+    const handleSignup = async () => {
+      await signup(email.value, password.value, userName.value);
       if (!error.value) {
         router.push("/");
       }
@@ -111,6 +114,9 @@ export default defineComponent({
       handleSignup,
       handleGoogleSignin,
       handleGithubSignin,
+      error,
+      googleAuthError,
+      githubAuthError,
     };
   },
 });

@@ -60,7 +60,7 @@
       faIcon="fa-solid fa-quote-left"
       tooltip="Цитата"
       @click="editor.chain().focus().toggleBlockquote().run()"
-      :class="{ isActive: editor.isActive('blockquote') }"
+      :class="{ isActive: editor?.isActive('blockquote') }"
     />
 
     <tip-tap-button
