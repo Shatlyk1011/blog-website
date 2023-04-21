@@ -31,9 +31,15 @@
     />
     <tip-tap-button
       faIcon="fa-solid fa-code"
+      tooltip="Код"
+      @click="editor.chain().focus().toggleCode().run()"
+      :class="{ isActive: editor?.isActive('code') }"
+    />
+    <tip-tap-button
+      faIcon="fa-solid fa-laptop-code"
       tooltip="Блок кода"
       @click="editor.chain().focus().toggleCodeBlock().run()"
-      :class="{ isActive: editor?.isActive('codeBlock') }"
+      class="{ isActive: editor?.isActive('codeBlock') }"
     />
 
     <tip-tap-button
@@ -48,6 +54,13 @@
       tooltip="Упорядоченный список"
       @click="editor.commands.toggleOrderedList()"
       :class="{ isActive: editor?.isActive('orderedList') }"
+    />
+
+    <tip-tap-button
+      faIcon="fa-solid fa-quote-left"
+      tooltip="Цитата"
+      @click="editor.chain().focus().toggleBlockquote().run()"
+      :class="{ isActive: editor.isActive('blockquote') }"
     />
 
     <tip-tap-button
@@ -108,6 +121,6 @@ export default defineComponent({
 <style lang="scss">
 .marks {
   display: flex;
-  gap: 1.4rem;
+  gap: 1rem;
 }
 </style>

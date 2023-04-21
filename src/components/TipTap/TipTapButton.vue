@@ -1,11 +1,6 @@
 <template>
   <button class="btn">
-    <font-awesome-icon
-      v-if="faIcon"
-      class="faIcon"
-      :icon="faIcon"
-      :size="size"
-    />
+    <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
     <slot />
     <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>
   </button>
@@ -18,7 +13,7 @@ export default defineComponent({
   props: {
     faIcon: {
       type: String,
-      required: false,
+      required: true,
     },
     size: {
       type: String,
@@ -29,10 +24,6 @@ export default defineComponent({
       required: false,
       type: String,
     },
-  },
-
-  setup() {
-    return {};
   },
 });
 </script>
@@ -84,7 +75,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   color: $color-text;
   font-size: 1.28rem;
   font-weight: 400;
-  min-width: 4rem;
+  min-width: 3rem;
   max-width: 6.7rem;
   height: auto;
   text-align: center;

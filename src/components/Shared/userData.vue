@@ -7,7 +7,7 @@
     <div class="info">
       <div class="name">{{ user?.displayName }}</div>
       <!-- <div class="date">{{ date }}</div> -->
-      <div class="date">{{ date?.toDate() }}</div>
+      <div class="date">{{ date }}</div>
     </div>
   </div>
 </template>

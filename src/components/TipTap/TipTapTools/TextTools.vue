@@ -2,58 +2,19 @@
   <div class="text-tools">
     <div class="container">
       <tip-tap-button
-        style="margin-right: 6px"
         faIcon="fa-solid fa-paragraph"
         tooltip="Параграф"
         @click="editor.chain().focus().setParagraph().run()"
         :class="{ isActive: editor?.isActive('paragraph') }"
-        size="lg"
       />
       <tip-tap-button
-        tooltip="Загаловок"
-        @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+        faIcon="fa-solid fa-heading"
+        tooltip="H1-H6 нажмите 'space'"
+        @click="handleHeading"
         :class="{
           isActive: editor?.isActive('heading', { level: 1 }),
         }"
-      >
-        H1
-      </tip-tap-button>
-      <tip-tap-button
-        tooltip="Загаловок"
-        @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        :class="{
-          isActive: editor?.isActive('heading', { level: 2 }),
-        }"
-      >
-        H2
-      </tip-tap-button>
-      <tip-tap-button
-        tooltip="Загаловок"
-        @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        :class="{
-          isActive: editor?.isActive('heading', { level: 3 }),
-        }"
-      >
-        H3
-      </tip-tap-button>
-      <tip-tap-button
-        tooltip="Загаловок"
-        @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-        :class="{
-          isActive: editor?.isActive('heading', { level: 4 }),
-        }"
-      >
-        H4
-      </tip-tap-button>
-      <tip-tap-button
-        tooltip="Загаловок"
-        @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
-        :class="{
-          isActive: editor?.isActive('heading', { level: 5 }),
-        }"
-      >
-        H5
-      </tip-tap-button>
+      />
     </div>
   </div>
 </template>
@@ -74,8 +35,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const handleHeading = () => {
+      props.editor.commands.insertContent("#");
+    };
+    return { handleHeading };
   },
 });
 </script>
@@ -100,11 +64,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   .container {
     display: flex;
     gap: 6px;
-    font-family: $ff-mserrat;
-    font-size: 1.28rem;
-    font-weight: 600;
     align-items: center;
-    list-style: none;
   }
 }
 </style>

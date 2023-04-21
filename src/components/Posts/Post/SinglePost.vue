@@ -144,6 +144,15 @@ $ff-mserrat: "Montserrat", sans-serif;
 
       .E-link {
       }
+
+      .E-code {
+        background-color: $color-gray-1;
+        font-size: 80%;
+        border-radius: 4px;
+        // max-width: 100%;
+        display: inline-block;
+        padding: 2px 5px;
+      }
     }
   }
 }

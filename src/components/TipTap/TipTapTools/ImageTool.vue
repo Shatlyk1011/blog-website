@@ -2,7 +2,7 @@
   <div class="image-tool">
     <TipTapButton
       faIcon="fa-solid fa-image"
-      tooltip="Ссылку на изображение"
+      tooltip="Ссылка на изображение"
       @click="addImage"
     />
   </div>

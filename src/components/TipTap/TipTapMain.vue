@@ -355,7 +355,12 @@ form {
   }
 
   .isPending {
-    background-color: $color-gray-3;
+    background-color: rgba($color-gray-3, 0.5);
+    color: rgba($color-text, 0.5);
+
+    &:hover {
+      background-color: rgba($color-gray-3, 0.4);
+    }
   }
 }
 </style>
