@@ -10,7 +10,7 @@ import { defineComponent } from "vue";
 
 import SinglePost from "@/components/Posts/Post/SinglePost.vue";
 
-import getSingleDocument from "@/composables/firestore/getSingleDocument";
+import getDocument from "@/composables/firestore/getDocument";
 
 export default defineComponent({
   name: "PostView",
@@ -24,8 +24,8 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { document: post, error, getDocument } = getSingleDocument();
-    getDocument("posts", props.id);
+    const { document: post, error, getDoc } = getDocument();
+    getDoc("posts", props.id);
 
     return { post, error };
   },

@@ -6,9 +6,9 @@ import TextStyle from "@tiptap/extension-text-style";
 import CodeBlockLowLight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
 
-import useDocument from "@/composables/firestore/useDocument";
 import getUser from "@/composables/auth/getUser";
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, setDoc } from "firebase/firestore";
+import useDocument from "@/composables/firestore/useDocument";
 
 //code highlight
 import { lowlight } from "lowlight/lib/core";
@@ -22,16 +22,16 @@ lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
-const { addDocument } = useDocument();
+const { addDocument, updateDocument } = useDocument();
 const { user } = getUser();
 
 const useTiptapEditor = (title: string, tags: string[]) => {
   const editor = useEditor({
-    //
+    //save as drafts
     async onUpdate({ editor }) {
       const html = editor.getHTML();
       if (user.value) {
-        await addDocument("drafts", {
+        await updateDocument("drafts", user.value.uid, {
           html,
           title: title,
           tags: tags,
