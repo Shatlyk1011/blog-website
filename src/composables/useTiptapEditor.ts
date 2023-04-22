@@ -1,11 +1,14 @@
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextStyle from "@tiptap/extension-text-style";
 import CodeBlockLowLight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
+
+import useDocument from "@/composables/firestore/useDocument";
+import getUser from "@/composables/auth/getUser";
+import { Timestamp } from "firebase/firestore";
 
 //code highlight
 import { lowlight } from "lowlight/lib/core";
@@ -19,9 +22,27 @@ lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
-const useTiptapEditor = () => {
+const { addDocument } = useDocument();
+const { user } = getUser();
+
+const useTiptapEditor = (title: string, tags: string[]) => {
   const editor = useEditor({
-    // content: "<p>Example Text hehe</p>",
+    //
+    async onUpdate({ editor }) {
+      const html = editor.getHTML();
+      if (user.value) {
+        await addDocument("drafts", {
+          html,
+          title: title,
+          tags: tags,
+          userInfo: {
+            author: user.value.displayName!,
+            userUid: user.value.uid,
+          },
+          createdAt: Timestamp.fromDate(new Date()),
+        });
+      }
+    },
 
     autofocus: true,
     extensions: [

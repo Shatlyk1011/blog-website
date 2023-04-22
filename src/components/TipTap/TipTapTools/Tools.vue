@@ -48,5 +48,8 @@ $ff-mserrat: "Montserrat", sans-serif;
   display: flex;
   gap: 5rem;
   padding: 1rem;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
 }
 </style>

@@ -1,8 +1,8 @@
 import { db } from "@/firebase/config.ts";
 import { addDoc, collection } from "firebase/firestore";
-import Post from "../../assets/types/Post";
+import { Post, PostDraft } from "@/assets/Types";
 
-const addDocument = async (coll: string, data: Post) => {
+const addDocument = async (coll: string, data: Post | PostDraft) => {
   const colRef = collection(db, coll);
 
   await addDoc(colRef, data);

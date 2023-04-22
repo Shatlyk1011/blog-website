@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import Post from "@/assets/types/Post";
+import { Post } from "@/assets/Types";
 
 import PostPreview from "@/components/Posts/Post/PostPreview.vue";
 

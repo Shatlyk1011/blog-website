@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/vue";
-import Post from "@/components/Posts/Post.vue";
+import { Post } from "@/components/Posts/Post.vue";
 
 describe("Post", () => {
   describe("in posts > post", () => {

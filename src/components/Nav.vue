@@ -20,8 +20,8 @@
         <router-link class="btn login-btn" to="/signup" v-if="!user"
           >Войти</router-link
         >
-        <div class="profile" v-if="user">
-          <div class="info" @click="toggleDropdown">
+        <OnClickOutside class="profile" v-if="user" @trigger="closeDropdown">
+          <div class="info" @click="openDropdown">
             <img :src="user.photoURL" alt="" v-if="user.photoURL" />
             <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
           </div>
@@ -35,28 +35,32 @@
                 <router-link to="/create-post">Cоздать пост</router-link>
               </li>
               <li class="li-myposts">Мои посты</li>
-              <li class="li-logout" @click="handleLogout">
+              <li role="button" class="li-logout" @click="handleLogout">
                 <p>Выйти</p>
               </li>
             </ul>
           </div>
-        </div>
+        </OnClickOutside>
       </div>
     </nav>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" >
 import { defineComponent, ref } from "vue";
+
+import { OnClickOutside } from "@vueuse/components";
 
 import getUser from "@/composables/auth/getUser";
 import useLogout from "@/composables/auth/useLogout";
 import router from "@/router";
 
 export default defineComponent({
+  components: { OnClickOutside },
   setup() {
     const { user } = getUser();
     const { logout, error, isPending } = useLogout();
+
     const dropdown = ref(false);
 
     const handleLogout = async () => {
@@ -66,13 +70,20 @@ export default defineComponent({
         router.push("/");
       }
     };
-    const toggleDropdown = () => {
+    const openDropdown = () => {
       if (user.value) {
-        dropdown.value = !dropdown.value;
+        dropdown.value = true;
       }
     };
 
-    return { user, handleLogout, dropdown, toggleDropdown };
+    const closeDropdown = () => {
+      if (user.value) {
+        dropdown.value = false;
+      }
+    };
+    // onClickOutside(profile, closeDropdown);
+
+    return { user, handleLogout, dropdown, openDropdown, closeDropdown };
   },
 });
 </script>

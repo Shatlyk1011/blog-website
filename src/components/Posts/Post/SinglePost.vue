@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import Post from "@/assets/types/Post";
+import { Post } from "@/assets/Types";
 
 import UserData from "@/components/Shared/userData.vue";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
@@ -138,6 +138,7 @@ $ff-mserrat: "Montserrat", sans-serif;
         line-height: 1.1;
         font-weight: 700;
         color: $color-white;
+        margin: 1rem 0;
       }
     }
   }

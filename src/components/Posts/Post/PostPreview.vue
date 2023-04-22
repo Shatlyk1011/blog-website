@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import Post from "@/assets/types/Post";
+import { Post } from "@/assets/Types";
 
 export default defineComponent({
   name: "PostPreview",

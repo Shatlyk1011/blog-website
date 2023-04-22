@@ -1,5 +1,5 @@
 <template>
-  <div class="btn">
+  <div class="btn" role="button">
     <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
     <slot />
     <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>

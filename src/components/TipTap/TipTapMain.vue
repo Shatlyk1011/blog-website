@@ -1,5 +1,5 @@
 <template>
-  <button @click="html">SHOW HTML</button>
+  <!-- <button @click="html">SHOW HTML</button> -->
   <form @submit.prevent="createPost">
     <div id="base">
       <!-- Cover Image -->
@@ -40,7 +40,7 @@
 
       <!-- Tags -->
       <Input
-        @keydown.enter.prevent="addTag($event.target.value)"
+        @keydown.enter.prevent="addTag($event)"
         id="Itag"
         placeholder="Добавьте теги (max 3)"
       />
@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onBeforeUnmount } from "vue";
+import { ref, defineComponent, onBeforeUnmount, watch, onUpdated } from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -90,11 +90,6 @@ import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
-// import highlight.js
-import hljs from "highlight.js";
-// import style
-import "highlight.js/styles/googlecode.css";
-
 export default defineComponent({
   name: "TipTapMain",
 
@@ -105,42 +100,43 @@ export default defineComponent({
   },
 
   setup() {
+    const proseMirror = document.querySelector(".ProseMirror") as HTMLElement;
+
     const title = ref("");
     const isPending = ref(false);
 
     const { user } = getUser();
-
-    const { editor } = useTiptapEditor();
-
     const { addDocument } = useDocument();
-
     const {
       handleImage,
       image: coverImage,
       imageTypeError,
       imagePreviewUrl,
     } = getInputImage();
-
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
-
     const { addTag, removeTag, tags } = useTags();
+
+    const { editor } = useTiptapEditor(title.value, tags.value);
 
     const clearImageValues = () => {
       coverImage.value = null;
       imagePreviewUrl.value = "";
     };
 
-    const createPost = async () => {
-      const prose = document.querySelector(".ProseMirror") as HTMLElement;
-      const html = prose.innerHTML;
+    const getInnerHTML = () => {
+      let html = proseMirror.innerHTML;
+      return html;
+    };
 
-      if (editor.value && user.value && prose) {
+    const createPost = async () => {
+      const html = await getInnerHTML();
+
+      if (editor.value && user.value) {
         isPending.value = true;
         await uploadImage("covers", coverImage.value);
-        // const html = editor.value.getHTML();
-
         const { avgTimeToRead } = getAvgTimeToRead(html);
-        await addDocument("posts", {
+
+        let newPost = {
           html,
           title: title.value,
           imageUrl: imageUrl.value,
@@ -149,30 +145,28 @@ export default defineComponent({
           tags: tags.value,
           timeToRead: avgTimeToRead.value,
           userInfo: {
-            author: user.value.displayName
-              ? user.value.displayName
-              : "Анонимный",
+            author: user.value.displayName!,
             userUid: user.value.uid,
           },
           createdAt: Timestamp.fromDate(new Date()),
-        });
+        };
+        await addDocument("posts", newPost);
         if (!error.value) {
           router.push("/all-posts");
           isPending.value = false;
         }
       }
     };
-
-    const html = () => {
-      // const ht = editor.value?.getHTML();
-      const prose = document.querySelector(".ProseMirror") as HTMLElement;
-      const html = prose.innerHTML;
-
-      console.log("html", html);
-    };
+    onUpdated(async () => {
+      if (editor.value && user.value) {
+        const html = await getInnerHTML();
+      }
+    });
 
     onBeforeUnmount(() => {
       editor.value?.destroy();
+      /*       tags.value = [];
+      imagePreviewUrl.value = ""; */
     });
 
     return {
@@ -188,7 +182,6 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
-      html,
     };
   },
 });

@@ -78,7 +78,7 @@ a {
 
   .ProseMirror {
     outline: none;
-    min-height: 30vh;
+    min-height: 301vh;
     overflow-wrap: anywhere;
     border: 1px solid rgba($color-black, 0.2);
     border-radius: 2px;
@@ -127,6 +127,7 @@ ol {
     padding: 0;
     background: none;
     font-size: 1.4rem;
+    line-height: 1.3;
   }
 
   .hljs-comment,
