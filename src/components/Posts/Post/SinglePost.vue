@@ -4,7 +4,7 @@
       <img class="img" :src="post.imageUrl" alt="" />
     </div>
     <div class="container">
-      <UserData :date="post.createdAt" />
+      <UserData :date="post.createdAt" class="user-data" />
 
       <div class="title">{{ post.title }}</div>
       <ul class="tags">
@@ -68,7 +68,8 @@ $ff-mserrat: "Montserrat", sans-serif;
   max-width: 85rem;
 
   margin: 2rem auto;
-  background-color: $color-gray-2;
+  background-color: $color-gray-2; // ?
+
   border-radius: 2px;
   overflow: hidden;
   .cover-image {
@@ -84,30 +85,35 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
   }
   .container {
-    background-color: rgba($color-gray-2, 0.8);
-    // border: 1px solid $color-gray-2;
     padding: 3.2rem 6.4rem;
+
+    .user-data {
+      margin-bottom: 2rem;
+    }
 
     .title {
       font-size: 4.8rem;
+      line-height: 0.9;
       font-family: $ff-mserrat;
       font-weight: 700;
       color: white;
-      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
     .tags {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 1.4rem;
       list-style: none;
       padding: 0;
-      margin-top: 1.6rem;
+      margin-bottom: 1.6rem;
       width: 100%;
 
       .tag {
         font-weight: 500;
         display: flex;
         color: $color-main-2;
+        background-color: $color-gray-1;
         padding: 4px 1rem;
         border-radius: 4px;
       }
@@ -128,6 +134,7 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
     .html {
       margin-top: 2rem;
+      width: 100%;
 
       h1,
       h2,
@@ -138,7 +145,11 @@ $ff-mserrat: "Montserrat", sans-serif;
         line-height: 1.1;
         font-weight: 700;
         color: $color-white;
-        margin: 1rem 0;
+        margin-bottom: 1rem;
+      }
+
+      li {
+        font-size: 2rem;
       }
     }
   }

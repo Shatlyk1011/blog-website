@@ -12,9 +12,9 @@ const addTag = (e: InputEvent) => {
     tags.value.push(tag);
     console.log("event", e.target?.value);
 
-    tag = "";
+    e.target.value = "";
   }
-  tag = "";
+  e.target.value = "";
 };
 
 const removeTag = (tag: string) => {

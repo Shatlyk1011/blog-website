@@ -1,12 +1,12 @@
 <template>
-  <PostPreview v-for="post in formatDate" :key="post.id" :post="post" />
+  <PostItem v-for="post in formatDate" :key="post.id" :post="post" />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { Post } from "@/assets/Types";
 
-import PostPreview from "@/components/Posts/Post/PostPreview.vue";
+import PostItem from "@/components/Posts/Post/PostItem.vue";
 
 //форматирование времени
 import formatRelative from "date-fns/formatRelative";
@@ -14,7 +14,7 @@ import { ru } from "date-fns/locale";
 
 export default defineComponent({
   name: "Post",
-  components: { PostPreview },
+  components: { PostItem },
   props: ["posts"],
 
   setup(props) {

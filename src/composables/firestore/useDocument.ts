@@ -24,7 +24,7 @@ const updateDocument = async (
   const docRef = doc(db, coll, id);
 
   try {
-    await setDoc(docRef, { data });
+    await setDoc(docRef, data);
   } catch (err: any) {
     error.value = err.message;
   }

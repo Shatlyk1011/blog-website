@@ -11,6 +11,9 @@ const getDoc = async (collection: string, id: string) => {
   const docSnap = await getD(docRef);
   if (docSnap.exists()) {
     document.value = docSnap.data();
+  } else {
+    console.log("error in getDocument ");
+    error.value = "Что то пошло не так";
   }
 };
 

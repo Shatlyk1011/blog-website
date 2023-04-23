@@ -1,3 +1,5 @@
+import { ref } from "vue";
+
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -9,6 +11,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 import getUser from "@/composables/auth/getUser";
 import { Timestamp, setDoc } from "firebase/firestore";
 import useDocument from "@/composables/firestore/useDocument";
+import getDocument from "@/composables/firestore/getDocument";
+import useTags from "@/composables/useTags";
 
 //code highlight
 import { lowlight } from "lowlight/lib/core";
@@ -22,19 +26,35 @@ lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
-const { addDocument, updateDocument } = useDocument();
+const { updateDocument } = useDocument();
 const { user } = getUser();
 
-const useTiptapEditor = (title: string, tags: string[]) => {
+const useTiptapEditor = () => {
+  const title = ref("");
+  const { tags } = useTags();
+
   const editor = useEditor({
-    //save as drafts
+    async onBeforeCreate({ editor }) {
+      const { document: draft, getDoc } = getDocument();
+      if (user.value) {
+        await getDoc("drafts", user.value.uid);
+        if (draft.value) {
+          console.log("setting content");
+          editor.commands.setContent(draft.value.html);
+          title.value = draft.value.title;
+          tags.value = draft.value.tags;
+        }
+      }
+    },
+
+    //save  as drafts
     async onUpdate({ editor }) {
       const html = editor.getHTML();
       if (user.value) {
         await updateDocument("drafts", user.value.uid, {
           html,
-          title: title,
-          tags: tags,
+          title: title.value,
+          tags: tags.value,
           userInfo: {
             author: user.value.displayName!,
             userUid: user.value.uid,
@@ -94,7 +114,7 @@ const useTiptapEditor = (title: string, tags: string[]) => {
     ],
   });
 
-  return { editor };
+  return { editor, title, tags };
 };
 
 export default useTiptapEditor;

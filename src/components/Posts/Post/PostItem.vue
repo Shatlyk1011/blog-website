@@ -39,7 +39,7 @@ import { defineComponent, PropType } from "vue";
 import { Post } from "@/assets/Types";
 
 export default defineComponent({
-  name: "PostPreview",
+  name: "PostItem",
   props: {
     post: {
       type: Object as PropType<Post>,
@@ -68,6 +68,7 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 .post-item {
+  min-width: 100%;
   .container {
     display: grid;
     grid-template-columns: repeat(1, 1fr);

@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onBeforeUnmount, watch, onUpdated } from "vue";
+import { ref, defineComponent, onBeforeUnmount, onUpdated } from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -89,6 +89,7 @@ import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
+import getDocument from "@/composables/firestore/getDocument";
 
 export default defineComponent({
   name: "TipTapMain",
@@ -100,13 +101,10 @@ export default defineComponent({
   },
 
   setup() {
-    const proseMirror = document.querySelector(".ProseMirror") as HTMLElement;
-
-    const title = ref("");
     const isPending = ref(false);
 
     const { user } = getUser();
-    const { addDocument } = useDocument();
+    const { addDocument, updateDocument } = useDocument();
     const {
       handleImage,
       image: coverImage,
@@ -114,9 +112,9 @@ export default defineComponent({
       imagePreviewUrl,
     } = getInputImage();
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
-    const { addTag, removeTag, tags } = useTags();
+    const { addTag, removeTag } = useTags();
 
-    const { editor } = useTiptapEditor(title.value, tags.value);
+    const { editor, title, tags } = useTiptapEditor();
 
     const clearImageValues = () => {
       coverImage.value = null;
@@ -124,6 +122,7 @@ export default defineComponent({
     };
 
     const getInnerHTML = () => {
+      const proseMirror = document.querySelector(".ProseMirror") as HTMLElement;
       let html = proseMirror.innerHTML;
       return html;
     };
@@ -157,16 +156,27 @@ export default defineComponent({
         }
       }
     };
+
     onUpdated(async () => {
-      if (editor.value && user.value) {
-        const html = await getInnerHTML();
+      if (user.value && (title.value.length || tags.value.length)) {
+        const html = editor.value!.getHTML();
+        await updateDocument("drafts", user.value.uid, {
+          html,
+          title: title.value,
+          tags: tags.value,
+          userInfo: {
+            author: user.value.displayName!,
+            userUid: user.value.uid,
+          },
+          createdAt: Timestamp.fromDate(new Date()),
+        });
       }
     });
 
     onBeforeUnmount(() => {
       editor.value?.destroy();
-      /*       tags.value = [];
-      imagePreviewUrl.value = ""; */
+      tags.value = [];
+      imagePreviewUrl.value = "";
     });
 
     return {

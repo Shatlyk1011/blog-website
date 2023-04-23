@@ -11,9 +11,6 @@
         faIcon="fa-solid fa-heading"
         tooltip="H1-H6 нажмите 'space'"
         @click="handleHeading"
-        :class="{
-          isActive: editor?.isActive('heading', { level: 1 }),
-        }"
       />
     </div>
   </div>
