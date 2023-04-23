@@ -68,12 +68,14 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 .post-item {
-  min-width: 100%;
-  .container {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
+  max-width: 100%;
 
-    gap: 4rem;
+  .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
     padding: 1.6rem;
     box-shadow: 0 0 4rem rgba(0, 0, 0, 0.12);
     &:hover {
@@ -83,8 +85,9 @@ $ff-mserrat: "Montserrat", sans-serif;
     .description {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       gap: 1.2rem;
-      justify-content: center;
+      // justify-content: center;
       .heading {
         font-size: 2.4rem;
         font-family: $ff-mserrat;
@@ -100,6 +103,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
       .tags {
         display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
         list-style: none;
         padding: 0;
@@ -110,32 +114,19 @@ $ff-mserrat: "Montserrat", sans-serif;
           border-radius: 2rem;
         }
       }
-      .html {
-        width: 100%;
-
-        & p {
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-line-clamp: 4;
-          -webkit-box-orient: vertical;
-        }
-      }
-      p {
-        font-size: 1.6rem;
-        line-height: 1.4;
-      }
     }
     .img-container {
-      width: 100%;
-      min-height: 22rem;
+      max-width: 100%;
+      height: 20rem;
       position: relative;
-
+      background-color: red;
+      margin-top: auto;
       .read {
         opacity: 0;
         position: absolute;
-
+        top: 0;
+        left: 0;
         z-index: 1000;
-        margin: auto;
         width: 100%;
         height: 100%;
         display: flex;
@@ -173,14 +164,8 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
 
       img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
         width: 100%;
-        max-height: 100%;
+        height: 100%;
         object-fit: cover;
         z-index: 500;
       }
@@ -188,8 +173,9 @@ $ff-mserrat: "Montserrat", sans-serif;
     .credentials {
       display: flex;
       flex-direction: column;
+      justify-self: flex-end;
       gap: 4px;
-      margin-top: auto;
+      // margin-top: auto;
       color: rgba($color-gray-3, 0.7);
       .posted {
         span {

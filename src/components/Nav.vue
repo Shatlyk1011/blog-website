@@ -32,7 +32,7 @@
                 <p class="email">{{ user.email }}</p>
               </li>
               <li>
-                <router-link to="/create-post">Cоздать пост</router-link>
+                <router-link to="/drafts">Черновик</router-link>
               </li>
               <li class="li-myposts">Мои посты</li>
               <li role="button" class="li-logout" @click="handleLogout">

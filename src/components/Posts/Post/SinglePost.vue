@@ -145,7 +145,7 @@ $ff-mserrat: "Montserrat", sans-serif;
         line-height: 1.1;
         font-weight: 700;
         color: $color-white;
-        margin-bottom: 1rem;
+        margin-top: 1.6rem;
       }
 
       li {
