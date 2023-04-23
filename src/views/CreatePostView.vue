@@ -1,16 +1,16 @@
 
 <template>
   <section class="post-view">
-    <TipTapMain />
+    <CreatePost />
   </section>
 </template>
 
 <script lang="ts">
-import TipTapMain from "@/components/TipTap/TipTapMain.vue";
+import CreatePost from "@/components/Posts/Post/CreatePost.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { TipTapMain },
+  components: { CreatePost },
 });
 </script>
 

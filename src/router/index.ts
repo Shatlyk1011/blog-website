@@ -11,6 +11,8 @@ import CreatePostView from "@/views/CreatePostView.vue";
 import SigninView from "@/views/auth/SigninView.vue";
 import SignupView from "@/views/auth/SignupView.vue";
 import PostView from "@/views/Posts/PostView.vue";
+import DraftsView from "@/views/DraftsView.vue";
+import UpdatePostView from "@/views/posts/UpdatePostView.vue";
 
 import { auth } from "@/firebase/config";
 
@@ -42,7 +44,7 @@ const routes = [
     path: "/create-post",
     name: "CreatePost",
     component: CreatePostView,
-    // beforeEnter: requireAuth,
+    beforeEnter: requireAuth,
   },
   {
     path: "/signin",
@@ -58,6 +60,17 @@ const routes = [
     path: "/post/:id",
     name: "Post",
     component: PostView,
+    props: true,
+  },
+  {
+    path: "/drafts",
+    name: "Drafts",
+    component: DraftsView,
+  },
+  {
+    path: "/update-post/:id",
+    name: "UpdatePost",
+    component: UpdatePostView,
     props: true,
   },
 ];

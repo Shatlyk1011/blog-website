@@ -4,6 +4,17 @@
       <img class="img" :src="post.imageUrl" alt="" />
     </div>
     <div class="container">
+      <div class="menu">
+        <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
+        <ul class="dropdown">
+          <router-link
+            class="li"
+            :to="{ name: 'UpdatePost', params: { id: postId } }"
+            >Изменить</router-link
+          >
+          <li>Удалить</li>
+        </ul>
+      </div>
       <UserData :date="post.createdAt" class="user-data" />
 
       <div class="title">{{ post.title }}</div>
@@ -24,6 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { useRoute } from "vue-router";
 
 import { Post } from "@/assets/Types";
 
@@ -43,8 +55,11 @@ export default defineComponent({
   },
   setup(props) {
     const { avgTimeToRead } = getAvgTimeToRead(props.post?.html);
+    const route = useRoute();
+    let postId = route.params.id;
+    console.log(props);
 
-    return { avgTimeToRead };
+    return { avgTimeToRead, postId };
   },
 });
 </script>
@@ -86,6 +101,55 @@ $ff-mserrat: "Montserrat", sans-serif;
   }
   .container {
     padding: 3.2rem 6.4rem;
+    position: relative;
+    .menu {
+      position: absolute;
+      right: 2rem;
+      top: 2rem;
+      text-align: right;
+
+      .icon {
+        padding: 2px 6px;
+        border-radius: 4px;
+        line-height: 1;
+        cursor: pointer;
+
+        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+        &:hover {
+          background-color: $color-gray-3;
+        }
+      }
+
+      .dropdown {
+        padding: 6px 1rem;
+        text-align: left;
+        border-radius: 4px;
+        background-color: $color-gray-1;
+        list-style: none;
+        color: $color-text;
+        width: 8rem;
+        .li,
+        li {
+          font-size: 1rem;
+          padding: 2px 4px;
+          border-radius: 3px;
+          cursor: pointer;
+
+          &:hover {
+            color: $color-main-2;
+          }
+          &:last-child {
+            margin-top: 6px;
+
+            &:hover {
+              background-color: red;
+              color: $color-text;
+            }
+          }
+        }
+      }
+    }
 
     .user-data {
       margin-bottom: 2rem;

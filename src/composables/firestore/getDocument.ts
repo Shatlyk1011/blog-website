@@ -17,8 +17,8 @@ const getDoc = async (collection: string, id: string) => {
   }
 };
 
-const getSingleDocument = () => {
+const getDocument = () => {
   return { document, error, getDoc };
 };
 
-export default getSingleDocument;
+export default getDocument;

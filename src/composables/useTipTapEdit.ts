@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-import { useEditor, EditorContent } from "@tiptap/vue-3";
+import { useEditor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -8,10 +8,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import CodeBlockLowLight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
 
-import getUser from "@/composables/auth/getUser";
-import { Timestamp, setDoc } from "firebase/firestore";
 import useDocument from "@/composables/firestore/useDocument";
-import getDocument from "@/composables/firestore/getDocument";
 import useTags from "@/composables/useTags";
 
 //code highlight
@@ -27,43 +24,12 @@ lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
 const { updateDocument } = useDocument();
-const { user } = getUser();
 
-const useTiptapEditor = () => {
+const useTipTapEdit = () => {
   const title = ref("");
   const { tags } = useTags();
 
   const editor = useEditor({
-    async onBeforeCreate({ editor }) {
-      const { document: draft, getDoc } = getDocument();
-      if (user.value) {
-        await getDoc("drafts", user.value.uid);
-        if (draft.value) {
-          console.log("setting content");
-          editor.commands.setContent(draft.value.html);
-          title.value = draft.value.title;
-          tags.value = draft.value.tags;
-        }
-      }
-    },
-
-    //save  as drafts
-    async onUpdate({ editor }) {
-      const html = editor.getHTML();
-      if (user.value) {
-        await updateDocument("drafts", user.value.uid, {
-          html,
-          title: title.value,
-          tags: tags.value,
-          userInfo: {
-            author: user.value.displayName!,
-            userUid: user.value.uid,
-          },
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-      }
-    },
-
     autofocus: true,
     extensions: [
       StarterKit.configure({
@@ -117,4 +83,4 @@ const useTiptapEditor = () => {
   return { editor, title, tags };
 };
 
-export default useTiptapEditor;
+export default useTipTapEdit;

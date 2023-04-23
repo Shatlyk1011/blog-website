@@ -1,5 +1,4 @@
 <template>
-  <!-- <button @click="html">SHOW HTML</button> -->
   <form @submit.prevent="createPost">
     <div id="base">
       <!-- Cover Image -->
@@ -61,7 +60,6 @@
         <Tools :editor="editor" />
       </div>
     </div>
-
     <!-- Editor -->
     <editor-content class="editor" :editor="editor" />
 
@@ -83,16 +81,15 @@ import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 
 import getUser from "@/composables/auth/getUser";
-import useTiptapEditor from "@/composables/useTiptapEditor";
+import useTipTapCreate from "@/composables/useTipTapCreate";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
-import getDocument from "@/composables/firestore/getDocument";
 
 export default defineComponent({
-  name: "TipTapMain",
+  name: "CreatePost",
 
   components: {
     EditorContent,
@@ -114,7 +111,7 @@ export default defineComponent({
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
     const { addTag, removeTag } = useTags();
 
-    const { editor, title, tags } = useTiptapEditor();
+    const { editor, title, tags } = useTipTapCreate();
 
     const clearImageValues = () => {
       coverImage.value = null;
@@ -150,28 +147,13 @@ export default defineComponent({
           createdAt: Timestamp.fromDate(new Date()),
         };
         await addDocument("posts", newPost);
+        isPending.value = false;
         if (!error.value) {
           router.push("/all-posts");
           isPending.value = false;
         }
       }
     };
-
-    onUpdated(async () => {
-      if (user.value && (title.value.length || tags.value.length)) {
-        const html = editor.value!.getHTML();
-        await updateDocument("drafts", user.value.uid, {
-          html,
-          title: title.value,
-          tags: tags.value,
-          userInfo: {
-            author: user.value.displayName!,
-            userUid: user.value.uid,
-          },
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-      }
-    });
 
     onBeforeUnmount(() => {
       editor.value?.destroy();
