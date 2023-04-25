@@ -13,6 +13,7 @@ import { Timestamp, setDoc } from "firebase/firestore";
 import useDocument from "@/composables/firestore/useDocument";
 import getDocument from "@/composables/firestore/getDocument";
 import useTags from "@/composables/useTags";
+import getAvgTimeToRead from "./getAvgTimeToRead";
 
 //code highlight
 import { lowlight } from "lowlight/lib/core";
@@ -48,11 +49,13 @@ const useTiptapCreate = () => {
     //save as drafts
     async onUpdate({ editor }) {
       const html = editor.getHTML();
+      let { avgTimeToRead } = getAvgTimeToRead(html);
       if (user.value) {
         await updateDocument("drafts", user.value.uid, {
           html,
           title: title.value,
           tags: tags.value,
+          timeToRead: avgTimeToRead.value,
           userInfo: {
             author: user.value.displayName!,
             userUid: user.value.uid,

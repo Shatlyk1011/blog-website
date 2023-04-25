@@ -119,7 +119,6 @@ $ff-mserrat: "Montserrat", sans-serif;
       max-width: 100%;
       height: 20rem;
       position: relative;
-      background-color: red;
       margin-top: auto;
       .read {
         opacity: 0;

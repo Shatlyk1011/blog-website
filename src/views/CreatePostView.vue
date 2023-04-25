@@ -1,16 +1,43 @@
 
 <template>
-  <section class="post-view">
+  <form-nav
+    :class="update ? 'update' : 'preview'"
+    @update:update="handleUpdate"
+    @update:preview="handlePreview"
+  />
+  <div class="create-post-view" v-if="update">
     <CreatePost />
-  </section>
+  </div>
+  <PreviewPost v-if="preview" />
 </template>
 
 <script lang="ts">
+import { ref } from "vue";
+
 import CreatePost from "@/components/Posts/Post/CreatePost.vue";
+import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
+import FormNav from "@/components/Navigation/FormNav.vue";
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { CreatePost },
+  components: { CreatePost, PreviewPost, FormNav },
+
+  setup() {
+    let preview = ref(false);
+    let update = ref(true);
+
+    let handleUpdate = () => {
+      update.value = true;
+      preview.value = false;
+    };
+    let handlePreview = () => {
+      preview.value = true;
+      update.value = false;
+    };
+
+    return { preview, update, handleUpdate, handlePreview };
+  },
 });
 </script>
 
@@ -28,10 +55,11 @@ $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
-.post-view {
-  max-width: 100rem;
-  margin: 4.8rem auto;
+.create-post-view {
+  max-width: 80rem;
+  margin: 0 auto;
+  height: 85vh;
   background-color: $color-gray-2;
-  padding: 2.4rem;
+  padding: 2rem;
 }
 </style>

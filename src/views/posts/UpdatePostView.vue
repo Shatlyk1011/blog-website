@@ -1,6 +1,6 @@
 <template>
   <div class="update-post">
-    <form @submit.prevent="updatePost">
+    <form @submit.prevent="updatePost" v-if="post">
       <div id="base">
         <!-- Cover Image -->
         <label id="coverSelect" for="image" v-if="!imagePreviewUrl">
@@ -69,6 +69,8 @@
         Опубликовать
       </button>
     </form>
+    <div v-if="!post && !showNoPosts">Loading...</div>
+    <div v-if="showNoPosts">Такого поста не существует. Поробуйте еще раз.</div>
   </div>
 </template>
 
@@ -108,6 +110,7 @@ export default defineComponent({
     const isPending = ref(false);
     const route = useRoute();
     let postId = route.params.id as string;
+    const showNoPosts = ref(false);
 
     const { user } = getUser();
     const { updateDocument } = useDocument();
@@ -118,7 +121,8 @@ export default defineComponent({
       imagePreviewUrl,
     } = getInputImage();
     const { getDoc, document: post, error: getDocError } = getDocument();
-    const { error, imageRef, imageUrl, uploadImage } = useStorage();
+    const { error, imageRef, imageUrl, uploadImage, deleteImage } =
+      useStorage();
     const { addTag, removeTag } = useTags();
 
     const { editor, title, tags } = useTipTapEdit();
@@ -140,10 +144,13 @@ export default defineComponent({
       if (editor.value) {
         isPending.value = true;
         /* delete image before uploading */
+        if (post.value) {
+          await deleteImage(post.value.imageRef);
+        }
         await uploadImage("covers", coverImage.value);
         const { avgTimeToRead } = getAvgTimeToRead(html);
 
-        let post = {
+        let updatedPost = {
           html,
           title: title.value,
           imageUrl: imageUrl.value,
@@ -157,7 +164,7 @@ export default defineComponent({
           },
           createdAt: Timestamp.fromDate(new Date()),
         };
-        await updateDocument("posts", props.id || postId, post);
+        await updateDocument("posts", props.id || postId, updatedPost);
         isPending.value = false;
         if (!error.value) {
           router.push("/all-posts");
@@ -167,10 +174,15 @@ export default defineComponent({
     };
     onMounted(async () => {
       await getDoc("posts", props.id || postId);
-      imagePreviewUrl.value = post.value.imageUrl;
-      title.value = post.value.title;
-      tags.value = post.value.tags;
-      editor.value?.commands.setContent(post.value.html);
+      if (post.value) {
+        console.log("post.value", post.value);
+        imagePreviewUrl.value = post.value.imageUrl;
+        title.value = post.value.title;
+        tags.value = post.value.tags;
+        editor.value?.commands.setContent(post.value.html);
+      } else {
+        showNoPosts.value = true;
+      }
     });
 
     onBeforeUnmount(() => {
@@ -192,6 +204,8 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
+      post,
+      showNoPosts,
     };
   },
 });
@@ -346,7 +360,7 @@ $ff-mserrat: "Montserrat", sans-serif;
           }
 
           &--delete {
-            color: $color-main-1;
+            color: $color-main-2;
             border-radius: 2px;
 
             &:hover {

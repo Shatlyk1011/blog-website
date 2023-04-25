@@ -1,8 +1,9 @@
 import { ref } from "vue";
 import { doc, getDoc as getD } from "firebase/firestore";
 import { db } from "@/firebase/config";
+import { Post } from "@/assets/Types";
 
-let document = ref<any>(null);
+let document = ref<Post | null>(null);
 const error = ref<string | null>(null);
 
 const getDoc = async (collection: string, id: string) => {
@@ -10,9 +11,9 @@ const getDoc = async (collection: string, id: string) => {
 
   const docSnap = await getD(docRef);
   if (docSnap.exists()) {
-    document.value = docSnap.data();
+    document.value = docSnap.data() as Post;
   } else {
-    console.log("error in getDocument ");
+    console.log("error in getDocument");
     error.value = "Что то пошло не так";
   }
 };

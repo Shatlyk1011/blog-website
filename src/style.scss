@@ -65,12 +65,12 @@ a {
 
 //Tip tap editor
 .editor {
+  display: flex;
   color: $color-text;
   .ProseMirror p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);
     color: rgba($color-text, 0.5);
     float: left;
-    // font-size: 1.6rem;
     font-family: $ff-roboto;
     height: 0;
     pointer-events: none;
@@ -78,7 +78,7 @@ a {
 
   .ProseMirror {
     outline: none;
-    min-height: 301vh;
+    flex-grow: 1;
     overflow-wrap: anywhere;
     border: 1px solid rgba($color-black, 0.2);
     border-radius: 2px;

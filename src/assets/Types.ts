@@ -19,6 +19,7 @@ export interface PostDraft {
   html: string;
   title: string;
   tags: string[];
+  timeToRead: number;
   userInfo: {
     author: string;
     userUid: string;

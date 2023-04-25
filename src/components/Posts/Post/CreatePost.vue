@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onBeforeUnmount, onUpdated } from "vue";
+import { ref, defineComponent, onBeforeUnmount } from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -101,7 +101,7 @@ export default defineComponent({
     const isPending = ref(false);
 
     const { user } = getUser();
-    const { addDocument, updateDocument } = useDocument();
+    const { addDocument } = useDocument();
     const {
       handleImage,
       image: coverImage,
@@ -196,6 +196,10 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 form {
   color: $color-text;
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
+  gap: 1rem;
   #base {
     display: flex;
     flex-direction: column;
@@ -343,7 +347,8 @@ form {
     padding: 1rem 1.6rem;
     color: $color-text;
     background-color: $color-main-1;
-    margin-top: 1.6rem;
+    display: inline-block;
+    margin-top: auto;
     font-family: $ff-mserrat;
     font-weight: 500;
 

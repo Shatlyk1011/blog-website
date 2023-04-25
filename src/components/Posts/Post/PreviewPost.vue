@@ -1,70 +1,60 @@
 <template>
-  <div class="single-post" v-if="post">
+  <div class="preview-post" v-if="draft">
     <div class="cover-image">
-      <img class="img" :src="post.imageUrl" alt="" />
+      <img
+        class="img"
+        src="@/assets/images/image-template.jpg"
+        alt=""
+        title="Ваша обложка тут "
+      />
     </div>
     <div class="container">
       <div class="menu">
         <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
-        <ul class="dropdown">
-          <router-link
-            class="li"
-            :to="{ name: 'UpdatePost', params: { id: postId } }"
-            >Изменить</router-link
-          >
-          <li>Удалить</li>
-        </ul>
       </div>
-      <UserData :date="post.createdAt" class="user-data" />
+      <UserData :date="draft.createdAt" class="user-data" />
 
-      <div class="title">{{ post.title }}</div>
+      <div class="title">{{ draft.title }}</div>
       <ul class="tags">
-        <li class="tag" v-for="t in post.tags" :key="t">
+        <li class="tag" v-for="t in draft.tags" :key="t">
           # <span>{{ t }}</span>
         </li>
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
-          <span>{{ post.timeToRead }} минут</span>
+          <span>{{ draft.timeToRead }} минут</span>
         </div>
       </ul>
 
-      <div class="html" v-html="post.html"></div>
+      <div class="html" v-html="draft.html"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent, onMounted } from "vue";
 
-import { Post } from "@/assets/Types";
+import SinglePost from "./SinglePost.vue";
 
 import UserData from "@/components/Shared/userData.vue";
-import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
+import getDocument from "@/composables/firestore/getDocument";
+import getUser from "@/composables/auth/getUser";
 
 export default defineComponent({
-  name: "SinglePost",
+  components: { SinglePost, UserData },
+  setup() {
+    const { document: draft, error, getDoc } = getDocument();
+    const { user } = getUser();
+    onMounted(async () => {
+      await getDoc("drafts", user.value!.uid);
+      console.log("draft", draft.value);
+    });
 
-  components: { UserData },
-
-  props: {
-    post: {
-      type: Object as PropType<Post>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { avgTimeToRead } = getAvgTimeToRead(props.post?.html);
-    const route = useRoute();
-    let postId = route.params.id;
-    console.log(props);
-
-    return { avgTimeToRead, postId };
+    return { draft, error };
   },
 });
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 $color-black: #000;
 $color-white: #fff;
 $color-text: #e9ecef;
@@ -79,10 +69,9 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
-.single-post {
+.preview-post {
   max-width: 85rem;
 
-  margin: 2rem auto;
   background-color: $color-gray-2; // ?
 
   border-radius: 2px;
