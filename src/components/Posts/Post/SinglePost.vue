@@ -4,29 +4,31 @@
       <img class="img" :src="post.imageUrl" alt="" />
     </div>
     <div class="container">
-      <div class="menu">
-        <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
-        <ul class="dropdown">
+      <OnClickOutside class="menu" @trigger="closeMenu">
+        <font-awesome-icon
+          class="icon"
+          icon="fa-solid fa-ellipsis"
+          @click="openMenu"
+        />
+        <ul class="dropdown" v-if="menu">
           <router-link
             class="li"
             :to="{ name: 'UpdatePost', params: { id: postId } }"
             >Изменить</router-link
           >
-          <li>Удалить</li>
+          <li @click="handleDelete">Удалить</li>
         </ul>
-      </div>
+      </OnClickOutside>
       <UserData :date="post.createdAt" class="user-data" />
 
       <div class="title">{{ post.title }}</div>
-      <ul class="tags">
-        <li class="tag" v-for="t in post.tags" :key="t">
-          # <span>{{ t }}</span>
-        </li>
+      <div class="wrap">
+        <Tags :tags="post.tags" hash="#" />
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
-          <span>{{ post.timeToRead }} минут</span>
+          <span> {{ post.timeToRead }} минут</span>
         </div>
-      </ul>
+      </div>
 
       <div class="html" v-html="post.html"></div>
     </div>
@@ -34,18 +36,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { useRoute } from "vue-router";
+import router from "@/router";
+
+import { OnClickOutside } from "@vueuse/components";
 
 import { Post } from "@/assets/Types";
 
 import UserData from "@/components/Shared/userData.vue";
+import Tags from "@/components/Shared/Tags.vue";
+
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
+import useDocument from "@/composables/firestore/useDocument";
 
 export default defineComponent({
   name: "SinglePost",
 
-  components: { UserData },
+  components: { UserData, Tags, OnClickOutside },
 
   props: {
     post: {
@@ -54,12 +62,38 @@ export default defineComponent({
     },
   },
   setup(props) {
+    let menu = ref(false);
+    const { deleteDocument, error } = useDocument();
+
     const { avgTimeToRead } = getAvgTimeToRead(props.post?.html);
     const route = useRoute();
-    let postId = route.params.id;
+    let postId = route.params.id as string;
     console.log(props);
 
-    return { avgTimeToRead, postId };
+    const openMenu = () => {
+      menu.value = !menu.value;
+    };
+
+    const closeMenu = () => {
+      menu.value = false;
+    };
+
+    const handleDelete = async () => {
+      await deleteDocument("posts", postId);
+      if (!error.value) {
+        router.push("/all-posts");
+      }
+    };
+
+    return {
+      avgTimeToRead,
+      menu,
+      openMenu,
+      closeMenu,
+      postId,
+      handleDelete,
+      error,
+    };
   },
 });
 </script>
@@ -143,7 +177,7 @@ $ff-mserrat: "Montserrat", sans-serif;
             margin-top: 6px;
 
             &:hover {
-              color: $color-text;
+              color: red;
             }
           }
         }
@@ -162,39 +196,27 @@ $ff-mserrat: "Montserrat", sans-serif;
       color: white;
       margin-bottom: 2rem;
     }
-    .tags {
+
+    .wrap {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.4rem;
-      list-style: none;
-      padding: 0;
-      margin-bottom: 1.6rem;
-      width: 100%;
-
-      .tag {
-        font-weight: 500;
-        display: flex;
-        color: $color-main-2;
-        background-color: $color-gray-1;
-        padding: 4px 1rem;
-        border-radius: 4px;
-      }
-
+      margin-left: auto;
       .time {
         display: flex;
-        margin-left: auto;
         align-items: center;
+        justify-content: center;
         background-color: $color-gray-3;
         gap: 1rem;
         padding: 6px 10px;
+        width: max-content;
 
         span {
           font-size: 1.28rem;
           font-weight: 500;
+          white-space: nowrap;
         }
       }
     }
+
     .html {
       margin-top: 2rem;
       width: 100%;

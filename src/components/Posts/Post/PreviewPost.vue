@@ -15,16 +15,12 @@
       <UserData :date="draft.createdAt" class="user-data" />
 
       <div class="title">{{ draft.title }}</div>
-      <ul class="tags">
-        <li class="tag" v-for="t in draft.tags" :key="t">
-          # <span>{{ t }}</span>
-        </li>
+      <Tags :tags="draft.tags" hash="#">
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
           <span>{{ draft.timeToRead }} минут</span>
         </div>
-      </ul>
-
+      </Tags>
       <div class="html" v-html="draft.html"></div>
     </div>
   </div>
@@ -33,14 +29,15 @@
 <script lang="ts">
 import { defineComponent, onMounted } from "vue";
 
-import SinglePost from "./SinglePost.vue";
-
+import SinglePost from "@/components/Posts/Post/SinglePost.vue";
 import UserData from "@/components/Shared/userData.vue";
+import Tags from "@/components/Shared/Tags.vue";
+
 import getDocument from "@/composables/firestore/getDocument";
 import getUser from "@/composables/auth/getUser";
 
 export default defineComponent({
-  components: { SinglePost, UserData },
+  components: { SinglePost, UserData, Tags },
   setup() {
     const { document: draft, error, getDoc } = getDocument();
     const { user } = getUser();
@@ -71,6 +68,7 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 .preview-post {
   max-width: 85rem;
+  margin: 0 auto;
 
   background-color: $color-gray-2; // ?
 
@@ -151,39 +149,20 @@ $ff-mserrat: "Montserrat", sans-serif;
       color: white;
       margin-bottom: 2rem;
     }
-    .tags {
+    .time {
       display: flex;
+      margin-left: auto;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 1.4rem;
-      list-style: none;
-      padding: 0;
-      margin-bottom: 1.6rem;
-      width: 100%;
+      background-color: $color-gray-3;
+      gap: 1rem;
+      padding: 6px 10px;
 
-      .tag {
+      span {
+        font-size: 1.28rem;
         font-weight: 500;
-        display: flex;
-        color: $color-main-2;
-        background-color: $color-gray-1;
-        padding: 4px 1rem;
-        border-radius: 4px;
-      }
-
-      .time {
-        display: flex;
-        margin-left: auto;
-        align-items: center;
-        background-color: $color-gray-3;
-        gap: 1rem;
-        padding: 6px 10px;
-
-        span {
-          font-size: 1.28rem;
-          font-weight: 500;
-        }
       }
     }
+
     .html {
       margin-top: 2rem;
       width: 100%;

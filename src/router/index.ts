@@ -6,8 +6,8 @@ import {
 } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
-import AllPostsview from "@/views/Posts/AllPostsView.vue";
-import CreatePostView from "@/views/CreatePostView.vue";
+import AllPostsView from "@/views/posts/AllPostsView.vue";
+import CreatePostView from "@/views/posts/CreatePostView.vue";
 import SigninView from "@/views/auth/SigninView.vue";
 import SignupView from "@/views/auth/SignupView.vue";
 import PostView from "@/views/Posts/PostView.vue";
@@ -38,7 +38,7 @@ const routes = [
   {
     path: "/all-posts/",
     name: "AllPosts",
-    component: AllPostsview,
+    component: AllPostsView,
   },
   {
     path: "/create-post",

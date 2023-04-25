@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { db } from "@/firebase/config.ts";
-import { addDoc, collection, updateDoc, setDoc, doc } from "firebase/firestore";
+import { addDoc, collection, setDoc, deleteDoc, doc } from "firebase/firestore";
 import { Post, PostDraft } from "@/assets/Types";
 
 const error = ref<string | null>(null);
@@ -30,8 +30,18 @@ const updateDocument = async (
   }
 };
 
+const deleteDocument = async (coll: string, id: string) => {
+  try {
+    const docRef = doc(db, coll, id);
+    await deleteDoc(docRef);
+  } catch (err: any) {
+    console.log("error useDocument");
+    error.value = err.message;
+  }
+};
+
 const useDocument = () => {
-  return { addDocument, updateDocument, error };
+  return { addDocument, updateDocument, deleteDocument, error };
 };
 
 export default useDocument;

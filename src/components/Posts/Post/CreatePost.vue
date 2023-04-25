@@ -43,18 +43,17 @@
         id="Itag"
         placeholder="Добавьте теги (max 3)"
       />
-      <div class="tags" v-if="tags.length">
-        <ul class="tag" v-for="t in tags" :key="t">
-          <li>#{{ t }}</li>
+      <Tags :tags="tags" :white="true">
+        <template #default="slotProps">
           <font-awesome-icon
-            @click="removeTag(t)"
+            @click="removeTag(slotProps.tag)"
             title="Удалить тег"
             class="icon"
             icon="fa-solid fa-x"
             size="xs"
           />
-        </ul>
-      </div>
+        </template>
+      </Tags>
 
       <div class="toolbar">
         <Tools :editor="editor" />
@@ -79,6 +78,7 @@ import { Timestamp } from "firebase/firestore";
 
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
+import Tags from "@/components/Shared/Tags.vue";
 
 import getUser from "@/composables/auth/getUser";
 import useTipTapCreate from "@/composables/useTipTapCreate";
@@ -95,13 +95,14 @@ export default defineComponent({
     EditorContent,
     Tools,
     Input,
+    Tags,
   },
 
   setup() {
     const isPending = ref(false);
 
     const { user } = getUser();
-    const { addDocument } = useDocument();
+    const { addDocument, error: docError, deleteDocument } = useDocument();
     const {
       handleImage,
       image: coverImage,
@@ -147,6 +148,8 @@ export default defineComponent({
           createdAt: Timestamp.fromDate(new Date()),
         };
         await addDocument("posts", newPost);
+        //delete drafts
+        await deleteDocument("drafts", user.value.uid);
         isPending.value = false;
         if (!error.value) {
           router.push("/all-posts");

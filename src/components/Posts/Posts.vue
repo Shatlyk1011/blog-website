@@ -22,7 +22,7 @@ export default defineComponent({
     const formatDate = computed(() => {
       if (props.posts) {
         return props.posts.map((post: Post) => {
-          let newFormat = Number(post.createdAt.toDate());
+          let newFormat = Number(post.createdAt!.toDate());
           let newTime = formatRelative(newFormat, date, { locale: ru });
           return { ...post, createdAt: newTime };
         });

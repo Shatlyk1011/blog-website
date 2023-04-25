@@ -7,9 +7,7 @@
           class="heading"
           >{{ post.title }}</router-link
         >
-        <ul class="tags">
-          <li class="tag" v-for="t in post.tags" :key="t">{{ t }}</li>
-        </ul>
+        <Tags :tags="post.tags" :white="true" />
       </div>
       <div class="img-container">
         <img :src="post.imageUrl" alt="" />
@@ -38,17 +36,16 @@
 import { defineComponent, PropType } from "vue";
 import { Post } from "@/assets/Types";
 
+import Tags from "@/components/Shared/Tags.vue";
+
 export default defineComponent({
   name: "PostItem",
+  components: { Tags },
   props: {
     post: {
       type: Object as PropType<Post>,
       required: true,
     },
-  },
-
-  setup(props) {
-    return {};
   },
 });
 </script>

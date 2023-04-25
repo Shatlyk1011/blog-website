@@ -22,6 +22,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   components: { CreatePost, PreviewPost, FormNav },
+  name: "Create Post View",
 
   setup() {
     let preview = ref(false);
@@ -58,7 +59,7 @@ $ff-mserrat: "Montserrat", sans-serif;
 .create-post-view {
   max-width: 80rem;
   margin: 0 auto;
-  height: 85vh;
+  min-height: 85vh;
   background-color: $color-gray-2;
   padding: 2rem;
 }

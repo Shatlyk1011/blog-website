@@ -162,7 +162,7 @@ export default defineComponent({
             author: user.value!.displayName!,
             userUid: user.value!.uid,
           },
-          createdAt: Timestamp.fromDate(new Date()),
+          editedAt: Timestamp.fromDate(new Date()),
         };
         await updateDocument("posts", props.id || postId, updatedPost);
         isPending.value = false;
