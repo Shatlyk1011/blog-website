@@ -45,7 +45,6 @@ export default defineComponent({
     const { user } = getUser();
     onMounted(async () => {
       await getDoc("drafts", user.value!.uid);
-      console.log("draft", draft.value);
     });
 
     return { draft, error };

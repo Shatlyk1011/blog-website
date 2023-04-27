@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, onBeforeUnmount, PropType, ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 
@@ -49,6 +49,7 @@ import Tags from "@/components/Shared/Tags.vue";
 
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 import useDocument from "@/composables/firestore/useDocument";
+import getDocument from "@/composables/firestore/getDocument";
 
 export default defineComponent({
   name: "SinglePost",
@@ -56,8 +57,8 @@ export default defineComponent({
   components: { UserData, Tags, OnClickOutside },
 
   props: {
-    post: {
-      type: Object as PropType<Post>,
+    postId: {
+      type: String,
       required: true,
     },
   },
@@ -65,10 +66,11 @@ export default defineComponent({
     let menu = ref(false);
     const { deleteDocument, error } = useDocument();
 
-    const { avgTimeToRead } = getAvgTimeToRead(props.post?.html);
+    const { document: post, error: getError, getDoc } = getDocument();
+    getDoc("posts", props.postId);
+
     const route = useRoute();
     let postId = route.params.id as string;
-    console.log(props);
 
     const openMenu = () => {
       menu.value = !menu.value;
@@ -85,14 +87,18 @@ export default defineComponent({
       }
     };
 
+    onBeforeUnmount(() => {
+      post.value = null;
+    });
+
     return {
-      avgTimeToRead,
       menu,
       openMenu,
       closeMenu,
       postId,
       handleDelete,
       error,
+      post,
     };
   },
 });

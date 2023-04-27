@@ -15,7 +15,7 @@ import TextTools from "@/components/TipTap/TipTapTools/TextTools.vue";
 import ImageTool from "@/components/TipTap/TipTapTools/ImageTool.vue";
 import RedoUndoTool from "@/components/TipTap/TipTapTools/RedoUndoTools.vue";
 
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   components: { TextTools, MarkTools, ImageTool, RedoUndoTool },

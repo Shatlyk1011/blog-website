@@ -3,7 +3,7 @@ import { doc, getDoc as getD } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import { Post } from "@/assets/Types";
 
-let document = ref<Post | null>(null);
+let document = ref<Post>();
 const error = ref<string | null>(null);
 
 const getDoc = async (collection: string, id: string) => {

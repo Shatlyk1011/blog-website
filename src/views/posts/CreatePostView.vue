@@ -6,27 +6,39 @@
     @update:preview="handlePreview"
   />
   <div class="create-post-view" v-if="update">
-    <CreatePost />
+    <SubmitForm :setDraft="true">
+      <template #default="slotProps">
+        <SubmitButton text="Опубликовать" :isPending="slotProps.isPending" />
+      </template>
+    </SubmitForm>
   </div>
   <PreviewPost v-if="preview" />
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 
-import CreatePost from "@/components/Posts/Post/CreatePost.vue";
+import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
+import SubmitButton from "@/components/Shared/SubmitButton.vue";
+
+import getDocument from "@/composables/firestore/getDocument";
+import getUser from "@/composables/auth/getUser";
 
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  components: { CreatePost, PreviewPost, FormNav },
   name: "Create Post View",
+
+  components: { SubmitForm, PreviewPost, FormNav, SubmitButton },
 
   setup() {
     let preview = ref(false);
     let update = ref(true);
+
+    const { document, getDoc } = getDocument();
+    const { user } = getUser();
 
     let handleUpdate = () => {
       update.value = true;

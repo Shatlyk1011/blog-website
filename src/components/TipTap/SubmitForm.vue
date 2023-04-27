@@ -1,87 +1,81 @@
 <template>
-  <form @submit.prevent="createPost">
-    <div id="base">
-      <!-- Cover Image -->
-      <label id="coverSelect" for="image" v-if="!imagePreviewUrl">
-        <span>Выберите обложку</span>
-        <Input @input="handleImage" id="image" type="file" required />
-      </label>
-      <div class="imagePreview" v-if="imagePreviewUrl">
-        <img :src="imagePreviewUrl" alt="" />
-        <div class="options">
-          <label
-            id="changeLabel"
-            for="image"
-            class="options__btn options--change"
-            @input="handleImage"
-          >
-            <span>Изменить</span>
-            <Input @input="handleImage" id="image" type="file" />
-          </label>
-          <button
-            class="options__btn options--delete"
-            @click="clearImageValues"
-          >
-            Удалить
-          </button>
+  <div class="form-submit">
+    <form @submit.prevent="handleSubmit">
+      <div class="head">
+        <!-- Cover Image Preview -->
+        <label id="coverSelect" for="image" v-if="!imagePreviewUrl">
+          <span>Выберите обложку</span>
+          <Input @input="handleImage" id="image" type="file" required />
+        </label>
+        <div class="imagePreview" v-if="imagePreviewUrl">
+          <img :src="imagePreviewUrl" alt="" />
+          <div class="options">
+            <label
+              id="changeLabel"
+              for="image"
+              class="options__btn options--change"
+              @input="handleImage"
+            >
+              <span>Изменить</span>
+              <Input @input="handleImage" id="image" type="file" />
+            </label>
+            <button
+              class="options__btn options--delete"
+              @click="clearImageValues"
+            >
+              Удалить
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="error" v-if="imageTypeError">{{ imageTypeError }}</div>
+        <div class="error" v-if="imageTypeError">{{ imageTypeError }}</div>
 
-      <!-- Title of the Post -->
-      <Input
-        v-model="title"
-        id="Ititle"
-        placeholder="Загаловок вашего поста..."
-        autocomplete="off"
-        required
-      />
+        <!-- Title of the Post -->
+        <Input
+          v-model="title"
+          id="Ititle"
+          placeholder="Загаловок вашего поста..."
+          autocomplete="off"
+          required
+        />
 
-      <!-- Tags -->
-      <Input
-        @keydown.enter.prevent="addTag($event)"
-        id="Itag"
-        placeholder="Добавьте теги (max 3)"
-      />
-      <Tags :tags="tags" :white="true" v-if="tags">
-        <template #default="slotProps">
-          <font-awesome-icon
-            @click="removeTag(slotProps.tag)"
-            title="Удалить тег"
-            class="icon"
-            icon="fa-solid fa-x"
-            size="xs"
-          />
-        </template>
-      </Tags>
-
-      <div class="toolbar">
-        <Tools :editor="editor" />
+        <!-- Tags -->
+        <Input
+          @keydown.enter.prevent="addTag($event)"
+          id="Itag"
+          placeholder="Добавьте теги (max 3)"
+        />
+        <Tags :tags="tags" :white="true" v-if="tags">
+          <template #default="slotProps">
+            <font-awesome-icon
+              @click="removeTag(slotProps.tag)"
+              title="Удалить тег"
+              class="icon"
+              icon="fa-solid fa-x"
+              size="xs"
+            />
+          </template>
+        </Tags>
+        <!-- Editor Tools -->
+        <div class="toolbar">
+          <Tools :editor="editor" />
+        </div>
+        <!-- Editor -->
+        <editor-content class="editor" :editor="editor" />
+        <slot :isPending="isPending" />
       </div>
-    </div>
-    <!-- Editor -->
-    <editor-content class="editor" :editor="editor" />
-
-    <div class="buttons">
-      <div class="submit">
-        <button class="submit__btn" v-if="!isPending">Опубликовать</button>
-        <button
-          class="submit__btn submit__btn--isPending"
-          v-if="isPending"
-          disabled
-        >
-          Опубликовать
-        </button>
-      </div>
-      <div class="draft">
-        <button class="draft__btn">Сохранить в черновике</button>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onBeforeUnmount } from "vue";
+import {
+  ref,
+  defineComponent,
+  onBeforeUnmount,
+  PropType,
+  watch,
+  onUpdated,
+} from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -90,29 +84,44 @@ import { Timestamp } from "firebase/firestore";
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 import Tags from "@/components/Shared/Tags.vue";
+import SubmitButton from "@/components/Shared/SubmitButton.vue";
 
 import getUser from "@/composables/auth/getUser";
-import useTipTapCreate from "@/composables/useTipTapCreate";
+import useTipTap from "@/composables/useTipTap";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
-export default defineComponent({
-  name: "CreatePost",
+import { Post } from "@/assets/Types";
 
+export default defineComponent({
+  name: "SubmitForm",
   components: {
     EditorContent,
     Tools,
     Input,
     Tags,
+    SubmitButton,
   },
 
-  setup() {
+  props: {
+    postToUpdate: {
+      required: false,
+      type: Object as PropType<Post> | null | undefined,
+    },
+    setDraft: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
     const isPending = ref(false);
 
     const { user } = getUser();
+
     const { addDocument, error: docError, deleteDocument } = useDocument();
     const {
       handleImage,
@@ -123,7 +132,7 @@ export default defineComponent({
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
     const { addTag, removeTag } = useTags();
 
-    const { editor, title, tags } = useTipTapCreate();
+    const { editor, title, tags } = useTipTap(props.setDraft);
 
     const clearImageValues = () => {
       coverImage.value = null;
@@ -136,7 +145,7 @@ export default defineComponent({
       return html;
     };
 
-    const createPost = async () => {
+    const handleSubmit = async () => {
       const html = await getInnerHTML();
 
       if (editor.value && user.value) {
@@ -173,6 +182,16 @@ export default defineComponent({
       }
     };
 
+    onUpdated(() => {
+      if (props.postToUpdate) {
+        let postToUpdate = props.postToUpdate;
+        console.log("post to update available");
+        title.value = postToUpdate.title;
+        tags.value = postToUpdate.tags;
+        editor.value?.commands.setContent(postToUpdate.html);
+      }
+    });
+
     onBeforeUnmount(() => {
       editor.value?.destroy();
       tags.value = [];
@@ -181,7 +200,7 @@ export default defineComponent({
 
     return {
       editor,
-      createPost,
+      handleSubmit,
       title,
       tags,
       isPending,
@@ -219,7 +238,7 @@ form {
   grid-template-rows: min-content 1fr min-content;
   gap: 1rem;
 
-  #base {
+  .head {
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -358,47 +377,6 @@ form {
             transform: translateY(4px) scale(0.98);
           }
         }
-      }
-    }
-  }
-
-  .buttons {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    margin-top: 1rem;
-    font-family: $ff-mserrat;
-    font-weight: 500;
-    .submit {
-      &__btn {
-        padding: 1rem 1.6rem;
-        color: $color-text;
-        background-color: $color-main-1;
-        display: inline-block;
-        justify-self: start;
-
-        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-        &:hover {
-          background-color: rgba($color-main-1, 0.8);
-        }
-
-        &:active {
-          transform: translateY(4px) scale(0.98);
-        }
-        &--isPending {
-          background-color: rgba($color-gray-3, 0.5);
-          color: rgba($color-text, 0.5);
-
-          &:hover {
-            background-color: rgba($color-gray-3, 0.4);
-          }
-        }
-      }
-    }
-    .draft {
-      &__btn {
-        padding: 1rem 1.6rem;
-        background-color: $color-gray-3;
       }
     }
   }
