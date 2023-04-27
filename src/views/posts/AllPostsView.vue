@@ -18,6 +18,7 @@ export default defineComponent({
   },
   setup() {
     const { documents: posts } = getCollection("posts");
+    console.log("POSTS", posts.value);
 
     return { posts };
   },

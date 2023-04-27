@@ -43,7 +43,7 @@
         id="Itag"
         placeholder="Добавьте теги (max 3)"
       />
-      <Tags :tags="tags" :white="true">
+      <Tags :tags="tags" :white="true" v-if="tags">
         <template #default="slotProps">
           <font-awesome-icon
             @click="removeTag(slotProps.tag)"
@@ -62,10 +62,21 @@
     <!-- Editor -->
     <editor-content class="editor" :editor="editor" />
 
-    <button class="btn submit" v-if="!isPending">Опубликовать</button>
-    <button class="btn submit isPending" v-if="isPending" disabled>
-      Опубликовать
-    </button>
+    <div class="buttons">
+      <div class="submit">
+        <button class="submit__btn" v-if="!isPending">Опубликовать</button>
+        <button
+          class="submit__btn submit__btn--isPending"
+          v-if="isPending"
+          disabled
+        >
+          Опубликовать
+        </button>
+      </div>
+      <div class="draft">
+        <button class="draft__btn">Сохранить в черновике</button>
+      </div>
+    </div>
   </form>
 </template>
 
@@ -149,12 +160,16 @@ export default defineComponent({
         };
         await addDocument("posts", newPost);
         //delete drafts
-        await deleteDocument("drafts", user.value.uid);
+        await deleteDocument("drafts", user.value!.uid);
+
         isPending.value = false;
         if (!error.value) {
+          editor.value?.destroy();
           router.push("/all-posts");
           isPending.value = false;
         }
+      } else {
+        console.log("error");
       }
     };
 
@@ -199,10 +214,11 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 form {
   color: $color-text;
+  min-height: 85vh;
   display: grid;
   grid-template-rows: min-content 1fr min-content;
-  height: 100%;
   gap: 1rem;
+
   #base {
     display: flex;
     flex-direction: column;
@@ -346,32 +362,44 @@ form {
     }
   }
 
-  .submit {
-    padding: 1rem 1.6rem;
-    color: $color-text;
-    background-color: $color-main-1;
-    display: inline-block;
-    margin-top: auto;
+  .buttons {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 1rem;
     font-family: $ff-mserrat;
     font-weight: 500;
+    .submit {
+      &__btn {
+        padding: 1rem 1.6rem;
+        color: $color-text;
+        background-color: $color-main-1;
+        display: inline-block;
+        justify-self: start;
 
-    transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        &:hover {
+          background-color: rgba($color-main-1, 0.8);
+        }
 
-    &:hover {
-      background-color: rgba($color-main-1, 0.8);
+        &:active {
+          transform: translateY(4px) scale(0.98);
+        }
+        &--isPending {
+          background-color: rgba($color-gray-3, 0.5);
+          color: rgba($color-text, 0.5);
+
+          &:hover {
+            background-color: rgba($color-gray-3, 0.4);
+          }
+        }
+      }
     }
-
-    &:active {
-      transform: translateY(4px) scale(0.98);
-    }
-  }
-
-  .isPending {
-    background-color: rgba($color-gray-3, 0.5);
-    color: rgba($color-text, 0.5);
-
-    &:hover {
-      background-color: rgba($color-gray-3, 0.4);
+    .draft {
+      &__btn {
+        padding: 1rem 1.6rem;
+        background-color: $color-gray-3;
+      }
     }
   }
 }

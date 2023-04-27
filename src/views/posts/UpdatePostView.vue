@@ -66,7 +66,7 @@
 
       <button class="btn submit" v-if="!isPending">Опубликовать</button>
       <button class="btn submit isPending" v-if="isPending" disabled>
-        Опубликовать
+        Сохранить
       </button>
     </form>
     <div v-if="!post && !showNoPosts">Loading...</div>
@@ -86,7 +86,7 @@ import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 
 import getUser from "@/composables/auth/getUser";
-import useTipTapEdit from "@/composables/useTipTapEdit";
+import useTipTapUpdate from "@/composables/useTipTapUpdate";
 import useDocument from "@/composables/firestore/useDocument";
 import getDocument from "@/composables/firestore/getDocument";
 import getInputImage from "@/composables/getInputImage";
@@ -125,7 +125,7 @@ export default defineComponent({
       useStorage();
     const { addTag, removeTag } = useTags();
 
-    const { editor, title, tags } = useTipTapEdit();
+    const { editor, title, tags } = useTipTapUpdate();
 
     const clearImageValues = () => {
       coverImage.value = null;
@@ -141,30 +141,32 @@ export default defineComponent({
     const updatePost = async () => {
       const html = await getInnerHTML();
 
-      if (editor.value) {
+      if (editor.value && post.value) {
         isPending.value = true;
         /* delete image before uploading */
-        if (post.value) {
+        if (imageUrl.value && imageRef.value && coverImage.value) {
           await deleteImage(post.value.imageRef);
+          await uploadImage("covers", coverImage.value);
         }
-        await uploadImage("covers", coverImage.value);
         const { avgTimeToRead } = getAvgTimeToRead(html);
 
         let updatedPost = {
           html,
           title: title.value,
-          imageUrl: imageUrl.value,
-          imageRef: imageRef.value,
+          imageUrl: imageUrl.value ? imageUrl.value : post.value.imageUrl,
+          imageRef: imageRef.value ? imageRef.value : post.value.imageRef,
           comments: [],
           tags: tags.value,
           timeToRead: avgTimeToRead.value,
           userInfo: {
+            //route guard setted
             author: user.value!.displayName!,
             userUid: user.value!.uid,
           },
+          createdAt: post.value.createdAt,
           editedAt: Timestamp.fromDate(new Date()),
         };
-        await updateDocument("posts", props.id || postId, updatedPost);
+        await updateDocument("posts", props.id!, updatedPost);
         isPending.value = false;
         if (!error.value) {
           router.push("/all-posts");
@@ -173,7 +175,7 @@ export default defineComponent({
       }
     };
     onMounted(async () => {
-      await getDoc("posts", props.id || postId);
+      await getDoc("posts", props.id!);
       if (post.value) {
         console.log("post.value", post.value);
         imagePreviewUrl.value = post.value.imageUrl;

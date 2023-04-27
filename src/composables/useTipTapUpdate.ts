@@ -31,6 +31,10 @@ const useTipTapEdit = () => {
 
   const editor = useEditor({
     autofocus: true,
+
+    onCreate({ editor }) {
+      editor.commands.clearContent();
+    },
     extensions: [
       StarterKit.configure({
         bulletList: {

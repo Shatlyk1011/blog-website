@@ -23,7 +23,6 @@ const useStorage = () => {
 
     try {
       const res = await uploadBytes(strRef, image);
-
       //get url of an uploaded image
       imageUrl.value = await getDownloadURL(strRef);
     } catch (err: any) {

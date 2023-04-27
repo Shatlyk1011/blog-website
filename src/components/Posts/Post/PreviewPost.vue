@@ -15,12 +15,14 @@
       <UserData :date="draft.createdAt" class="user-data" />
 
       <div class="title">{{ draft.title }}</div>
-      <Tags :tags="draft.tags" hash="#">
+      <div class="wrap">
+        <Tags :tags="draft.tags" hash="#" />
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
           <span>{{ draft.timeToRead }} минут</span>
         </div>
-      </Tags>
+      </div>
+
       <div class="html" v-html="draft.html"></div>
     </div>
   </div>
@@ -30,7 +32,7 @@
 import { defineComponent, onMounted } from "vue";
 
 import SinglePost from "@/components/Posts/Post/SinglePost.vue";
-import UserData from "@/components/Shared/userData.vue";
+import UserData from "@/components/Shared/UserData.vue";
 import Tags from "@/components/Shared/Tags.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
@@ -149,17 +151,23 @@ $ff-mserrat: "Montserrat", sans-serif;
       color: white;
       margin-bottom: 2rem;
     }
-    .time {
+    .wrap {
       display: flex;
       margin-left: auto;
-      align-items: center;
-      background-color: $color-gray-3;
-      gap: 1rem;
-      padding: 6px 10px;
+      .time {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $color-gray-3;
+        gap: 1rem;
+        padding: 6px 10px;
+        width: max-content;
 
-      span {
-        font-size: 1.28rem;
-        font-weight: 500;
+        span {
+          font-size: 1.28rem;
+          font-weight: 500;
+          white-space: nowrap;
+        }
       }
     }
 

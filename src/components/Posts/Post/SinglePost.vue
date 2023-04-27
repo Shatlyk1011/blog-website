@@ -44,7 +44,7 @@ import { OnClickOutside } from "@vueuse/components";
 
 import { Post } from "@/assets/Types";
 
-import UserData from "@/components/Shared/userData.vue";
+import UserData from "@/components/Shared/UserData.vue";
 import Tags from "@/components/Shared/Tags.vue";
 
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
@@ -190,7 +190,7 @@ $ff-mserrat: "Montserrat", sans-serif;
 
     .title {
       font-size: 4.8rem;
-      line-height: 0.9;
+      line-height: 1.07;
       font-family: $ff-mserrat;
       font-weight: 700;
       color: white;

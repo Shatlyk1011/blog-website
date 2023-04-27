@@ -59,7 +59,6 @@ $ff-mserrat: "Montserrat", sans-serif;
 .create-post-view {
   max-width: 80rem;
   margin: 0 auto;
-  min-height: 85vh;
   background-color: $color-gray-2;
   padding: 2rem;
 }

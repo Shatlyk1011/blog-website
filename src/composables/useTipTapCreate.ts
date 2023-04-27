@@ -28,7 +28,10 @@ lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
 const { updateDocument } = useDocument();
+
 const { user } = getUser();
+
+const { document: draft, getDoc } = getDocument();
 
 const useTiptapCreate = () => {
   const title = ref("");
@@ -36,14 +39,14 @@ const useTiptapCreate = () => {
 
   const editor = useEditor({
     //set undone work
-    async onBeforeCreate({ editor }) {
-      const { document: draft, getDoc } = getDocument();
+    async onCreate({ editor }) {
       await getDoc("drafts", user.value!.uid);
       if (draft.value) {
         editor.commands.setContent(draft.value.html);
         title.value = draft.value.title;
         tags.value = draft.value.tags;
       }
+      draft.value = null;
     },
 
     //save as drafts
