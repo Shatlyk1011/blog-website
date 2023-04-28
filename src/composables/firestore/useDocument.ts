@@ -1,6 +1,13 @@
 import { ref } from "vue";
 import { db } from "@/firebase/config.ts";
-import { addDoc, collection, setDoc, deleteDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { Post, PostDraft } from "@/assets/Types";
 
 const error = ref<string | null>(null);
@@ -16,7 +23,8 @@ const addDocument = async (coll: string, data: Post | PostDraft) => {
   }
 };
 
-const updateDocument = async (
+// update or create
+const setDocument = async (
   coll: string,
   id: string,
   data: Post | PostDraft
@@ -40,8 +48,23 @@ const deleteDocument = async (coll: string, id: string) => {
   }
 };
 
+const updateDocument = async (
+  coll: string,
+  id: string,
+  data: Post | PostDraft
+) => {
+  const docRef = doc(db, coll, id);
+
+  try {
+    await updateDoc(docRef, { data });
+    console.log("post updated");
+  } catch (err: any) {
+    error.value = err.message;
+  }
+};
+
 const useDocument = () => {
-  return { addDocument, updateDocument, deleteDocument, error };
+  return { addDocument, setDocument, deleteDocument, error, updateDocument };
 };
 
 export default useDocument;

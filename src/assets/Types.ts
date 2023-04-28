@@ -25,6 +25,5 @@ export interface PostDraft {
     author: string;
     userUid: string;
   };
-  createdAt: Timestamp;
   readonly id?: string;
 }

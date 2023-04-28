@@ -4,14 +4,15 @@
     @update:update="handleUpdate"
     @update:preview="handlePreview"
   />
-  <div class="update-post-view">
+  <div class="update-post-view" v-if="update">
     <SubmitForm :postToUpdate="post">
+      <!-- slot -->
       <template #default="slotProps">
         <SubmitButton text="Сохранить" :isPending="slotProps.isPending" />
       </template>
     </SubmitForm>
   </div>
-  <PreviewPost v-if="preview" />
+  <PreviewPost v-if="preview" :post="post" />
 </template>
 
 <script lang="ts">
@@ -53,7 +54,9 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      await getDoc("posts", props.id!);
+      console.log("getting post to edit");
+      await getDoc("posts", props.id);
+      console.log("posttt", post.value);
     });
 
     return { preview, update, handleUpdate, post, handlePreview };

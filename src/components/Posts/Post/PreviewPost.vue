@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-post" v-if="draft">
+  <div class="preview-post" v-if="post">
     <div class="cover-image">
       <img
         class="img"
@@ -12,24 +12,24 @@
       <div class="menu">
         <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
       </div>
-      <UserData :date="draft.createdAt" class="user-data" />
+      <UserData date="12.02.12" class="user-data" />
 
-      <div class="title">{{ draft.title }}</div>
+      <div class="title">{{ post.title }}</div>
       <div class="wrap">
-        <Tags :tags="draft.tags" hash="#" />
+        <Tags :tags="post.tags" hash="#" />
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
-          <span>{{ draft.timeToRead }} минут</span>
+          <span>{{ post.timeToRead }} минут</span>
         </div>
       </div>
 
-      <div class="html" v-html="draft.html"></div>
+      <div class="html" v-html="post.html"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, PropType } from "vue";
 
 import SinglePost from "@/components/Posts/Post/SinglePost.vue";
 import UserData from "@/components/Shared/UserData.vue";
@@ -37,17 +37,26 @@ import Tags from "@/components/Shared/Tags.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 import getUser from "@/composables/auth/getUser";
+import { Post, PostDraft } from "@/assets/Types";
 
 export default defineComponent({
   components: { SinglePost, UserData, Tags },
+
+  props: {
+    post: {
+      required: true,
+      type: Object as PropType<Post | PostDraft> | PropType<undefined>,
+    },
+  },
+
   setup() {
-    const { document: draft, error, getDoc } = getDocument();
+    /*     const { document: draft, error, getDoc } = getDocument();
     const { user } = getUser();
     onMounted(async () => {
       await getDoc("drafts", user.value!.uid);
     });
 
-    return { draft, error };
+    return { draft, error }; */
   },
 });
 </script>

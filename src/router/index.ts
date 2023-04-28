@@ -10,7 +10,7 @@ import AllPostsView from "@/views/posts/AllPostsView.vue";
 import CreatePostView from "@/views/posts/CreatePostView.vue";
 import SigninView from "@/views/auth/SigninView.vue";
 import SignupView from "@/views/auth/SignupView.vue";
-import PostView from "@/views/Posts/PostView.vue";
+import PostView from "@/views/posts/PostView.vue";
 import DraftsView from "@/views/DraftsView.vue";
 import UpdatePostView from "@/views/posts/UpdatePostView.vue";
 

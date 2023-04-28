@@ -75,6 +75,7 @@ import {
   PropType,
   watch,
   onUpdated,
+  onMounted,
 } from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
@@ -94,7 +95,7 @@ import useStorage from "@/composables/storage/useStorage";
 import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
-import { Post } from "@/assets/Types";
+import { Post, PostDraft } from "@/assets/Types";
 
 export default defineComponent({
   name: "SubmitForm",
@@ -111,6 +112,10 @@ export default defineComponent({
       required: false,
       type: Object as PropType<Post> | null | undefined,
     },
+    postToSetDraft: {
+      required: false,
+      type: Object as PropType<PostDraft>,
+    },
     setDraft: {
       required: false,
       type: Boolean,
@@ -122,7 +127,12 @@ export default defineComponent({
 
     const { user } = getUser();
 
-    const { addDocument, error: docError, deleteDocument } = useDocument();
+    const {
+      addDocument,
+      error: docError,
+      deleteDocument,
+      setDocument,
+    } = useDocument();
     const {
       handleImage,
       image: coverImage,
@@ -182,22 +192,46 @@ export default defineComponent({
       }
     };
 
-    onUpdated(() => {
-      if (props.postToUpdate) {
-        let postToUpdate = props.postToUpdate;
-        console.log("post to update available");
-        title.value = postToUpdate.title;
-        tags.value = postToUpdate.tags;
-        editor.value?.commands.setContent(postToUpdate.html);
-      }
-    });
-
-    onBeforeUnmount(() => {
+    onBeforeUnmount(async () => {
       editor.value?.destroy();
       tags.value = [];
       imagePreviewUrl.value = "";
+      //save as draft
+      if (props.setDraft && editor.value) {
+        let html = editor.value.getHTML();
+        let { avgTimeToRead } = getAvgTimeToRead(html);
+        console.log("sending draft to fs");
+        await setDocument("drafts", user.value!.uid, {
+          html,
+          title: title.value,
+          tags: tags.value,
+          timeToRead: avgTimeToRead.value,
+          userInfo: {
+            author: user.value!.displayName!,
+            userUid: user.value!.uid,
+          },
+        });
+      }
     });
 
+    //set the editable post in update-post view
+    onUpdated(() => {
+      if (props.postToUpdate) {
+        console.log("I LL SET POST TO  UPDATE");
+
+        let post = props.postToUpdate;
+        title.value = post.title;
+        tags.value = post.tags;
+        editor.value?.commands.setContent(post.html);
+      }
+      if (props.postToSetDraft) {
+        console.log("I LL SET POST DRAFT");
+        let draft = props.postToSetDraft;
+        title.value = draft.title;
+        tags.value = draft.tags;
+        editor.value?.commands.setContent(draft.html);
+      }
+    });
     return {
       editor,
       handleSubmit,
@@ -211,6 +245,7 @@ export default defineComponent({
       clearImageValues,
       addTag,
       removeTag,
+      user,
     };
   },
 });

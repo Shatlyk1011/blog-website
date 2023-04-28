@@ -6,17 +6,18 @@
     @update:preview="handlePreview"
   />
   <div class="create-post-view" v-if="update">
-    <SubmitForm :setDraft="true">
+    <SubmitForm :setDraft="true" :postToSetDraft="draft">
+      <!-- slot -->
       <template #default="slotProps">
         <SubmitButton text="Опубликовать" :isPending="slotProps.isPending" />
       </template>
     </SubmitForm>
   </div>
-  <PreviewPost v-if="preview" />
+  <PreviewPost v-if="preview" :post="draft" />
 </template>
 
 <script lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
@@ -37,8 +38,8 @@ export default defineComponent({
     let preview = ref(false);
     let update = ref(true);
 
-    const { document, getDoc } = getDocument();
     const { user } = getUser();
+    const { getDoc, document: draft } = getDocument();
 
     let handleUpdate = () => {
       update.value = true;
@@ -49,7 +50,11 @@ export default defineComponent({
       update.value = false;
     };
 
-    return { preview, update, handleUpdate, handlePreview };
+    onMounted(async () => {
+      await getDoc("drafts", user.value!.uid);
+    });
+
+    return { preview, update, handleUpdate, handlePreview, draft };
   },
 });
 </script>

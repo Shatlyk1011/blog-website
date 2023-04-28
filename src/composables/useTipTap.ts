@@ -29,7 +29,7 @@ lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
-const { updateDocument } = useDocument();
+const { setDocument, updateDocument } = useDocument();
 const { getDoc, document: draft } = getDocument();
 const { user } = getUser();
 
@@ -39,39 +39,18 @@ const useTipTap = (setDraft: boolean = false) => {
 
   const editor = useEditor({
     //set undone work
-    async onCreate({ editor }) {
+    /*     async onCreate({ editor }) {
       if (setDraft) {
         await getDoc("drafts", user.value!.uid);
         if (draft.value) {
-          console.log("i'll set default");
+          console.log("i'll set drafts");
           editor.commands.setContent(draft.value.html);
           title.value = draft.value.title;
           tags.value = draft.value.tags;
         }
         draft.value = undefined;
       }
-    },
-
-    //save as drafts
-    async onUpdate({ editor }) {
-      if (setDraft) {
-        const html = editor.getHTML();
-        let { avgTimeToRead } = getAvgTimeToRead(html);
-        if (user.value) {
-          await updateDocument("drafts", user.value.uid, {
-            html,
-            title: title.value,
-            tags: tags.value,
-            timeToRead: avgTimeToRead.value,
-            userInfo: {
-              author: user.value.displayName!,
-              userUid: user.value.uid,
-            },
-            createdAt: Timestamp.fromDate(new Date()),
-          });
-        }
-      }
-    },
+    }, */
 
     autofocus: true,
     extensions: [

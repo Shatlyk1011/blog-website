@@ -13,7 +13,7 @@ const getDoc = async (collection: string, id: string) => {
   if (docSnap.exists()) {
     document.value = docSnap.data() as Post;
   } else {
-    console.log("error in getDocument");
+    console.log("no documents getDocument");
     error.value = "Что то пошло не так";
   }
 };

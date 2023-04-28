@@ -23,7 +23,7 @@ export default defineComponent({
   props: {
     date: {
       required: false,
-      type: Timestamp,
+      type: String, //Timestamp
     },
   },
   setup() {

@@ -18,7 +18,11 @@ export default defineComponent({
     const route = useRoute();
 
     const showNav = computed(() => {
-      return route.path != "/create-post";
+      if (route.name == "CreatePost" || route.name == "UpdatePost")
+        return false;
+      else {
+        return true;
+      }
     });
 
     return { showNav };
