@@ -21,7 +21,25 @@
       </OnClickOutside>
       <Modal :modalActive="modalActive" @close="toggleModal">
         <div class="modal-content">
-          <h1>This is a Modal Header</h1>
+          <div class="icon-wrap">
+            <font-awesome-icon
+              class="icon"
+              color="red"
+              size="xl"
+              icon="fa-solid fa-circle-exclamation"
+            />
+          </div>
+          <h3>Удалить?</h3>
+          <p>
+            Вы уверены что хотите удалить <span>"{{ post.title }}"</span>?
+          </p>
+
+          <div class="btns">
+            <button class="btn btn--cancel" @click="toggleModal">Отмена</button>
+            <button class="btn btn--delete" @click="handleDelete">
+              Удалить
+            </button>
+          </div>
         </div>
       </Modal>
 
@@ -71,7 +89,7 @@ export default defineComponent({
   },
   setup(props) {
     let menu = ref(false);
-    const modalActive = ref(true);
+    const modalActive = ref(false);
     const toggleModal = () => {
       modalActive.value = !modalActive.value;
     };
@@ -127,6 +145,8 @@ $color-main-2: #f9744b;
 $color-gray-1: #212529;
 $color-gray-2: #495057;
 $color-gray-3: #868e96;
+
+$color-red: #d92d20;
 
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
@@ -195,7 +215,7 @@ $ff-mserrat: "Montserrat", sans-serif;
             margin-top: 6px;
 
             &:hover {
-              color: red;
+              color: $color-red;
             }
           }
         }
@@ -259,6 +279,74 @@ $ff-mserrat: "Montserrat", sans-serif;
 }
 
 .modal-content {
-  color: $color-black;
+  padding: 2.4rem 3.2rem;
+  position: relative;
+  background-color: #fff;
+  border-radius: 4px;
+  color: $color-gray-1;
+
+  .icon-wrap {
+    position: absolute;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 3.6rem;
+      height: 3.6rem;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 100%;
+      background-color: rgba($color-red, 0.15);
+      z-index: 10000;
+    }
+    &::after {
+      width: 4.8rem;
+      height: 4.8rem;
+      background-color: rgba($color-red, 0.1);
+    }
+  }
+
+  h3 {
+    margin-top: 4.8rem;
+  }
+
+  p {
+    margin-top: 1.6rem;
+    line-height: 1.4;
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  .btns {
+    display: flex;
+    gap: 2.4rem;
+    margin-top: 2rem;
+    justify-content: flex-end;
+
+    .btn {
+      padding: 0.8rem 1.2rem;
+      border: 1px solid $color-gray-2;
+      border-radius: 2px;
+
+      transition: all 0.4s cubic-bezier(0.83, 0, 0.17, 1);
+
+      &--cancel {
+      }
+
+      &--delete {
+        background-color: $color-red;
+        color: $color-text;
+
+        transition: all 0.4s cubic-bezier(0.83, 0, 0.17, 1);
+
+        &:hover {
+          background-color: rgba($color-red, 0.9);
+        }
+      }
+    }
+  }
 }
 </style>
