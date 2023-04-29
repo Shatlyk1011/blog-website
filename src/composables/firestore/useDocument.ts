@@ -42,6 +42,7 @@ const deleteDocument = async (coll: string, id: string) => {
   try {
     const docRef = doc(db, coll, id);
     await deleteDoc(docRef);
+    console.log("doc deleted");
   } catch (err: any) {
     console.log("error useDocument");
     error.value = err.message;

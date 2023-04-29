@@ -6,7 +6,7 @@
         :is="currentView"
         :postToUpdate="post"
         :post="post"
-        btnText="Изменить"
+        btnText="Сохранить"
       />
     </keep-alive>
   </div>
@@ -18,14 +18,13 @@ import { ref, onMounted, KeepAlive, defineComponent } from "vue";
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
-import SubmitButton from "@/components/Shared/SubmitButton.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 
 export default defineComponent({
   name: "UpdatePost",
 
-  components: { SubmitForm, PreviewPost, FormNav, SubmitButton, KeepAlive },
+  components: { SubmitForm, PreviewPost, FormNav, KeepAlive },
 
   props: {
     id: {

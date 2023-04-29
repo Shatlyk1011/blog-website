@@ -86,7 +86,7 @@ import {
   onActivated,
   onDeactivated,
 } from "vue";
-import router from "@/router";
+import { useRoute, useRouter } from "vue-router";
 import { EditorContent } from "@tiptap/vue-3";
 
 import { Timestamp } from "firebase/firestore";
@@ -94,7 +94,6 @@ import { Timestamp } from "firebase/firestore";
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 import Tags from "@/components/Shared/Tags.vue";
-import SubmitButton from "@/components/Shared/SubmitButton.vue";
 
 import getUser from "@/composables/auth/getUser";
 import useTipTap from "@/composables/useTipTap";
@@ -113,7 +112,6 @@ export default defineComponent({
     Tools,
     Input,
     Tags,
-    SubmitButton,
   },
 
   emits: ["update:draft"],
@@ -136,17 +134,24 @@ export default defineComponent({
       required: true,
       type: String,
     },
+    id: {
+      type: String,
+    },
   },
   setup(props, { emit }) {
     const isPending = ref(false);
 
     const { user } = getUser();
 
+    const route = useRoute();
+    const router = useRouter();
+
     const {
       addDocument,
       error: docError,
       deleteDocument,
       setDocument,
+      updateDocument,
     } = useDocument();
     const {
       handleImage,
@@ -172,7 +177,36 @@ export default defineComponent({
     const handleSubmit = async () => {
       const html = await getInnerHTML();
 
-      if (editor.value && user.value) {
+      //update post
+      if (props.postToUpdate) {
+        let postId = route.params.id as string;
+        let postToUpdate = props.postToUpdate;
+        isPending.value = true;
+        if (coverImage.value) {
+          await uploadImage("covers", coverImage.value);
+        }
+        const { avgTimeToRead } = getAvgTimeToRead(html);
+        let updatePost = {
+          html,
+          title: title.value,
+          imageUrl: imageUrl.value ? imageUrl.value : postToUpdate.imageUrl,
+          imageRef: imageRef.value ? imageRef.value : postToUpdate.imageRef,
+          comments: [],
+          tags: tags.value,
+          timeToRead: avgTimeToRead.value,
+          userInfo: {
+            author: user.value!.displayName!,
+            userUid: user.value!.uid,
+          },
+          editedAt: Timestamp.fromDate(new Date()),
+        };
+
+        await updateDocument("posts", postId, updatePost);
+        isPending.value = false;
+      }
+
+      //create post
+      if (!props.postToUpdate && route.path === "/create-post") {
         isPending.value = true;
         await uploadImage("covers", coverImage.value);
         const { avgTimeToRead } = getAvgTimeToRead(html);
@@ -186,8 +220,8 @@ export default defineComponent({
           tags: tags.value,
           timeToRead: avgTimeToRead.value,
           userInfo: {
-            author: user.value.displayName!,
-            userUid: user.value.uid,
+            author: user.value!.displayName!,
+            userUid: user.value!.uid,
           },
           createdAt: Timestamp.fromDate(new Date()),
         };

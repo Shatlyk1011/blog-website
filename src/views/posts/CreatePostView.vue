@@ -20,7 +20,6 @@ import { onMounted, ref, KeepAlive, onUpdated } from "vue";
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
-import SubmitButton from "@/components/Shared/SubmitButton.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 import getUser from "@/composables/auth/getUser";
@@ -30,7 +29,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Create Post View",
 
-  components: { SubmitForm, PreviewPost, FormNav, SubmitButton, KeepAlive },
+  components: { SubmitForm, PreviewPost, FormNav, KeepAlive },
 
   setup() {
     const { user } = getUser();
