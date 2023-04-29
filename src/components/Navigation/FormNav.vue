@@ -5,8 +5,8 @@
         >set-web</router-link
       >
       <div class="btns">
-        <button class="btn--update" @click="handleUpdateEmit">Изменить</button>
-        <button class="btn--preview" @click="handlePreviewEmit">Превью</button>
+        <button class="btn--update" @click="emitChange">Изменить</button>
+        <button class="btn--update" @click="emitPreview">Превью</button>
       </div>
     </nav>
   </div>
@@ -16,16 +16,16 @@
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  emits: ["update:preview", "update:update"],
+  emits: ["update:change", "update:preview"],
   setup(props, { emit }) {
-    const handleUpdateEmit = () => {
-      emit("update:update");
+    const emitChange = () => {
+      emit("update:change");
     };
 
-    const handlePreviewEmit = () => {
+    const emitPreview = () => {
       emit("update:preview");
     };
-    return { handlePreviewEmit, handleUpdateEmit };
+    return { emitChange, emitPreview };
   },
 });
 </script>

@@ -1,23 +1,20 @@
-
 <template>
-  <form-nav
-    :class="update ? 'update' : 'preview'"
-    @update:update="handleUpdate"
-    @update:preview="handlePreview"
-  />
-  <div class="create-post-view" v-if="update">
-    <SubmitForm :setDraft="true" :postToSetDraft="draft">
-      <!-- slot -->
-      <template #default="slotProps">
-        <SubmitButton text="Опубликовать" :isPending="slotProps.isPending" />
-      </template>
-    </SubmitForm>
+  <div class="create-post">
+    <form-nav @update:change="handleChange" @update:preview="handlePreview" />
+    <keep-alive>
+      <component
+        @update:draft="updateDraft"
+        :setDraft="true"
+        :is="currentView"
+        :postToSetDraft="draft"
+        :post="draft"
+      />
+    </keep-alive>
   </div>
-  <PreviewPost v-if="preview" :post="draft" />
 </template>
 
 <script lang="ts">
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onMounted, ref, KeepAlive, onUpdated } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
@@ -32,29 +29,31 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Create Post View",
 
-  components: { SubmitForm, PreviewPost, FormNav, SubmitButton },
+  components: { SubmitForm, PreviewPost, FormNav, SubmitButton, KeepAlive },
 
   setup() {
-    let preview = ref(false);
-    let update = ref(true);
-
     const { user } = getUser();
     const { getDoc, document: draft } = getDocument();
 
-    let handleUpdate = () => {
-      update.value = true;
-      preview.value = false;
+    let currentView = ref("SubmitForm");
+    const handleChange = () => {
+      currentView.value = "SubmitForm";
     };
-    let handlePreview = () => {
-      preview.value = true;
-      update.value = false;
+    const handlePreview = () => {
+      currentView.value = "PreviewPost";
+    };
+
+    const updateDraft = async () => {
+      console.log("updateDrafttttttt!!!!!!!!");
+      await getDoc("drafts", user.value!.uid);
     };
 
     onMounted(async () => {
+      console.log("mounting create-post");
       await getDoc("drafts", user.value!.uid);
     });
 
-    return { preview, update, handleUpdate, handlePreview, draft };
+    return { currentView, handleChange, handlePreview, draft, updateDraft };
   },
 });
 </script>

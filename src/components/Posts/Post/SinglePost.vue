@@ -16,9 +16,15 @@
             :to="{ name: 'UpdatePost', params: { id: postId } }"
             >Изменить</router-link
           >
-          <li @click="handleDelete">Удалить</li>
+          <li @click="toggleModal">Удалить</li>
         </ul>
       </OnClickOutside>
+      <Modal :modalActive="modalActive" @close="toggleModal">
+        <div class="modal-content">
+          <h1>This is a Modal Header</h1>
+        </div>
+      </Modal>
+
       <UserData :date="post.createdAt" class="user-data" />
 
       <div class="title">{{ post.title }}</div>
@@ -46,6 +52,7 @@ import { Post } from "@/assets/Types";
 
 import UserData from "@/components/Shared/UserData.vue";
 import Tags from "@/components/Shared/Tags.vue";
+import Modal from "@/components/Shared/Modal.vue";
 
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 import useDocument from "@/composables/firestore/useDocument";
@@ -54,7 +61,7 @@ import getDocument from "@/composables/firestore/getDocument";
 export default defineComponent({
   name: "SinglePost",
 
-  components: { UserData, Tags, OnClickOutside },
+  components: { UserData, Tags, OnClickOutside, Modal },
 
   props: {
     postId: {
@@ -64,8 +71,12 @@ export default defineComponent({
   },
   setup(props) {
     let menu = ref(false);
-    const { deleteDocument, error } = useDocument();
+    const modalActive = ref(true);
+    const toggleModal = () => {
+      modalActive.value = !modalActive.value;
+    };
 
+    const { deleteDocument, error } = useDocument();
     const { document: post, error: getError, getDoc } = getDocument();
     getDoc("posts", props.postId);
 
@@ -75,7 +86,6 @@ export default defineComponent({
     const openMenu = () => {
       menu.value = !menu.value;
     };
-
     const closeMenu = () => {
       menu.value = false;
     };
@@ -88,7 +98,7 @@ export default defineComponent({
     };
 
     onBeforeUnmount(() => {
-      post.value = null;
+      post.value = undefined;
     });
 
     return {
@@ -99,6 +109,8 @@ export default defineComponent({
       handleDelete,
       error,
       post,
+      modalActive,
+      toggleModal,
     };
   },
 });
@@ -244,5 +256,9 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
     }
   }
+}
+
+.modal-content {
+  color: $color-black;
 }
 </style>

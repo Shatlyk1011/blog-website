@@ -29,34 +29,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
-import SinglePost from "@/components/Posts/Post/SinglePost.vue";
-import UserData from "@/components/Shared/UserData.vue";
-import Tags from "@/components/Shared/Tags.vue";
-
-import getDocument from "@/composables/firestore/getDocument";
-import getUser from "@/composables/auth/getUser";
 import { Post, PostDraft } from "@/assets/Types";
 
 export default defineComponent({
-  components: { SinglePost, UserData, Tags },
-
   props: {
     post: {
       required: true,
       type: Object as PropType<Post | PostDraft> | PropType<undefined>,
     },
-  },
-
-  setup() {
-    /*     const { document: draft, error, getDoc } = getDocument();
-    const { user } = getUser();
-    onMounted(async () => {
-      await getDoc("drafts", user.value!.uid);
-    });
-
-    return { draft, error }; */
   },
 });
 </script>

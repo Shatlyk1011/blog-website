@@ -9,8 +9,8 @@ interface InputEvent extends Event {
 const addTag = (e: InputEvent) => {
   let tag = e.target.value.trim();
   if (!tags.value.includes(tag) && tags.value.length < 3 && tag !== "") {
+    e.preventDefault();
     tags.value.push(tag.toLowerCase());
-    console.log("event", tags.value);
 
     e.target.value = "";
   }

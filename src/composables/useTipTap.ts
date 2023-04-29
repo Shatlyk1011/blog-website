@@ -33,25 +33,11 @@ const { setDocument, updateDocument } = useDocument();
 const { getDoc, document: draft } = getDocument();
 const { user } = getUser();
 
-const useTipTap = (setDraft: boolean = false) => {
+const useTipTap = () => {
   const title = ref("");
-  const { tags } = useTags();
+  const { tags, addTag, removeTag } = useTags();
 
   const editor = useEditor({
-    //set undone work
-    /*     async onCreate({ editor }) {
-      if (setDraft) {
-        await getDoc("drafts", user.value!.uid);
-        if (draft.value) {
-          console.log("i'll set drafts");
-          editor.commands.setContent(draft.value.html);
-          title.value = draft.value.title;
-          tags.value = draft.value.tags;
-        }
-        draft.value = undefined;
-      }
-    }, */
-
     autofocus: true,
     extensions: [
       StarterKit.configure({
@@ -102,7 +88,7 @@ const useTipTap = (setDraft: boolean = false) => {
     ],
   });
 
-  return { editor, title, tags };
+  return { editor, title, tags, addTag, removeTag };
 };
 
 export default useTipTap;

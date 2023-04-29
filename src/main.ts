@@ -24,6 +24,7 @@ import {
   faQuoteLeft,
   faBookOpen,
   faEllipsis,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import router from "./router";
@@ -52,7 +53,8 @@ library.add(
   faLaptopCode,
   faQuoteLeft,
   faBookOpen,
-  faEllipsis
+  faEllipsis,
+  faTimesCircle
 );
 
 const pinia = createPinia();

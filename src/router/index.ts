@@ -44,7 +44,7 @@ const routes = [
     path: "/create-post",
     name: "CreatePost",
     component: CreatePostView,
-    // beforeEnter: requireAuth,
+    beforeEnter: requireAuth,
   },
   {
     path: "/signin",

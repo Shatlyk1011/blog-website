@@ -1,5 +1,5 @@
 <template>
-  <div class="form-submit">
+  <div class="form-submit" v-if="editor">
     <form @submit.prevent="handleSubmit">
       <div class="head">
         <!-- Cover Image Preview -->
@@ -71,11 +71,10 @@
 import {
   ref,
   defineComponent,
-  onBeforeUnmount,
   PropType,
   watch,
-  onUpdated,
-  onMounted,
+  onActivated,
+  onDeactivated,
 } from "vue";
 import router from "@/router";
 import { EditorContent } from "@tiptap/vue-3";
@@ -107,22 +106,24 @@ export default defineComponent({
     SubmitButton,
   },
 
+  emits: ["update:draft"],
+
   props: {
+    setDraft: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
     postToUpdate: {
       required: false,
       type: Object as PropType<Post> | null | undefined,
     },
     postToSetDraft: {
       required: false,
-      type: Object as PropType<PostDraft>,
-    },
-    setDraft: {
-      required: false,
-      type: Boolean,
-      default: false,
+      type: Object as PropType<PostDraft> | null,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isPending = ref(false);
 
     const { user } = getUser();
@@ -140,9 +141,8 @@ export default defineComponent({
       imagePreviewUrl,
     } = getInputImage();
     const { error, imageRef, imageUrl, uploadImage } = useStorage();
-    const { addTag, removeTag } = useTags();
 
-    const { editor, title, tags } = useTipTap(props.setDraft);
+    const { editor, title, tags, addTag, removeTag } = useTipTap();
 
     const clearImageValues = () => {
       coverImage.value = null;
@@ -192,13 +192,31 @@ export default defineComponent({
       }
     };
 
-    onBeforeUnmount(async () => {
-      editor.value?.destroy();
-      tags.value = [];
-      imagePreviewUrl.value = "";
-      //save as draft
-      if (props.setDraft && editor.value) {
-        let html = editor.value.getHTML();
+    watch(props, () => {
+      if (props.postToSetDraft) {
+        console.log("postToSetDraft available");
+        let post = props.postToSetDraft;
+        title.value = post.title;
+        tags.value = post.tags;
+        editor.value?.commands.setContent(post.html);
+      }
+      if (props.postToUpdate) {
+        console.log("postToUpdate available");
+        let post = props.postToUpdate;
+        title.value = post.title;
+        tags.value = post.tags;
+        editor.value?.commands.setContent(post.html);
+      }
+    });
+
+    onActivated(() => {});
+    onDeactivated(async () => {
+      console.log("ondeactivate run");
+      emit("update:draft");
+
+      if (props.setDraft) {
+        //save as draft
+        let html = editor.value!.getHTML();
         let { avgTimeToRead } = getAvgTimeToRead(html);
         console.log("sending draft to fs");
         await setDocument("drafts", user.value!.uid, {
@@ -214,24 +232,6 @@ export default defineComponent({
       }
     });
 
-    //set the editable post in update-post view
-    onUpdated(() => {
-      if (props.postToUpdate) {
-        console.log("I LL SET POST TO  UPDATE");
-
-        let post = props.postToUpdate;
-        title.value = post.title;
-        tags.value = post.tags;
-        editor.value?.commands.setContent(post.html);
-      }
-      if (props.postToSetDraft) {
-        console.log("I LL SET POST DRAFT");
-        let draft = props.postToSetDraft;
-        title.value = draft.title;
-        tags.value = draft.tags;
-        editor.value?.commands.setContent(draft.html);
-      }
-    });
     return {
       editor,
       handleSubmit,
@@ -266,150 +266,156 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
-form {
-  color: $color-text;
-  min-height: 85vh;
-  display: grid;
-  grid-template-rows: min-content 1fr min-content;
-  gap: 1rem;
+.form-submit {
+  max-width: 80rem;
+  margin: 0 auto;
+  background-color: $color-gray-2;
+  padding: 2rem;
+  form {
+    color: $color-text;
+    min-height: 85vh;
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    gap: 1rem;
 
-  .head {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    .head {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
 
-    #coverSelect {
-      position: relative;
-      align-self: flex-start;
-      padding: 1rem 1.6rem;
-      border-radius: 4px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.4rem;
-      cursor: pointer;
-      background-color: $color-gray-3;
-
-      span {
-        z-index: 10;
-        width: 100%;
-      }
-      #image {
+      #coverSelect {
+        position: relative;
+        align-self: flex-start;
+        padding: 1rem 1.6rem;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.4rem;
         cursor: pointer;
-        opacity: 0;
-        z-index: -1;
-        position: absolute;
-        top: 50%;
-        left: 90%;
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    #Ititle,
-    #Itag {
-      padding: 1rem;
-      font-size: 2rem;
-      background-color: transparent;
-      border: 1px solid $color-gray-1;
-      color: $color-text;
-
-      &:focus {
-        border: 1px solid $color-white;
-        outline: none;
-      }
-
-      &::placeholder {
-        font-family: $ff-mserrat;
-        color: rgba($color-text, 0.6);
-        font-weight: 500;
-      }
-    }
-
-    #Itag {
-      padding: 6px;
-      background-color: transparent;
-      font-size: 1.28rem;
-    }
-
-    .tags {
-      display: flex;
-      gap: 1rem;
-
-      .tag {
-        list-style: none;
-        padding: 3px 6px;
         background-color: $color-gray-3;
-        border-radius: 3px;
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        justify-content: center;
 
-        .icon {
-          color: $color-gray-1;
-          cursor: pointer;
-
-          &:hover {
-            color: $color-main-2;
-          }
-        }
-      }
-    }
-
-    .toolbar {
-      margin-bottom: 1.6rem;
-    }
-
-    .imagePreview {
-      max-width: 20%;
-      max-height: 100%;
-      display: flex;
-      align-items: center;
-      gap: 6.1rem;
-
-      img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-      }
-
-      .options {
-        display: flex;
-        gap: 2rem;
-
-        #changeLabel {
+        span {
           z-index: 10;
-          border: 1px solid -gray-3;
-          #image {
-            opacity: 0;
-            top: -100px;
-            left: 0;
-            position: absolute;
-            z-index: -2;
-          }
+          width: 100%;
         }
-
-        &__btn {
-          transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-          padding: 1rem;
+        #image {
           cursor: pointer;
-          user-select: none;
+          opacity: 0;
+          z-index: -1;
+          position: absolute;
+          top: 50%;
+          left: 90%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      #Ititle,
+      #Itag {
+        padding: 1rem;
+        font-size: 2rem;
+        background-color: transparent;
+        border: 1px solid $color-gray-1;
+        color: $color-text;
+
+        &:focus {
+          border: 1px solid $color-white;
+          outline: none;
         }
 
-        &--change {
-          border: 1px solid -gray-1;
+        &::placeholder {
+          font-family: $ff-mserrat;
+          color: rgba($color-text, 0.6);
+          font-weight: 500;
         }
+      }
 
-        &--delete {
-          color: $color-main-1;
-          border-radius: 2px;
+      #Itag {
+        padding: 6px;
+        background-color: transparent;
+        font-size: 1.28rem;
+      }
 
-          &:hover {
-            background-color: $color-main-1;
-            color: $color-white;
-            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+      .tags {
+        display: flex;
+        gap: 1rem;
+
+        .tag {
+          list-style: none;
+          padding: 3px 6px;
+          background-color: $color-gray-3;
+          border-radius: 3px;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          justify-content: center;
+
+          .icon {
+            color: $color-gray-1;
+            cursor: pointer;
+
+            &:hover {
+              color: $color-main-2;
+            }
           }
-          &:active {
-            transform: translateY(4px) scale(0.98);
+        }
+      }
+
+      .toolbar {
+        margin-bottom: 1.6rem;
+      }
+
+      .imagePreview {
+        max-width: 20%;
+        max-height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 6.1rem;
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+        }
+
+        .options {
+          display: flex;
+          gap: 2rem;
+
+          #changeLabel {
+            z-index: 10;
+            border: 1px solid -gray-3;
+            #image {
+              opacity: 0;
+              top: -100px;
+              left: 0;
+              position: absolute;
+              z-index: -2;
+            }
+          }
+
+          &__btn {
+            transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+            padding: 1rem;
+            cursor: pointer;
+            user-select: none;
+          }
+
+          &--change {
+            border: 1px solid -gray-1;
+          }
+
+          &--delete {
+            color: $color-main-1;
+            border-radius: 2px;
+
+            &:hover {
+              background-color: $color-main-1;
+              color: $color-white;
+              box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+            }
+            &:active {
+              transform: translateY(4px) scale(0.98);
+            }
           }
         }
       }

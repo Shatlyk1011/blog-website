@@ -1,24 +1,15 @@
 <template>
-  <form-nav
-    :class="update ? 'update' : 'preview'"
-    @update:update="handleUpdate"
-    @update:preview="handlePreview"
-  />
-  <div class="update-post-view" v-if="update">
-    <SubmitForm :postToUpdate="post">
-      <!-- slot -->
-      <template #default="slotProps">
-        <SubmitButton text="Сохранить" :isPending="slotProps.isPending" />
-      </template>
-    </SubmitForm>
+  <div class="update-post">
+    <form-nav @update:change="handleChange" @update:preview="handlePreview" />
+    <keep-alive>
+      <component :is="currentView" :postToUpdate="post" :post="post" />
+    </keep-alive>
   </div>
-  <PreviewPost v-if="preview" :post="post" />
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, KeepAlive, defineComponent } from "vue";
 
-import { defineComponent } from "vue";
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
@@ -29,7 +20,7 @@ import getDocument from "@/composables/firestore/getDocument";
 export default defineComponent({
   name: "UpdatePost",
 
-  components: { SubmitForm, PreviewPost, FormNav, SubmitButton },
+  components: { SubmitForm, PreviewPost, FormNav, SubmitButton, KeepAlive },
 
   props: {
     id: {
@@ -39,27 +30,22 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { getDoc, document: post, error: getDocError } = getDocument();
+    const { getDoc, document: post, error } = getDocument();
 
-    let preview = ref(false);
-    let update = ref(true);
-
-    let handleUpdate = () => {
-      update.value = true;
-      preview.value = false;
+    let currentView = ref("SubmitForm");
+    const handleChange = () => {
+      currentView.value = "SubmitForm";
     };
-    let handlePreview = () => {
-      preview.value = true;
-      update.value = false;
+    const handlePreview = () => {
+      currentView.value = "PreviewPost";
     };
 
     onMounted(async () => {
-      console.log("getting post to edit");
       await getDoc("posts", props.id);
-      console.log("posttt", post.value);
+      console.log("post to edit", post.value);
     });
 
-    return { preview, update, handleUpdate, post, handlePreview };
+    return { post, handleChange, handlePreview, currentView };
   },
 });
 </script>
@@ -78,10 +64,4 @@ $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
-.update-post-view {
-  max-width: 80rem;
-  margin: 0 auto;
-  background-color: $color-gray-2;
-  padding: 2rem;
-}
 </style>
