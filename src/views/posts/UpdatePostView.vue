@@ -2,7 +2,12 @@
   <div class="update-post">
     <form-nav @update:change="handleChange" @update:preview="handlePreview" />
     <keep-alive>
-      <component :is="currentView" :postToUpdate="post" :post="post" />
+      <component
+        :is="currentView"
+        :postToUpdate="post"
+        :post="post"
+        btnText="Изменить"
+      />
     </keep-alive>
   </div>
 </template>

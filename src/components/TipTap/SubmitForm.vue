@@ -55,13 +55,23 @@
             />
           </template>
         </Tags>
+
         <!-- Editor Tools -->
         <div class="toolbar">
           <Tools :editor="editor" />
         </div>
-        <!-- Editor -->
-        <editor-content class="editor" :editor="editor" />
-        <slot :isPending="isPending" />
+      </div>
+      <!-- Editor -->
+      <editor-content class="editor" :editor="editor" />
+      <div class="submit">
+        <button class="submit__btn" v-if="!isPending">{{ btnText }}</button>
+        <button
+          class="submit__btn submit__btn--isPending"
+          v-if="isPending"
+          disabled
+        >
+          {{ btnText }}
+        </button>
       </div>
     </form>
   </div>
@@ -121,6 +131,10 @@ export default defineComponent({
     postToSetDraft: {
       required: false,
       type: Object as PropType<PostDraft> | null,
+    },
+    btnText: {
+      required: true,
+      type: String,
     },
   },
   setup(props, { emit }) {
@@ -206,15 +220,19 @@ export default defineComponent({
         title.value = post.title;
         tags.value = post.tags;
         editor.value?.commands.setContent(post.html);
+        imagePreviewUrl.value = post.imageUrl;
       }
     });
 
-    onActivated(() => {});
+    onActivated(() => {
+      if (props.postToUpdate) {
+        imagePreviewUrl.value = props.postToUpdate.imageUrl;
+      }
+    });
     onDeactivated(async () => {
       console.log("ondeactivate run");
-      emit("update:draft");
-
       if (props.setDraft) {
+        emit("update:draft");
         //save as draft
         let html = editor.value!.getHTML();
         let { avgTimeToRead } = getAvgTimeToRead(html);
@@ -229,6 +247,11 @@ export default defineComponent({
             userUid: user.value!.uid,
           },
         });
+      }
+
+      imagePreviewUrl.value = "";
+
+      if (props.postToUpdate) {
       }
     });
 
@@ -361,7 +384,6 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
 
       .toolbar {
-        margin-bottom: 1.6rem;
       }
 
       .imagePreview {
@@ -416,6 +438,32 @@ $ff-mserrat: "Montserrat", sans-serif;
             &:active {
               transform: translateY(4px) scale(0.98);
             }
+          }
+        }
+      }
+    }
+    .submit {
+      &__btn {
+        padding: 1rem 1.6rem;
+        color: $color-text;
+        background-color: $color-main-1;
+        display: inline-block;
+        justify-self: start;
+
+        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        &:hover {
+          background-color: rgba($color-main-1, 0.8);
+        }
+
+        &:active {
+          transform: translateY(4px) scale(0.98);
+        }
+        &--isPending {
+          background-color: rgba($color-gray-3, 0.5);
+          color: rgba($color-text, 0.5);
+
+          &:hover {
+            background-color: rgba($color-gray-3, 0.4);
           }
         }
       }

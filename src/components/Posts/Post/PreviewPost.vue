@@ -33,7 +33,10 @@ import { defineComponent, PropType } from "vue";
 
 import { Post, PostDraft } from "@/assets/Types";
 
+import UserData from "@/components/Shared/UserData.vue";
+
 export default defineComponent({
+  components: { UserData },
   props: {
     post: {
       required: true,

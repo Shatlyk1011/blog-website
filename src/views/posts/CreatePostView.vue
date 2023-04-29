@@ -8,6 +8,7 @@
         :is="currentView"
         :postToSetDraft="draft"
         :post="draft"
+        btnText="Cоздать"
       />
     </keep-alive>
   </div>
