@@ -40,7 +40,7 @@
 
         <!-- Tags -->
         <Input
-          @keydown.enter.prevent="addTag($event)"
+          @keydown.enter="addTag($event)"
           id="Itag"
           placeholder="Добавьте теги (max 3)"
         />
@@ -55,6 +55,11 @@
             />
           </template>
         </Tags>
+        <!-- <ul class="tags">
+          <li class="tag" v-for="tag in tags" :key="tag">
+            <span>#{{ tag }}</span>
+          </li>
+        </ul> -->
 
         <!-- Editor Tools -->
         <div class="toolbar">
@@ -114,7 +119,7 @@ export default defineComponent({
     Tags,
   },
 
-  emits: ["update:draft"],
+  emits: ["update:draft", "update:updateDraft"],
 
   props: {
     setDraft: {
@@ -179,6 +184,7 @@ export default defineComponent({
 
       //update post
       if (props.postToUpdate) {
+        console.log("UPDATING YOUR POST");
         let postId = route.params.id as string;
         let postToUpdate = props.postToUpdate;
         isPending.value = true;
@@ -200,8 +206,8 @@ export default defineComponent({
           },
           editedAt: Timestamp.fromDate(new Date()),
         };
-
         await updateDocument("posts", postId, updatePost);
+        console.log("YOUR POST UPDATED");
         isPending.value = false;
       }
 
@@ -226,8 +232,8 @@ export default defineComponent({
           createdAt: Timestamp.fromDate(new Date()),
         };
         await addDocument("posts", newPost);
-        //delete drafts
-        await deleteDocument("drafts", user.value!.uid);
+        //delete createDraft
+        await deleteDocument("createDraft", user.value!.uid);
 
         isPending.value = false;
         if (!error.value) {
@@ -241,13 +247,17 @@ export default defineComponent({
     };
 
     watch(props, () => {
-      if (props.postToSetDraft) {
+      let count = 0;
+      // set drafts
+      if (props.postToSetDraft && count < 1) {
+        count++;
         console.log("postToSetDraft available");
         let post = props.postToSetDraft;
         title.value = post.title;
         tags.value = post.tags;
         editor.value?.commands.setContent(post.html);
       }
+      // set post to update
       if (props.postToUpdate) {
         console.log("postToUpdate available");
         let post = props.postToUpdate;
@@ -259,19 +269,22 @@ export default defineComponent({
     });
 
     onActivated(() => {
-      if (props.postToUpdate) {
+      console.log("onActivated");
+      if (props.postToUpdate && imagePreviewUrl.value === "") {
         imagePreviewUrl.value = props.postToUpdate.imageUrl;
       }
     });
     onDeactivated(async () => {
       console.log("ondeactivate run");
+      let html = editor.value!.getHTML();
+      let { avgTimeToRead } = getAvgTimeToRead(html);
+
+      //save as draft in create-post
       if (props.setDraft) {
         emit("update:draft");
-        //save as draft
-        let html = editor.value!.getHTML();
-        let { avgTimeToRead } = getAvgTimeToRead(html);
         console.log("sending draft to fs");
-        await setDocument("drafts", user.value!.uid, {
+
+        await setDocument("createDraft", user.value!.uid, {
           html,
           title: title.value,
           tags: tags.value,
@@ -282,10 +295,21 @@ export default defineComponent({
           },
         });
       }
-
-      imagePreviewUrl.value = "";
-
+      //save as draft in update-post
       if (props.postToUpdate) {
+        emit("update:updateDraft");
+        console.log("sending edit draft to fs");
+
+        await setDocument("updateDraft", user.value!.uid, {
+          html,
+          title: title.value,
+          tags: tags.value,
+          timeToRead: avgTimeToRead.value,
+          userInfo: {
+            author: user.value!.displayName!,
+            userUid: user.value!.uid,
+          },
+        });
       }
     });
 

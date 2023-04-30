@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, KeepAlive, onUpdated } from "vue";
+import { onMounted, ref, KeepAlive } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
@@ -45,12 +45,12 @@ export default defineComponent({
 
     const updateDraft = async () => {
       console.log("updateDrafttttttt!!!!!!!!");
-      await getDoc("drafts", user.value!.uid);
+      await getDoc("createDraft", user.value!.uid);
     };
 
     onMounted(async () => {
       console.log("mounting create-post");
-      await getDoc("drafts", user.value!.uid);
+      await getDoc("createDraft", user.value!.uid);
     });
 
     return { currentView, handleChange, handlePreview, draft, updateDraft };

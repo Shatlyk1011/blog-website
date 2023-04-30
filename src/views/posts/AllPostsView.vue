@@ -18,7 +18,9 @@ export default defineComponent({
   },
   setup() {
     const { documents: posts } = getCollection("posts");
-    console.log("POSTS", posts.value);
+    if (posts.value) {
+      console.log("posts", posts.value);
+    }
 
     return { posts };
   },

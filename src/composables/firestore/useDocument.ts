@@ -57,9 +57,10 @@ const updateDocument = async (
   const docRef = doc(db, coll, id);
 
   try {
-    await updateDoc(docRef, { data });
+    await updateDoc(docRef, { ...data }); //??
     console.log("post updated");
   } catch (err: any) {
+    console.log("ERROR IN UDPATE DOC");
     error.value = err.message;
   }
 };

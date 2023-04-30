@@ -16,7 +16,11 @@
 
       <div class="title">{{ post.title }}</div>
       <div class="wrap">
-        <Tags :tags="post.tags" hash="#" />
+        <ul class="tags">
+          <li class="tag" v-for="tag in post.tags" :key="tag">
+            <span>#{{ tag }}</span>
+          </li>
+        </ul>
         <div class="time">
           <font-awesome-icon icon="fa-solid fa-book-open" />
           <span>{{ post.timeToRead }} минут</span>
@@ -147,6 +151,29 @@ $ff-mserrat: "Montserrat", sans-serif;
     .wrap {
       display: flex;
       margin-left: auto;
+
+      .tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.4rem;
+        list-style: none;
+        padding: 0;
+        width: 100%;
+
+        .tag {
+          font-weight: 500;
+          display: flex;
+          color: $color-main-2;
+          background-color: $color-gray-1;
+          padding: 4px 1rem;
+          border-radius: 4px;
+
+          &.white {
+            color: $color-text;
+          }
+        }
+      }
       .time {
         display: flex;
         align-items: center;

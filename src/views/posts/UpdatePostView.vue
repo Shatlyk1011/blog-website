@@ -3,12 +3,14 @@
     <form-nav @update:change="handleChange" @update:preview="handlePreview" />
     <keep-alive>
       <component
+        @update:updateDraft="updateDraft"
         :is="currentView"
         :postToUpdate="post"
         :post="post"
         btnText="Сохранить"
       />
     </keep-alive>
+    <!-- :updateDraft="" -->
   </div>
 </template>
 
@@ -20,6 +22,7 @@ import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
+import getUser from "@/composables/auth/getUser";
 
 export default defineComponent({
   name: "UpdatePost",
@@ -35,6 +38,7 @@ export default defineComponent({
 
   setup(props) {
     const { getDoc, document: post, error } = getDocument();
+    const { user } = getUser();
 
     let currentView = ref("SubmitForm");
     const handleChange = () => {
@@ -43,13 +47,17 @@ export default defineComponent({
     const handlePreview = () => {
       currentView.value = "PreviewPost";
     };
+    const updateDraft = async () => {
+      console.log("updateDraft for update post");
+      await getDoc("updateDraft", user.value!.uid);
+    };
 
     onMounted(async () => {
       await getDoc("posts", props.id);
       console.log("post to edit", post.value);
     });
 
-    return { post, handleChange, handlePreview, currentView };
+    return { post, handleChange, handlePreview, currentView, updateDraft };
   },
 });
 </script>
