@@ -3,10 +3,21 @@
     <form @submit.prevent="handleSubmit">
       <div class="head">
         <!-- Cover Image Preview -->
-        <label id="coverSelect" for="image" v-if="!imagePreviewUrl">
-          <span>Выберите обложку</span>
-          <Input @input="handleImage" id="image" type="file" required />
-        </label>
+        <div class="wrap" v-if="!imagePreviewUrl">
+          <label id="coverSelect" for="image">
+            <span>Выберите обложку</span>
+            <Input @input="handleImage" id="image" type="file" required />
+          </label>
+          <div
+            type="button"
+            @click="setFormerImage"
+            v-if="postToUpdate"
+            class="old-cover"
+          >
+            Вставить прежнее фото
+          </div>
+        </div>
+
         <div class="imagePreview" v-if="imagePreviewUrl">
           <img :src="imagePreviewUrl" alt="" />
           <div class="options">
@@ -145,6 +156,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const isPending = ref(false);
+    const postUpdated = ref(false);
 
     const { user } = getUser();
 
@@ -164,7 +176,8 @@ export default defineComponent({
       imageTypeError,
       imagePreviewUrl,
     } = getInputImage();
-    const { error, imageRef, imageUrl, uploadImage } = useStorage();
+    const { error, imageRef, imageUrl, uploadImage, deleteImage } =
+      useStorage();
 
     const { editor, title, tags, addTag, removeTag } = useTipTap();
 
@@ -179,6 +192,13 @@ export default defineComponent({
       return html;
     };
 
+    const setFormerImage = () => {
+      if (props.postToUpdate) {
+        let post = props.postToUpdate;
+        imagePreviewUrl.value = post.imageUrl;
+      }
+    };
+
     const handleSubmit = async () => {
       const html = await getInnerHTML();
 
@@ -189,6 +209,7 @@ export default defineComponent({
         let postToUpdate = props.postToUpdate;
         isPending.value = true;
         if (coverImage.value) {
+          await deleteImage(props.postToUpdate.imageRef);
           await uploadImage("covers", coverImage.value);
         }
         const { avgTimeToRead } = getAvgTimeToRead(html);
@@ -207,13 +228,24 @@ export default defineComponent({
           editedAt: Timestamp.fromDate(new Date()),
         };
         await updateDocument("posts", postId, updatePost);
-        console.log("YOUR POST UPDATED");
+        //delete updateDraft
+        await deleteDocument("updateDraft", user.value!.uid);
         isPending.value = false;
+        if (!error.value) {
+          editor.value?.destroy();
+          coverImage.value = undefined;
+          imagePreviewUrl.value = "";
+          tags.value = [];
+
+          router.push("/all-posts");
+          isPending.value = false;
+        }
       }
 
       //create post
       if (!props.postToUpdate && route.path === "/create-post") {
         isPending.value = true;
+        postUpdated.value = true;
         await uploadImage("covers", coverImage.value);
         const { avgTimeToRead } = getAvgTimeToRead(html);
 
@@ -238,17 +270,19 @@ export default defineComponent({
         isPending.value = false;
         if (!error.value) {
           editor.value?.destroy();
+          coverImage.value = undefined;
+          imagePreviewUrl.value = "";
+          tags.value = [];
+
           router.push("/all-posts");
           isPending.value = false;
         }
-      } else {
-        console.log("error");
       }
     };
 
     watch(props, () => {
       let count = 0;
-      // set drafts
+      // set drafts once when data is available
       if (props.postToSetDraft && count < 1) {
         count++;
         console.log("postToSetDraft available");
@@ -257,8 +291,9 @@ export default defineComponent({
         tags.value = post.tags;
         editor.value?.commands.setContent(post.html);
       }
-      // set post to update
-      if (props.postToUpdate) {
+      // set post to update once when data is available
+      if (props.postToUpdate && count < 1) {
+        count++;
         console.log("postToUpdate available");
         let post = props.postToUpdate;
         title.value = post.title;
@@ -270,7 +305,7 @@ export default defineComponent({
 
     onActivated(() => {
       console.log("onActivated");
-      if (props.postToUpdate && imagePreviewUrl.value === "") {
+      if (props.postToUpdate && !imagePreviewUrl.value) {
         imagePreviewUrl.value = props.postToUpdate.imageUrl;
       }
     });
@@ -280,7 +315,7 @@ export default defineComponent({
       let { avgTimeToRead } = getAvgTimeToRead(html);
 
       //save as draft in create-post
-      if (props.setDraft) {
+      if (props.setDraft && !postUpdated.value) {
         emit("update:draft");
         console.log("sending draft to fs");
 
@@ -295,6 +330,7 @@ export default defineComponent({
           },
         });
       }
+      imagePreviewUrl.value = "";
       //save as draft in update-post
       if (props.postToUpdate) {
         emit("update:updateDraft");
@@ -303,14 +339,19 @@ export default defineComponent({
         await setDocument("updateDraft", user.value!.uid, {
           html,
           title: title.value,
+          imageUrl: props.postToUpdate.imageUrl,
+          imageRef: props.postToUpdate.imageRef,
+          comments: [],
           tags: tags.value,
           timeToRead: avgTimeToRead.value,
           userInfo: {
             author: user.value!.displayName!,
             userUid: user.value!.uid,
           },
+          createdAt: Timestamp.fromDate(new Date()),
         });
       }
+      imagePreviewUrl.value = "";
     });
 
     return {
@@ -324,6 +365,7 @@ export default defineComponent({
       imageTypeError,
       imagePreviewUrl,
       clearImageValues,
+      setFormerImage,
       addTag,
       removeTag,
       user,
@@ -364,12 +406,26 @@ $ff-mserrat: "Montserrat", sans-serif;
       flex-direction: column;
       gap: 2rem;
 
+      .wrap {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .old-cover {
+          background-color: $color-main-2;
+          color: $color-text;
+          padding: 1rem 1.6rem;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+
       #coverSelect {
         position: relative;
         align-self: flex-start;
         padding: 1rem 1.6rem;
         border-radius: 4px;
-        text-align: center;
+        // text-align: center;
         font-weight: 600;
         font-size: 1.4rem;
         cursor: pointer;

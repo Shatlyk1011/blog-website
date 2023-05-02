@@ -7,12 +7,15 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  onSnapshot,
 } from "firebase/firestore";
-import { Post, PostDraft } from "@/assets/Types";
+import { Post, PostDraft, Comment } from "@/assets/Types";
 
 const error = ref<string | null>(null);
 
-const addDocument = async (coll: string, data: Post | PostDraft) => {
+type Data = Comment | Post | PostDraft;
+
+const addDocument = async (coll: string, data: Data) => {
   const colRef = collection(db, coll);
 
   try {
@@ -24,11 +27,7 @@ const addDocument = async (coll: string, data: Post | PostDraft) => {
 };
 
 // update or create
-const setDocument = async (
-  coll: string,
-  id: string,
-  data: Post | PostDraft
-) => {
+const setDocument = async (coll: string, id: string, data: Data) => {
   const docRef = doc(db, coll, id);
 
   try {
@@ -49,11 +48,7 @@ const deleteDocument = async (coll: string, id: string) => {
   }
 };
 
-const updateDocument = async (
-  coll: string,
-  id: string,
-  data: Post | PostDraft
-) => {
+const updateDocument = async (coll: string, id: string, data: Data) => {
   const docRef = doc(db, coll, id);
 
   try {

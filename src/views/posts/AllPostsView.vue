@@ -1,6 +1,7 @@
 <template>
   <div class="all-posts">
-    <Posts :posts="posts" />
+    <Posts :posts="posts" v-if="posts" />
+    <Loading v-else />
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import { defineComponent } from "vue";
 
 import Posts from "@/components/Posts/Posts.vue";
+import Loading from "@/components/Shared/Loading.vue";
 
 import getCollection from "@/composables/firestore/getCollection";
 
@@ -15,6 +17,7 @@ export default defineComponent({
   name: "CreatePost",
   components: {
     Posts,
+    Loading,
   },
   setup() {
     const { documents: posts } = getCollection("posts");

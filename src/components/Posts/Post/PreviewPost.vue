@@ -12,7 +12,7 @@
       <div class="menu">
         <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
       </div>
-      <UserData date="12.02.12" class="user-data" />
+      <!-- <UserData date="12.02.12" class="user-data" /> -->
 
       <div class="title">{{ post.title }}</div>
       <div class="wrap">
@@ -30,6 +30,7 @@
       <div class="html" v-html="post.html"></div>
     </div>
   </div>
+  <div v-else><Loading /></div>
 </template>
 
 <script lang="ts">
@@ -38,9 +39,10 @@ import { defineComponent, PropType } from "vue";
 import { Post, PostDraft } from "@/assets/Types";
 
 import UserData from "@/components/Shared/UserData.vue";
+import Loading from "@/components/Shared/Loading.vue";
 
 export default defineComponent({
-  components: { UserData },
+  components: { UserData, Loading },
   props: {
     post: {
       required: true,

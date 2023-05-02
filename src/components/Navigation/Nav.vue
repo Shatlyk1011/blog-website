@@ -25,21 +25,23 @@
             <img :src="user.photoURL" alt="" v-if="user.photoURL" />
             <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
           </div>
-          <div class="dropdown" v-if="dropdown">
-            <ul>
-              <li class="li-info">
-                <div>{{ user.displayName }}</div>
-                <p class="email">{{ user.email }}</p>
-              </li>
-              <li>
-                <router-link to="/drafts">Черновик</router-link>
-              </li>
-              <li class="li-myposts">Мои посты</li>
-              <li role="button" class="li-logout" @click="handleLogout">
-                <p>Выйти</p>
-              </li>
-            </ul>
-          </div>
+          <transition name="dropdown-animation">
+            <div class="dropdown" v-show="dropdown">
+              <ul>
+                <li class="li-info">
+                  <div>{{ user.displayName }}</div>
+                  <p class="email">{{ user.email }}</p>
+                </li>
+                <li>
+                  <router-link to="/drafts">Черновик</router-link>
+                </li>
+                <li class="li-myposts">Мои посты</li>
+                <li role="button" class="li-logout" @click="handleLogout">
+                  <p>Выйти</p>
+                </li>
+              </ul>
+            </div>
+          </transition>
         </OnClickOutside>
       </div>
     </nav>
@@ -238,5 +240,15 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
     }
   }
+}
+
+.dropdown-animation-enter-active,
+.dropdown-animation-leave-active {
+  transition: opacity 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.dropdown-animation-enter-from,
+.dropdown-animation-leave-to {
+  opacity: 0;
 }
 </style>

@@ -1,10 +1,18 @@
 import { Timestamp } from "firebase/firestore";
+
+export interface Comment {
+  author: string;
+  comment: string;
+  createdAt: Timestamp;
+  likes: number | string;
+  reply: [];
+}
 export interface Post {
   html: string;
   title: string;
   imageUrl: string;
   imageRef: string;
-  comments: string[];
+  comments: Comment | [];
   tags: string[];
   timeToRead: number;
   userInfo: {

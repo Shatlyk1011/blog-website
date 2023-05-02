@@ -37,5 +37,6 @@ export default defineComponent({
   height: calc(100vh - 6rem);
   box-sizing: border-box;
   margin: 0 auto;
+  position: relative;
 }
 </style>

@@ -8,13 +8,14 @@ const error = ref<string | null>(null);
 
 const getDoc = async (collection: string, id: string) => {
   const docRef = doc(db, collection, id);
-
+  error.value = null;
   const docSnap = await getD(docRef);
   if (docSnap.exists()) {
+    error.value = null;
     document.value = docSnap.data() as Post;
   } else {
     console.log("no documents getDocument");
-    error.value = "Что то пошло не так";
+    error.value = "Такого поста не существует. Попробуйте еще раз.";
   }
 };
 

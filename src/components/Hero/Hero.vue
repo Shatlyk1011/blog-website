@@ -3,7 +3,9 @@
     <div class="container">
       <div class="description">
         <h1>
-          Все о <span>{{ action }}</span> <br />
+          Все о <br />
+
+          <transition name="action-animation">{{ action }}</transition>
           разработке
         </h1>
         <p>
@@ -31,7 +33,7 @@ export default defineComponent({
 
     const changeActionWord = () => {
       interval.value = setInterval(() => {
-        const actions = ref(["веб", "дизайн", "лого?"]);
+        const actions = ref(["веб", "дизайн"]);
         action.value = nextElementList(actions.value, action.value);
         console.log("interval");
       }, 2700);
@@ -136,5 +138,21 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
     }
   }
+}
+
+.action-animation-inner-enter-active {
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s;
+}
+.action-animation-inner-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.action-animation-inner-leave-to {
+  transform: scale(0.8);
+}
+
+.action-animation-inner-leave-active {
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s;
 }
 </style>

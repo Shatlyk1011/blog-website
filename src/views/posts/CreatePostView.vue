@@ -44,7 +44,6 @@ export default defineComponent({
     };
 
     const updateDraft = async () => {
-      console.log("updateDrafttttttt!!!!!!!!");
       await getDoc("createDraft", user.value!.uid);
     };
 
