@@ -16,7 +16,7 @@
           />
           <ul class="dropdown" v-if="dropdown">
             <li>Изменить</li>
-            <!-- <li @click="toggleModal">Удалить</li> -->
+            <li @click="deleteComment">Удалить</li>
           </ul>
         </OnClickOutside>
       </div>
@@ -42,27 +42,40 @@ import { defineComponent, PropType, ref } from "vue";
 import { Comment as IComment } from "@/assets/Types";
 
 import { OnClickOutside } from "@vueuse/components";
+import ModalVue from "../Shared/Modal.vue";
 
 export default defineComponent({
   name: "Comment",
+
+  emits: ["delete:comment"],
 
   props: {
     comment: {
       type: Object as PropType<IComment>,
     },
   },
-  components: { OnClickOutside },
-  setup() {
+  components: { OnClickOutside, ModalVue },
+  setup(props, { emit }) {
     const dropdown = ref(false);
 
-    const toggleMenu = () => {
-      dropdown.value = !dropdown.value;
-    };
-    const closeMenu = () => {
-      dropdown.value = false;
+    const toggleMenu = () => (dropdown.value = !dropdown.value);
+    const closeMenu = () => (dropdown.value = false);
+
+    const deleteComment = () => {
+      closeMenu();
+      if (props.comment) {
+        let id = props.comment.id;
+        emit("delete:comment", id);
+      }
     };
 
-    return { dropdown, toggleMenu, closeMenu };
+    return {
+      dropdown,
+      toggleMenu,
+      closeMenu,
+
+      deleteComment,
+    };
   },
 });
 </script>
@@ -84,6 +97,10 @@ $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
 .comment {
+  margin-top: 3.2rem;
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
   .container {
     display: flex;
     position: relative;

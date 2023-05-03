@@ -14,7 +14,6 @@ const getDocSnap = (collection: string, id: string) => {
     docRef,
     (doc: any) => {
       if (doc.data()) {
-        console.log("doc", doc.data());
         document.value = { ...doc.data(), id: doc.id };
         error.value = null;
       } else {

@@ -2,17 +2,20 @@
   <div class="grid">
     <img src="@/assets/images/image-template.jpg" alt="" />
     <textarea
-      @keyup.prevent.enter="handleComment"
+      v-if="!isPending"
+      @keydown.enter.prevent="addComment"
       v-model.trim="comment"
       placeholder="Добавить комментарий..."
       maxlength="200"
-    ></textarea>
-    <button class="btn" v-if="!isPending" @click="handleComment">
+    />
+    <textarea v-if="isPending" placeholder="Отправляем..." disabled />
+    <button class="btn" v-if="!isPending" @click="addComment">
       Опубликовать
     </button>
     <button class="btn" v-if="isPending" disabled>Опубликовать</button>
     <div class="comments">
       <comment
+        @delete:comment="deleteComment"
         :comment="comment"
         v-for="(comment, index) in comments"
         :key="index"
@@ -22,8 +25,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { useRoute } from "vue-router";
+import { nanoid } from "nanoid";
 
 import { arrayUnion } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
@@ -38,12 +42,12 @@ export default defineComponent({
   name: "Comments",
   props: {
     comments: {
-      type: [] as PropType<IComment>,
+      type: Array as PropType<IComment[]>,
     },
   },
 
   components: { Comment },
-  setup() {
+  setup(props) {
     const comment = ref("");
     const route = useRoute();
     let postId = route.params.id as string;
@@ -52,7 +56,8 @@ export default defineComponent({
 
     const { updateDocument } = useDocument();
 
-    const handleComment = async () => {
+    const addComment = async () => {
+      let id = nanoid(5);
       isPending.value = true;
       let newComment: IComment = {
         author: user.value!.displayName!,
@@ -60,14 +65,29 @@ export default defineComponent({
         createdAt: Timestamp.fromDate(new Date()),
         likes: 0,
         reply: [],
+        id,
       };
-      await updateDocument("posts", postId, {
-        comments: arrayUnion(newComment),
-      });
+      if (comment.value !== "") {
+        await updateDocument("posts", postId, {
+          comments: arrayUnion(newComment),
+        });
+        isPending.value = false;
+      }
       isPending.value = false;
       comment.value = "";
     };
-    return { comment, handleComment, isPending };
+
+    const deleteComment = async (payload: string) => {
+      if (props.comments) {
+        let comments = props.comments.filter((comment: IComment) => {
+          return comment.id !== payload;
+        });
+        await updateDocument("posts", postId, {
+          comments,
+        });
+      }
+    };
+    return { comment, addComment, isPending, deleteComment };
   },
 });
 </script>

@@ -86,10 +86,8 @@ import Modal from "@/components/Shared/Modal.vue";
 import Comments from "@/components/Comments/Comments.vue";
 import Loading from "@/components/Shared/Loading.vue";
 
-import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 import useDocument from "@/composables/firestore/useDocument";
 import useStorage from "@/composables/storage/useStorage";
-import getDocument from "@/composables/firestore/getDocument";
 import getDocSnap from "@/composables/firestore/getDocSnap";
 
 export default defineComponent({
@@ -111,8 +109,6 @@ export default defineComponent({
     };
 
     const { deleteDocument, error } = useDocument();
-    // const { document: post, error: getError, getDoc } = getDocument();
-    // getDoc("posts", props.postId);
 
     const { document: post, error: getError } = getDocSnap(
       "posts",

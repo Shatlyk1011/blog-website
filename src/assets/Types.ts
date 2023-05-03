@@ -6,6 +6,7 @@ export interface Comment {
   createdAt: Timestamp;
   likes: number | string;
   reply: [];
+  readonly id: string;
 }
 export interface Post {
   html: string;
