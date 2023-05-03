@@ -39,7 +39,14 @@
       faIcon="fa-solid fa-laptop-code"
       tooltip="Блок кода"
       @click="editor.chain().focus().toggleCodeBlock().run()"
-      class="{ isActive: editor?.isActive('codeBlock') }"
+      :class="{ isActive: editor?.isActive('codeBlock') }"
+    />
+
+    <tip-tap-button
+      faIcon="fa-solid fa-highlighter"
+      tooltip="Выделить "
+      @click="editor.chain().focus().toggleHighlight().run()"
+      :class="{ isActive: editor?.isActive('highlight') }"
     />
 
     <tip-tap-button

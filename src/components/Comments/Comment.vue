@@ -1,10 +1,12 @@
 <template>
-  <div class="comment">
+  <div class="comment" v-if="comment">
     <div class="container">
       <div class="info">
         <img src="@/assets/images/hero.jpg" alt="" />
-        <div class="author">Jimmy McGILL</div>
-        <div class="time">14.02.1998</div>
+        <div class="author">{{ comment.author }}</div>
+        <!-- <div class="time">{{ comment.createdAt }}</div> -->
+        <div class="time">14.02.1999</div>
+
         <OnClickOutside class="menu" @trigger="closeMenu">
           <font-awesome-icon
             class="icon"
@@ -14,20 +16,18 @@
           />
           <ul class="dropdown" v-if="dropdown">
             <li>Изменить</li>
-            <li @click="toggleModal">Удалить</li>
+            <!-- <li @click="toggleModal">Удалить</li> -->
           </ul>
         </OnClickOutside>
       </div>
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam molestias
-        eveniet quaerat vel atque reiciendis! Odit repudiandae voluptatum ipsum
-        animi.
+        {{ comment.comment }}
       </p>
     </div>
     <div class="actions">
       <div class="likes">
         <font-awesome-icon icon="fa-solid fa-heart" size="sm" />
-        <span>0 лайков</span>
+        <span>{{ comment.likes }} лайков</span>
       </div>
       <div class="reply">
         <font-awesome-icon icon="fa-solid fa-reply" size="sm" />
@@ -38,11 +38,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
+import { Comment as IComment } from "@/assets/Types";
 
 import { OnClickOutside } from "@vueuse/components";
 
 export default defineComponent({
+  name: "Comment",
+
+  props: {
+    comment: {
+      type: Object as PropType<IComment>,
+    },
+  },
   components: { OnClickOutside },
   setup() {
     const dropdown = ref(false);
@@ -100,6 +108,26 @@ $ff-mserrat: "Montserrat", sans-serif;
         font-weight: 500;
       }
       .time {
+        position: relative;
+        margin-left: 4px;
+        font-size: 1.28rem;
+        font-weight: 500;
+        color: $color-gray-3;
+        line-height: 1.1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::before {
+          content: "\25CF";
+          align-self: center;
+          position: absolute;
+          top: 50%;
+          left: -8px;
+          transform: translateY(-50%);
+          line-height: 1;
+          font-size: 8px;
+        }
       }
       .menu {
         margin-left: auto;

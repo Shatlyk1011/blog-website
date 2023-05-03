@@ -21,18 +21,6 @@ const getCollection = (coll: string) => {
 
     documents.value = results;
   });
-  /* test */
-  // const commentsCollection = collection(colRef, "comments");
-  /*   const newCommentUnsubscribe = onSnapshot(colRef, (qSnap) => {
-    qSnap.docChanges().forEach((change) => {
-      console.log("change", change);
-      if (change.type === "added") {
-        const newComment = change.doc.data();
-        console.log("new comment", newComment);
-      }
-    });
-  }); */
-  /* test */
 
   watchEffect((onInvalidate) => {
     onInvalidate(() => unsubscribe());

@@ -7,12 +7,14 @@
       placeholder="Добавить комментарий..."
       maxlength="200"
     ></textarea>
-    <button class="btn" @click="handleComment">Опубликовать</button>
-    <button class="btn" disabled>Опубликовать</button>
+    <button class="btn" v-if="!isPending" @click="handleComment">
+      Опубликовать
+    </button>
+    <button class="btn" v-if="isPending" disabled>Опубликовать</button>
     <div class="comments">
       <comment
         :comment="comment"
-        v-for="(comment, index) in '2'"
+        v-for="(comment, index) in comments"
         :key="index"
       />
     </div>
@@ -20,17 +22,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { arrayUnion } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
+import { Timestamp } from "firebase/firestore";
 
 import Comment from "@/components/Comments/Comment.vue";
 
 import useDocument from "@/composables/firestore/useDocument";
 import getUser from "@/composables/auth/getUser";
-import { Timestamp } from "firebase/firestore";
 
 export default defineComponent({
   name: "Comments",
@@ -45,11 +47,13 @@ export default defineComponent({
     const comment = ref("");
     const route = useRoute();
     let postId = route.params.id as string;
+    let isPending = ref(false);
     const { user } = getUser();
 
-    const { addDocument } = useDocument();
+    const { updateDocument } = useDocument();
 
     const handleComment = async () => {
+      isPending.value = true;
       let newComment: IComment = {
         author: user.value!.displayName!,
         comment: comment.value.trim(),
@@ -57,8 +61,13 @@ export default defineComponent({
         likes: 0,
         reply: [],
       };
+      await updateDocument("posts", postId, {
+        comments: arrayUnion(newComment),
+      });
+      isPending.value = false;
+      comment.value = "";
     };
-    return { comment, handleComment };
+    return { comment, handleComment, isPending };
   },
 });
 </script>

@@ -88,8 +88,9 @@ import Loading from "@/components/Shared/Loading.vue";
 
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 import useDocument from "@/composables/firestore/useDocument";
-import getDocument from "@/composables/firestore/getDocument";
 import useStorage from "@/composables/storage/useStorage";
+import getDocument from "@/composables/firestore/getDocument";
+import getDocSnap from "@/composables/firestore/getDocSnap";
 
 export default defineComponent({
   name: "SinglePost",
@@ -110,8 +111,16 @@ export default defineComponent({
     };
 
     const { deleteDocument, error } = useDocument();
-    const { document: post, error: getError, getDoc } = getDocument();
-    getDoc("posts", props.postId);
+    // const { document: post, error: getError, getDoc } = getDocument();
+    // getDoc("posts", props.postId);
+
+    const { document: post, error: getError } = getDocSnap(
+      "posts",
+      props.postId
+    );
+    setTimeout(() => {
+      console.log("EHEHEH", post.value);
+    }, 1000);
 
     const { deleteImage, error: deleteError } = useStorage();
 
@@ -126,8 +135,10 @@ export default defineComponent({
     };
 
     const handleDelete = async () => {
-      await deleteImage(post.value!.imageRef);
-      await deleteDocument("posts", postId);
+      if (post.value) {
+        await deleteImage(post.value!.imageRef); //nonsense
+        await deleteDocument("posts", props.postId);
+      }
       if (!error.value) {
         router.push("/all-posts");
       }

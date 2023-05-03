@@ -223,3 +223,11 @@ blockquote {
   margin: 0 auto;
   border-radius: px;
 }
+
+mark {
+  background-color: #fff75e;
+  padding: 2px 4px;
+  font-size: 90%;
+  border-radius: 2px;
+  box-decoration-break: clone;
+}
