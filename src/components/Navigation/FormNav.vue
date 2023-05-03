@@ -45,6 +45,10 @@ $color-gray-3: #868e96;
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 .form-nav {
+  & *:focus {
+    box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
+    outline: none;
+  }
   &.update {
     .btn--update {
       color: $color-main-2;

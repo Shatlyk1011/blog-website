@@ -15,14 +15,18 @@
             @click="toggleMenu"
           />
           <ul class="dropdown" v-if="dropdown">
-            <li>Изменить</li>
-            <li @click="deleteComment">Удалить</li>
+            <li @click="(change = !change), (dropdown = false)">Изменить</li>
+            <li @click="emitDeleteComment">Удалить</li>
           </ul>
         </OnClickOutside>
       </div>
-      <p>
-        {{ comment.comment }}
+      <p v-if="change">
+        {{ comment.text }}
       </p>
+      <div class="change-comment">
+        <textarea v-if="!change" v-model="comment.text" />
+        <button @click="emitUpdateComment">Изменить</button>
+      </div>
     </div>
     <div class="actions">
       <div class="likes">
@@ -42,26 +46,32 @@ import { defineComponent, PropType, ref } from "vue";
 import { Comment as IComment } from "@/assets/Types";
 
 import { OnClickOutside } from "@vueuse/components";
-import ModalVue from "../Shared/Modal.vue";
+
+import useDocument from "@/composables/firestore/useDocument";
 
 export default defineComponent({
   name: "Comment",
 
-  emits: ["delete:comment"],
+  emits: ["delete:comment", "update:comment"],
 
   props: {
     comment: {
       type: Object as PropType<IComment>,
     },
+    postId: {
+      type: String,
+      required: true,
+    },
   },
-  components: { OnClickOutside, ModalVue },
+  components: { OnClickOutside },
   setup(props, { emit }) {
     const dropdown = ref(false);
+    const change = ref(false);
 
     const toggleMenu = () => (dropdown.value = !dropdown.value);
     const closeMenu = () => (dropdown.value = false);
 
-    const deleteComment = () => {
+    const emitDeleteComment = () => {
       closeMenu();
       if (props.comment) {
         let id = props.comment.id;
@@ -69,12 +79,21 @@ export default defineComponent({
       }
     };
 
+    const emitUpdateComment = () => {
+      if (props.comment) {
+        let text = props.comment.text;
+        let id = props.comment.id;
+        emit("update:comment", id, text);
+      }
+    };
+
     return {
       dropdown,
       toggleMenu,
       closeMenu,
-
-      deleteComment,
+      change,
+      emitUpdateComment,
+      emitDeleteComment,
     };
   },
 });
@@ -180,6 +199,10 @@ $ff-mserrat: "Montserrat", sans-serif;
           li {
             cursor: pointer;
 
+            &:hover {
+              color: $color-main-1;
+            }
+
             &:last-child:hover {
               color: $color-red;
             }
@@ -189,6 +212,42 @@ $ff-mserrat: "Montserrat", sans-serif;
     }
     p {
       line-height: 1.4;
+    }
+    .change-comment {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 1rem;
+        flex: 1;
+        border-radius: 4px;
+        min-height: 3.2rem;
+        max-height: 6.4rem;
+        background-color: transparent;
+        color: $color-white;
+        resize: none;
+        border: none;
+        outline: 1px solid rgba($color-gray-3, 0.6);
+        font-size: 1.6rem;
+      }
+      button {
+        padding: 6px 10px;
+        font-size: 1.28rem;
+        font-weight: 500;
+        color: $color-text;
+        border-radius: 2px;
+        background-color: $color-main-2;
+        align-self: flex-start;
+
+        transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+        &:hover {
+          background-color: $color-main-1;
+          color: rgba($color-text, 0.8);
+        }
+      }
     }
   }
   .actions {

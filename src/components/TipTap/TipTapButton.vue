@@ -1,5 +1,5 @@
 <template>
-  <div class="btn" role="button">
+  <div class="btn" role="button" tabindex="0">
     <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
     <slot />
     <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>
@@ -45,11 +45,17 @@ $ff-mserrat: "Montserrat", sans-serif;
   padding: 2px;
   user-select: none;
 
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(#000, 0.7);
+    outline: none;
+  }
+
   &:disabled {
     color: $color-gray-3;
     cursor: not-allowed;
   }
-  &:hover > .tooltip {
+  &:hover > .tooltip,
+  &:focus > .tooltip {
     opacity: 1;
     user-select: auto;
     visibility: visible;
@@ -65,7 +71,7 @@ $ff-mserrat: "Montserrat", sans-serif;
   opacity: 0;
   user-select: none;
   visibility: hidden;
-  z-index: 100;
+  z-index: 10000;
   position: absolute;
   left: 50%;
   transform: translate(-50%, -8px);

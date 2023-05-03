@@ -48,7 +48,7 @@ const deleteDocument = async (coll: string, id: string) => {
   }
 };
 
-const updateDocument = async (coll: string, id: string, data: Data) => {
+const updateDocument = async (coll: string, id: string, data: any) => {
   const docRef = doc(db, coll, id);
 
   try {

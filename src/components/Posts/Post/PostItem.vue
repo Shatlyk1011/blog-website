@@ -7,12 +7,18 @@
           class="heading"
           >{{ post.title }}</router-link
         >
-        <Tags :tags="post.tags" :white="true" />
+        <!--         <Tags :tags="post.tags" :white="true" /> -->
+        <ul class="tags">
+          <li class="tag" v-for="tag in post.tags" :key="tag">
+            <span>#{{ tag }}</span>
+          </li>
+        </ul>
       </div>
       <div class="img-container">
         <img :src="post.imageUrl" alt="" />
         <div class="read">
           <router-link
+            tabindex="0"
             class="link"
             :to="{ name: 'Post', params: { id: post.id } }"
           >
@@ -67,8 +73,17 @@ $ff-mserrat: "Montserrat", sans-serif;
 .post-item {
   max-width: 100%;
 
+  & *:focus {
+    box-shadow: 0 0 0 0.4rem rgba(#fff, 0.4);
+    box-sizing: content-box;
+    border-radius: 1px;
+
+    outline: none;
+  }
+
   .container {
     height: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
@@ -92,6 +107,7 @@ $ff-mserrat: "Montserrat", sans-serif;
         align-self: flex-start;
         cursor: pointer;
         padding-bottom: 4px;
+        word-break: break-word;
 
         transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
         &:hover {
@@ -100,15 +116,24 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
       .tags {
         display: flex;
+        align-items: center;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 1.4rem;
         list-style: none;
         padding: 0;
+        width: 100%;
+
         .tag {
-          padding: 6px 18px;
+          font-weight: 500;
+          display: flex;
+          color: $color-text;
           background-color: $color-gray-2;
-          color: $color-white;
-          border-radius: 2rem;
+          padding: 4px 1rem;
+          border-radius: 4px;
+
+          &.white {
+            color: $color-text;
+          }
         }
       }
     }
@@ -117,6 +142,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       height: 20rem;
       position: relative;
       margin-top: auto;
+
       .read {
         opacity: 0;
         position: absolute;
@@ -132,7 +158,8 @@ $ff-mserrat: "Montserrat", sans-serif;
 
         transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
 
-        &:hover {
+        &:hover,
+        &:focus-within {
           opacity: 1;
         }
 

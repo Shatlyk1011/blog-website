@@ -21,7 +21,9 @@ export default defineComponent({
   components: { TextTools, MarkTools, ImageTool, RedoUndoTool },
   props: {
     editor: {
-      type: Editor || undefined,
+      required: true,
+      type: Editor,
+      default: Editor,
     },
   },
 });
@@ -51,5 +53,10 @@ $ff-mserrat: "Montserrat", sans-serif;
   position: sticky;
   position: -webkit-sticky;
   top: 0;
+
+  &:focus {
+    box-shadow: 0 0 0 0.4rem rgba(#000, 0.7);
+    outline: none;
+  }
 }
 </style>

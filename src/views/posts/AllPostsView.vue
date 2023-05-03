@@ -35,5 +35,6 @@ export default defineComponent({
   margin-top: 4.8rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 3.2rem;
 }
 </style>

@@ -1,19 +1,20 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, FieldValue } from "firebase/firestore";
 
 export interface Comment {
   author: string;
-  comment: string;
+  text: string;
   createdAt: Timestamp;
+  editedAt?: Timestamp;
   likes: number | string;
   reply: [];
-  readonly id: string;
+  id: string;
 }
 export interface Post {
   html: string;
   title: string;
   imageUrl: string;
   imageRef: string;
-  comments: Comment | [];
+  comments: Comment[] | [];
   tags: string[];
   timeToRead: number;
   userInfo: {

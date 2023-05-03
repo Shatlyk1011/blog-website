@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, PropType, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 
@@ -140,10 +140,6 @@ export default defineComponent({
       }
     };
 
-    onBeforeUnmount(() => {
-      post.value = undefined;
-    });
-
     return {
       menu,
       toggleMenu,
@@ -185,6 +181,11 @@ $ff-mserrat: "Montserrat", sans-serif;
 
   border-radius: 2px;
   overflow: hidden;
+
+  & *:focus {
+    box-shadow: 0 0 0 0.4rem rgba($color-text, 0.8);
+    outline: none;
+  }
   .cover-image {
     width: 100%;
     // height: 42rem;

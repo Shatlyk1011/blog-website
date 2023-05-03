@@ -3,7 +3,8 @@ import { db } from "@/firebase/config";
 import { onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { Post, Comment, PostDraft } from "@/assets/Types";
 
-type Data = Post | Comment | PostDraft | null;
+type Data = Post | null;
+
 type Error = null | string;
 const getDocSnap = (collection: string, id: string) => {
   const document = ref<Data>(null);

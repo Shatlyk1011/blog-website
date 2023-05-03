@@ -4,9 +4,15 @@
       <div class="head">
         <!-- Cover Image Preview -->
         <div class="wrap" v-if="!imagePreviewUrl">
-          <label id="coverSelect" for="image">
+          <label tabindex="0" id="coverSelect" for="image">
             <span>Выберите обложку</span>
-            <Input @input="handleImage" id="image" type="file" required />
+            <Input
+              @input="handleImage"
+              id="image"
+              type="file"
+              required
+              tabindex="-1"
+            />
           </label>
           <div
             type="button"
@@ -66,15 +72,10 @@
             />
           </template>
         </Tags>
-        <!-- <ul class="tags">
-          <li class="tag" v-for="tag in tags" :key="tag">
-            <span>#{{ tag }}</span>
-          </li>
-        </ul> -->
 
         <!-- Editor Tools -->
         <div class="toolbar">
-          <Tools :editor="editor" />
+          <Tools :editor="editor" tabindex="0" />
         </div>
       </div>
       <!-- Editor -->
@@ -394,6 +395,11 @@ $ff-mserrat: "Montserrat", sans-serif;
   margin: 0 auto;
   background-color: $color-gray-2;
   padding: 2rem;
+
+  & *:focus {
+    box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
+    outline: none;
+  }
   form {
     color: $color-text;
     min-height: 85vh;
@@ -410,6 +416,12 @@ $ff-mserrat: "Montserrat", sans-serif;
         display: flex;
         align-items: center;
         gap: 1rem;
+
+        label {
+          &:focus {
+            box-shadow: 0 0 0 0.3rem rgba($color-black, 0.6);
+          }
+        }
 
         .old-cover {
           background-color: $color-main-2;

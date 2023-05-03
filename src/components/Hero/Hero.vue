@@ -12,7 +12,7 @@
           Блог о веб разработке, дизайне и о многом другом. Просто о сложном!
         </p>
 
-        <button class="btn">Перейти к постам</button>
+        <button tabindex="0" class="btn">Перейти к постам</button>
       </div>
       <div class="img-container">
         <img src="../../assets/images/hero.jpg" alt="Hero image" />
@@ -116,6 +116,11 @@ $ff-mserrat: "Montserrat", sans-serif;
         box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
 
         transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+        &:focus {
+          box-shadow: 0 0 0 0.3rem rgba($color-main-1, 0.8);
+          outline: none;
+        }
 
         &:hover {
           box-shadow: none;

@@ -20,7 +20,12 @@
         <router-link class="btn login-btn" to="/signup" v-if="!user"
           >Войти</router-link
         >
-        <OnClickOutside class="profile" v-if="user" @trigger="closeDropdown">
+        <OnClickOutside
+          tabindex="0"
+          class="profile"
+          v-if="user"
+          @trigger="closeDropdown"
+        >
           <div class="info" @click="openDropdown">
             <img :src="user.photoURL" alt="" v-if="user.photoURL" />
             <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
@@ -33,10 +38,15 @@
                   <p class="email">{{ user.email }}</p>
                 </li>
                 <li>
-                  <router-link to="/drafts">Черновик</router-link>
+                  <router-link to="/drafts" tabindex="0">Черновик</router-link>
                 </li>
-                <li class="li-myposts">Мои посты</li>
-                <li role="button" class="li-logout" @click="handleLogout">
+                <li class="li-myposts" tabindex="0">Мои посты</li>
+                <li
+                  role="button"
+                  class="li-logout"
+                  @click="handleLogout"
+                  tabindex="0"
+                >
                   <p>Выйти</p>
                 </li>
               </ul>
@@ -107,6 +117,10 @@ $ff-mserrat: "Montserrat", sans-serif;
 
 .nav {
   border-bottom: 1px solid $color-gray-3;
+  & *:focus {
+    box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
+    outline: none;
+  }
   nav {
     display: flex;
     justify-content: space-between;

@@ -42,11 +42,7 @@ const useTipTap = () => {
             spellcheck: false,
           },
         },
-        codeBlock: {
-          HTMLAttributes: {
-            class: "E-codeBlock",
-          },
-        },
+
         paragraph: {
           HTMLAttributes: {
             class: "E-paragraph",
@@ -63,7 +59,7 @@ const useTipTap = () => {
         HTMLAttributes: {
           class: "E-link",
           rel: null,
-          target: null,
+          target: "_blank",
         },
       }),
       CodeBlockLowLight.configure({

@@ -16,7 +16,9 @@
     <div class="comments">
       <comment
         @delete:comment="deleteComment"
+        @update:comment="updateComment"
         :comment="comment"
+        :postId="postId"
         v-for="(comment, index) in comments"
         :key="index"
       />
@@ -29,7 +31,7 @@ import { defineComponent, PropType, ref } from "vue";
 import { useRoute } from "vue-router";
 import { nanoid } from "nanoid";
 
-import { arrayUnion } from "firebase/firestore";
+import { arrayUnion, FieldValue } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
 import { Timestamp } from "firebase/firestore";
 
@@ -57,11 +59,12 @@ export default defineComponent({
     const { updateDocument } = useDocument();
 
     const addComment = async () => {
+      //create unique id
       let id = nanoid(5);
       isPending.value = true;
       let newComment: IComment = {
         author: user.value!.displayName!,
-        comment: comment.value.trim(),
+        text: comment.value.trim(),
         createdAt: Timestamp.fromDate(new Date()),
         likes: 0,
         reply: [],
@@ -87,7 +90,25 @@ export default defineComponent({
         });
       }
     };
-    return { comment, addComment, isPending, deleteComment };
+
+    //payload id, payload text
+    const updateComment = async (Pid: string, Ptext: string) => {
+      let id = nanoid(5);
+      if (props.comments) {
+        console.log("comments", props.comments);
+        /*         let comment = props.comments.find((comment) => {
+          return comment.id === Pid;
+        }); */
+      }
+    };
+    return {
+      comment,
+      addComment,
+      isPending,
+      deleteComment,
+      postId,
+      updateComment,
+    };
   },
 });
 </script>
@@ -138,10 +159,6 @@ $ff-mserrat: "Montserrat", sans-serif;
       font-family: inherit;
       color: rgba($color-text, 0.6);
     }
-
-    /*     &:focus {
-      min-height: 6.4rem;
-    } */
   }
 
   .btn {

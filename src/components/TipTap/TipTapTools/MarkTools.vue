@@ -4,6 +4,7 @@
       faIcon="fa-solid fa-bold"
       tooltip="Жирный"
       @click="editor.chain().focus().toggleBold().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleBold().run()"
       :class="{ isActive: editor?.isActive('bold') }"
       :disabled="!editor?.can().chain().focus().toggleBold().run()"
     />
@@ -11,6 +12,7 @@
       faIcon="fa-solid fa-italic"
       tooltip="Курсив"
       @click="editor.chain().focus().toggleItalic().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleItalic().run()"
       :class="{ isActive: editor?.isActive('italic') }"
       :disabled="!editor?.can().chain().focus().toggleItalic().run()"
     />
@@ -18,6 +20,7 @@
       faIcon="fa-solid fa-strikethrough"
       tooltip="Зачеркнуть"
       @click="editor.chain().focus().toggleStrike().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleStrike().run()"
       :class="{ isActive: editor?.isActive('strike') }"
       :disabled="!editor?.can().chain().focus().toggleStrike().run()"
     />
@@ -25,6 +28,7 @@
       faIcon="fa-solid fa-underline"
       tooltip="Подчеркнуть"
       @click="editor.chain().focus().toggleUnderline().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleUnderline().run()"
       :class="{
         isActive: editor?.isActive('underline'),
       }"
@@ -33,12 +37,14 @@
       faIcon="fa-solid fa-code"
       tooltip="Код"
       @click="editor.chain().focus().toggleCode().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleCode().run()"
       :class="{ isActive: editor?.isActive('code') }"
     />
     <tip-tap-button
       faIcon="fa-solid fa-laptop-code"
       tooltip="Блок кода"
       @click="editor.chain().focus().toggleCodeBlock().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleCodeBlock().run()"
       :class="{ isActive: editor?.isActive('codeBlock') }"
     />
 
@@ -46,6 +52,7 @@
       faIcon="fa-solid fa-highlighter"
       tooltip="Выделить "
       @click="editor.chain().focus().toggleHighlight().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleHighlight().run()"
       :class="{ isActive: editor?.isActive('highlight') }"
     />
 
@@ -53,6 +60,7 @@
       faIcon="fa-solid fa-list-ul"
       tooltip="Список пуля"
       @click="editor.commands.toggleBulletList()"
+      @keypress.enter.prevent="editor.commands.toggleBulletList()"
       :class="{ isActive: editor?.isActive('bulletList') }"
     />
 
@@ -60,6 +68,7 @@
       faIcon="fa-solid fa-list-ol"
       tooltip="Упорядоченный список"
       @click="editor.commands.toggleOrderedList()"
+      @keypress.enter.prevent="editor.commands.toggleOrderedList()"
       :class="{ isActive: editor?.isActive('orderedList') }"
     />
 
@@ -67,6 +76,7 @@
       faIcon="fa-solid fa-quote-left"
       tooltip="Цитата"
       @click="editor.chain().focus().toggleBlockquote().run()"
+      @keypress.enter.prevent="editor.chain().focus().toggleBlockquote().run()"
       :class="{ isActive: editor?.isActive('blockquote') }"
     />
 
@@ -74,6 +84,7 @@
       faIcon="fa-solid fa-link"
       tooltip=" Добавить ссылку"
       @click="setLink"
+      @keypress.enter.prevent="setLink"
     />
   </div>
 </template>
@@ -125,6 +136,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+$color-main-1: #d84f2a;
 .marks {
   display: flex;
   gap: 1rem;
