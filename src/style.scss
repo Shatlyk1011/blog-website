@@ -1,35 +1,4 @@
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-red: #d92d20;
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
-
-// transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
-
-/* 
-FONT-SIZES
-95.37px
-76.29px
-61px
-48.83px
-39.06px
-31.25px
-25.00px
-20.00px
-16.00px
-12.80px
-10.24px
-8.19px
-*/
+@import "@/globals";
 
 * {
   padding: 0;

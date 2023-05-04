@@ -24,7 +24,6 @@ const getCollection = (coll: string) => {
 
   watchEffect((onInvalidate) => {
     onInvalidate(() => unsubscribe());
-    // onInvalidate(() => newCommentUnsubscribe());
   });
 
   return { documents };

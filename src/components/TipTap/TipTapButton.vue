@@ -11,47 +11,32 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineProps } from "vue";
 
-export default defineComponent({
-  props: {
-    faIcon: {
-      type: String,
-      required: true,
-    },
-    size: {
-      type: String,
-      required: false,
-      default: "sm",
-    },
-    tooltip: {
-      required: false,
-      type: String,
-    },
-    command: {
-      required: false,
-      type: String,
-    },
+defineProps({
+  faIcon: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: String,
+    required: false,
+    default: "sm",
+  },
+  tooltip: {
+    required: false,
+    type: String,
+  },
+  command: {
+    required: false,
+    type: String,
   },
 });
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-main-1: #d84f2a;
-
-$color-red: #d92d20;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import "@/globals";
 
 .btn {
   color: $color-white;

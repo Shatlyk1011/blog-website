@@ -8,21 +8,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import Hero from "@/components/Hero/Hero.vue";
 import Posts from "@/components/Posts/Posts.vue";
 
 import getCollection from "@/composables/firestore/getCollection";
 
-export default defineComponent({
-  name: "HomeView",
-  components: { Hero, Posts },
-  setup() {
-    const { documents: posts } = getCollection("posts");
-    return { posts };
-  },
-});
+const { documents: posts } = getCollection("posts");
 </script>
 
 <style lang="scss" scoped>

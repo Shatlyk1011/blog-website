@@ -5,7 +5,8 @@
         <h1>
           Все о <br />
 
-          <transition name="action-animation">{{ action }}</transition>
+          <span>{{ action }}</span>
+
           разработке
         </h1>
         <p>
@@ -21,48 +22,28 @@
   </section>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import nextElementList from "@/composables/nextElementList";
-import { defineComponent, onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 
-export default defineComponent({
-  components: {},
-  setup() {
-    const action = ref("веб");
-    let interval = ref();
+const action = ref("веб");
+let interval = ref();
 
-    const changeActionWord = () => {
-      interval.value = setInterval(() => {
-        const actions = ref(["веб", "дизайн"]);
-        action.value = nextElementList(actions.value, action.value);
-        console.log("interval");
-      }, 2700);
-    };
+const changeActionWord = () => {
+  interval.value = setInterval(() => {
+    const actions = ref(["веб", "дизайн"]);
+    action.value = nextElementList(actions.value, action.value);
+  }, 2700);
+};
 
-    onBeforeMount(changeActionWord);
-    onBeforeUnmount(() => {
-      clearInterval(interval.value);
-    });
-
-    return { action };
-  },
+onBeforeMount(changeActionWord);
+onBeforeUnmount(() => {
+  clearInterval(interval.value);
 });
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import "@/globals";
 
 .hero {
   padding: 6rem 0rem;
@@ -143,21 +124,5 @@ $ff-mserrat: "Montserrat", sans-serif;
       }
     }
   }
-}
-
-.action-animation-inner-enter-active {
-  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s;
-}
-.action-animation-inner-enter-from {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-.action-animation-inner-leave-to {
-  transform: scale(0.8);
-}
-
-.action-animation-inner-leave-active {
-  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s;
 }
 </style>

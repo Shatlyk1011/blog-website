@@ -4,16 +4,8 @@
   </div>
 </template>
 
-
-
 <style lang="scss" scoped>
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
+@import "@/globals";
 .c {
   position: absolute;
   left: 50%;

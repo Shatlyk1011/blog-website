@@ -8,33 +8,25 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import TipTapButton from "@/components/TipTap/TipTapButton.vue";
 
-import { defineComponent } from "vue";
+import { defineProps } from "vue";
 
-export default defineComponent({
-  name: "ImageTool",
-  components: { TipTapButton },
-
-  props: {
-    editor: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const addImage = () => {
-      const url = window.prompt("URL");
-
-      if (url) {
-        props.editor.chain().focus().setImage({ src: url }).run();
-      }
-    };
-    return { addImage };
+const props = defineProps({
+  editor: {
+    type: Object,
+    required: true,
   },
 });
+
+const addImage = () => {
+  const url = window.prompt("URL");
+
+  if (url) {
+    props.editor.chain().focus().setImage({ src: url }).run();
+  }
+};
 </script>
 
 <style scoped>

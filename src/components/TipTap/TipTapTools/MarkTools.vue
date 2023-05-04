@@ -94,51 +94,43 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script lang="ts" setup>
+import { defineProps, PropType } from "vue";
 import { Editor } from "@tiptap/vue-3";
 
 import TipTapButton from "@/components/TipTap/TipTapButton.vue";
 
-export default defineComponent({
-  name: "MarkTools",
-
-  components: { TipTapButton },
-  props: {
-    editor: {
-      required: true,
-      type: Editor as PropType<Editor>,
-    },
-  },
-  setup(props) {
-    const setLink = () => {
-      const previousUrl = props.editor.getAttributes("link").href;
-      const url = window.prompt("URL", previousUrl);
-      // cancelled
-      if (url === null) {
-        return;
-      }
-      // empty
-      if (url === "") {
-        props.editor.chain().focus().extendMarkRange("link").unsetLink().run();
-        return;
-      }
-
-      // update link
-      props.editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
-    };
-    return { setLink };
+const props = defineProps({
+  editor: {
+    required: true,
+    type: Editor as PropType<Editor>,
   },
 });
+
+const setLink = () => {
+  const previousUrl = props.editor.getAttributes("link").href;
+  const url = window.prompt("URL", previousUrl);
+  // cancelled
+  if (url === null) {
+    return;
+  }
+  // empty
+  if (url === "") {
+    props.editor.chain().focus().extendMarkRange("link").unsetLink().run();
+    return;
+  }
+
+  // update link
+  props.editor
+    .chain()
+    .focus()
+    .extendMarkRange("link")
+    .setLink({ href: url })
+    .run();
+};
 </script>
 
 <style lang="scss">
-$color-main-1: #d84f2a;
 .marks {
   display: flex;
   gap: 1rem;

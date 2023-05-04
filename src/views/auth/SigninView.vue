@@ -13,14 +13,14 @@
         <div class="password">
           <Input
             ref="passwordRef"
-            :type="passwordBool ? 'text' : 'password'"
+            :type="togglePassword ? 'text' : 'password'"
             class="input"
             v-model="password"
             placeholder="Пароль"
             required
           />
           <font-awesome-icon
-            @click="passwordBool = !passwordBool"
+            @click="togglePassword = !togglePassword"
             title="Скрыть/показать пароль"
             class="eye"
             icon="fa-solid fa-eye"
@@ -40,34 +40,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import useSignin from "@/composables/auth/useSignin";
+<script lang="ts" setup>
+import { ref } from "vue";
+import router from "@/router";
 
 import Input from "@/components/Shared/Input.vue";
 
-import { ref } from "vue";
-import { defineComponent } from "vue";
-import router from "@/router";
+import useSignin from "@/composables/auth/useSignin";
 
-export default defineComponent({
-  components: { Input },
-  setup() {
-    const email = ref("");
-    const password = ref("");
-    let passwordBool = ref(false);
+const email = ref("");
+const password = ref("");
+let togglePassword = ref(false);
 
-    const { error, isPending, login } = useSignin();
+const { error, isPending, login } = useSignin();
 
-    const handleSignin = async () => {
-      await login(email.value, password.value);
-      if (!error.value) {
-        router.push("/");
-      }
-    };
-
-    return { email, password, passwordBool, isPending, error, handleSignin };
-  },
-});
+const handleSignin = async () => {
+  await login(email.value, password.value);
+  if (!error.value) {
+    router.push("/");
+  }
+};
 </script>
 
 <style lang="scss" scoped>

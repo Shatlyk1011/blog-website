@@ -18,7 +18,7 @@ const signup = async (email: string, password: string, userName: string) => {
     }
 
     if (!res) {
-      throw new Error("Could not complete signup");
+      throw new Error("Что то пошло не так. Попробуйте позже");
     }
 
     error.value = null;

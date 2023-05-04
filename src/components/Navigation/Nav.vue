@@ -17,6 +17,7 @@
           :to="{ name: 'CreatePost' }"
           >Создать пост</router-link
         >
+        <div class="error" v-if="error">{{ error }}</div>
         <router-link class="btn login-btn" to="/signup" v-if="!user"
           >Войти</router-link
         >
@@ -28,7 +29,10 @@
         >
           <div class="info" @click="dropdown = true">
             <img :src="user.photoURL" alt="" v-if="user.photoURL" />
-            <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
+            <p v-else-if="!user.photoURL">
+              {{ user.displayName?.slice(0, 1).toUpperCase() }}
+            </p>
+            <p v-else>{{ user.email?.slice(0, 1).toUpperCase() }}</p>
           </div>
           <transition name="dropdown-animation">
             <div class="dropdown" v-show="dropdown">
@@ -58,54 +62,32 @@
   </div>
 </template>
 
-<script lang="ts" >
-import { computed, defineComponent, ref } from "vue";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+import { OnClickOutside } from "@vueuse/components";
+import router from "@/router";
 
 import { useUserStore } from "@/stores/user";
 
-import { OnClickOutside } from "@vueuse/components";
-
 import useLogout from "@/composables/auth/useLogout";
-import router from "@/router";
 
-export default defineComponent({
-  components: { OnClickOutside },
-  setup() {
-    const { logout, error, isPending } = useLogout();
-    const dropdown = ref(false);
+const { logout, error } = useLogout();
+const dropdown = ref(false);
 
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 
-    const handleLogout = async () => {
-      dropdown.value = false;
-      await logout();
-      if (!error.value) {
-        router.push("/");
-      }
-    };
-
-    // onClickOutside(profile, closeDropdown);
-
-    return { user, handleLogout, dropdown };
-  },
-});
+const handleLogout = async () => {
+  dropdown.value = false;
+  await logout();
+  if (!error.value) {
+    router.push("/signin");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import "@/globals";
 
 .nav {
   border-bottom: 1px solid $color-gray-3;

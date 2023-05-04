@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <transition name="modal-animation">
-      <div v-show="modalActive" class="modal">
+      <div v-show="modalActive" class="modal" @click="close">
         <transition name="modal-animation-inner">
           <div v-show="modalActive" class="modal-inner">
             <slot />
@@ -12,20 +12,20 @@
   </Teleport>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineProps, defineEmits } from "vue";
 
-export default defineComponent({
-  name: "Modal",
-
-  props: ["modalActive"],
-  setup(props, { emit }) {
-    const close = () => {
-      emit("close");
-    };
-    return { close };
+defineProps({
+  modalActive: {
+    required: true,
+    type: Boolean,
+    default: false,
   },
 });
+const emit = defineEmits(["close"]);
+const close = () => {
+  emit("close");
+};
 </script>
 
 <style lang="scss" scoped>

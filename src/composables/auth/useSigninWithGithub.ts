@@ -5,16 +5,16 @@ import { signInWithPopup, GithubAuthProvider } from "firebase/auth";
 const useSigninWithGithub = () => {
   const error = ref();
 
-  const signinWithGithub = async () => {
-    try {
-      const res = await signInWithPopup(auth, githubProvider);
+  const signinWithGithub = () => {
+    signInWithPopup(auth, githubProvider).then((res) => {
+      console.log("res", res, res.user);
       const credential = GithubAuthProvider.credentialFromResult(res);
+
       const token = credential?.accessToken;
       console.log("token", token);
-    } catch (err: any) {
-      error.value = err.message;
-      console.log(err.message);
-    }
+      const user = res.user;
+      console.log(user);
+    });
   };
   return { error, signinWithGithub };
 };

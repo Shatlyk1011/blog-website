@@ -5,29 +5,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script lang="ts" setup>
 import Posts from "@/components/Posts/Posts.vue";
 import Loading from "@/components/Shared/Loading.vue";
 
 import getCollection from "@/composables/firestore/getCollection";
 
-export default defineComponent({
-  name: "CreatePost",
-  components: {
-    Posts,
-    Loading,
-  },
-  setup() {
-    const { documents: posts } = getCollection("posts");
-    if (posts.value) {
-      console.log("posts", posts.value);
-    }
-
-    return { posts };
-  },
-});
+const { documents: posts } = getCollection("posts");
 </script>
 
 <style lang="scss" scoped>

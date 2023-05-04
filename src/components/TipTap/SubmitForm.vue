@@ -82,10 +82,11 @@
         <editor-content class="editor" :editor="editor" />
       </div>
     </form>
+    <button @click="handleSubmit">xaoaxoaxo</button>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   ref,
   defineComponent,
@@ -100,290 +101,246 @@ import { EditorContent } from "@tiptap/vue-3";
 
 import { Timestamp } from "firebase/firestore";
 
+import { useUserStore } from "@/stores/user";
+
 import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
-import Tags from "@/components/Shared/Tags.vue";
-
-import { useUserStore } from "@/stores/user";
 
 import useTipTap from "@/composables/useTipTap";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
 import useStorage from "@/composables/storage/useStorage";
-import useTags from "@/composables/useTags";
 import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
 import { Post, PostDraft } from "@/assets/Types";
 
-export default defineComponent({
-  name: "SubmitForm",
-  components: {
-    EditorContent,
-    Tools,
-    Input,
-    Tags,
+const emit = defineEmits(["update:draft", "update:updateDraft"]);
+
+const props = defineProps({
+  setDraft: {
+    required: false,
+    type: Boolean,
+    default: false,
   },
-
-  emits: ["update:draft", "update:updateDraft"],
-
-  props: {
-    setDraft: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
-    postToUpdate: {
-      required: false,
-      type: Object as PropType<Post> | null | undefined,
-    },
-    postToSetDraft: {
-      required: false,
-      type: Object as PropType<PostDraft> | null,
-    },
-    btnText: {
-      required: true,
-      type: String,
-    },
-    id: {
-      type: String,
-    },
+  postToUpdate: {
+    required: false,
+    type: Object as PropType<Post> | null | undefined,
   },
-  setup(props, { emit }) {
-    const isPending = ref(false);
-    const postUpdated = ref(false);
-
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
-
-    const route = useRoute();
-    const router = useRouter();
-
-    const {
-      addDocument,
-      error: docError,
-      deleteDocument,
-      setDocument,
-      updateDocument,
-    } = useDocument();
-    const {
-      handleImage,
-      image: coverImage,
-      imageTypeError,
-      imagePreviewUrl,
-    } = getInputImage();
-    const { error, imageRef, imageUrl, uploadImage, deleteImage } =
-      useStorage();
-
-    const { editor, title, tags, addTag, removeTag } = useTipTap();
-
-    const clearImageValues = () => {
-      coverImage.value = null;
-      imagePreviewUrl.value = "";
-    };
-
-    const getInnerHTML = () => {
-      const proseMirror = document.querySelector(".ProseMirror") as HTMLElement;
-      let html = proseMirror.innerHTML;
-      return html;
-    };
-
-    const setFormerImage = () => {
-      if (props.postToUpdate) {
-        let post = props.postToUpdate;
-        imagePreviewUrl.value = post.imageUrl;
-      }
-    };
-
-    const handleSubmit = async () => {
-      const html = await getInnerHTML();
-
-      //update post
-      if (props.postToUpdate) {
-        console.log("UPDATING YOUR POST");
-        let postId = route.params.id as string;
-        let postToUpdate = props.postToUpdate;
-        isPending.value = true;
-        if (coverImage.value) {
-          await deleteImage(props.postToUpdate.imageRef);
-          await uploadImage("covers", coverImage.value);
-        }
-        const { avgTimeToRead } = getAvgTimeToRead(html);
-        let updatePost = {
-          html,
-          title: title.value,
-          imageUrl: imageUrl.value ? imageUrl.value : postToUpdate.imageUrl,
-          imageRef: imageRef.value ? imageRef.value : postToUpdate.imageRef,
-          comments: [],
-          tags: tags.value,
-          timeToRead: avgTimeToRead.value,
-          userInfo: {
-            author: user.value!.displayName!,
-            userUid: user.value!.uid,
-          },
-          editedAt: Timestamp.fromDate(new Date()),
-        };
-        await updateDocument("posts", postId, updatePost);
-        //delete updateDraft
-        await deleteDocument("updateDraft", user.value!.uid);
-        isPending.value = false;
-        if (!error.value) {
-          editor.value?.destroy();
-          coverImage.value = undefined;
-          imagePreviewUrl.value = "";
-          tags.value = [];
-
-          router.push("/all-posts");
-          isPending.value = false;
-        }
-      }
-
-      //create post
-      if (!props.postToUpdate && route.path === "/create-post") {
-        isPending.value = true;
-        postUpdated.value = true;
-        await uploadImage("covers", coverImage.value);
-        const { avgTimeToRead } = getAvgTimeToRead(html);
-
-        let newPost = {
-          html,
-          title: title.value,
-          imageUrl: imageUrl.value,
-          imageRef: imageRef.value,
-          comments: [],
-          tags: tags.value,
-          timeToRead: avgTimeToRead.value,
-          userInfo: {
-            author: user.value!.displayName!,
-            userUid: user.value!.uid,
-          },
-          createdAt: Timestamp.fromDate(new Date()),
-        };
-        await addDocument("posts", newPost);
-        //delete createDraft
-        await deleteDocument("createDraft", user.value!.uid);
-
-        isPending.value = false;
-        if (!error.value) {
-          editor.value?.destroy();
-          coverImage.value = undefined;
-          imagePreviewUrl.value = "";
-          tags.value = [];
-
-          router.push("/all-posts");
-          isPending.value = false;
-        }
-      }
-    };
-
-    watch(props, () => {
-      let count = 0;
-      // set drafts once when data is available
-      if (props.postToSetDraft && count < 1) {
-        count++;
-        console.log("postToSetDraft available");
-        let post = props.postToSetDraft;
-        title.value = post.title;
-        tags.value = post.tags;
-        editor.value?.commands.setContent(post.html);
-      }
-      // set post to update once when data is available
-      if (props.postToUpdate && count < 1) {
-        count++;
-        console.log("postToUpdate available");
-        let post = props.postToUpdate;
-        title.value = post.title;
-        tags.value = post.tags;
-        editor.value?.commands.setContent(post.html);
-        imagePreviewUrl.value = post.imageUrl;
-      }
-    });
-
-    onActivated(() => {
-      console.log("onActivated");
-      if (props.postToUpdate && !imagePreviewUrl.value) {
-        imagePreviewUrl.value = props.postToUpdate.imageUrl;
-      }
-    });
-    onDeactivated(async () => {
-      console.log("ondeactivate run");
-      let html = editor.value!.getHTML();
-      let { avgTimeToRead } = getAvgTimeToRead(html);
-
-      //save as draft in create-post
-      if (props.setDraft && !postUpdated.value) {
-        emit("update:draft");
-        console.log("sending draft to fs");
-
-        await setDocument("createDraft", user.value!.uid, {
-          html,
-          title: title.value,
-          tags: tags.value,
-          timeToRead: avgTimeToRead.value,
-          userInfo: {
-            author: user.value!.displayName!,
-            userUid: user.value!.uid,
-          },
-        });
-      }
-      imagePreviewUrl.value = "";
-      //save as draft in update-post
-      if (props.postToUpdate) {
-        emit("update:updateDraft");
-        console.log("sending edit draft to fs");
-
-        await setDocument("updateDraft", user.value!.uid, {
-          html,
-          title: title.value,
-          imageUrl: props.postToUpdate.imageUrl,
-          imageRef: props.postToUpdate.imageRef,
-          comments: [],
-          tags: tags.value,
-          timeToRead: avgTimeToRead.value,
-          userInfo: {
-            author: user.value!.displayName!,
-            userUid: user.value!.uid,
-          },
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-      }
-      imagePreviewUrl.value = "";
-    });
-
-    return {
-      editor,
-      handleSubmit,
-      title,
-      tags,
-      isPending,
-      handleImage,
-      coverImage,
-      imageTypeError,
-      imagePreviewUrl,
-      clearImageValues,
-      setFormerImage,
-      addTag,
-      removeTag,
-      user,
-    };
+  postToSetDraft: {
+    required: false,
+    type: Object as PropType<PostDraft> | null,
   },
+  btnText: {
+    required: true,
+    type: String,
+  },
+  id: {
+    type: String,
+  },
+});
+
+const isPending = ref(false);
+const postUpdated = ref(false);
+
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
+
+const route = useRoute();
+const router = useRouter();
+
+const {
+  addDocument,
+  error: docError,
+  deleteDocument,
+  setDocument,
+  updateDocument,
+} = useDocument();
+const {
+  handleImage,
+  image: coverImage,
+  imageTypeError,
+  imagePreviewUrl,
+} = getInputImage();
+const { error, imageRef, imageUrl, uploadImage, deleteImage } = useStorage();
+
+const { editor, title, tags, addTag, removeTag } = useTipTap();
+
+const clearImageValues = () => {
+  coverImage.value = null;
+  imagePreviewUrl.value = "";
+};
+
+const getInnerHTML = () => {
+  const proseMirror = document.querySelector(".ProseMirror") as HTMLElement;
+  let html = proseMirror.innerHTML;
+  return html;
+};
+
+const setFormerImage = () => {
+  if (props.postToUpdate) {
+    let post = props.postToUpdate;
+    imagePreviewUrl.value = post.imageUrl;
+  }
+};
+
+const handleSubmit = async () => {
+  const html = await getInnerHTML();
+
+  //update post
+  if (props.postToUpdate) {
+    console.log("UPDATING YOUR POST");
+    let postId = route.params.id as string;
+    let postToUpdate = props.postToUpdate;
+    isPending.value = true;
+    if (coverImage.value) {
+      await deleteImage(props.postToUpdate.imageRef);
+      await uploadImage("covers", coverImage.value);
+    }
+    const { avgTimeToRead } = getAvgTimeToRead(html);
+    let updatePost = {
+      html,
+      title: title.value,
+      imageUrl: imageUrl.value ? imageUrl.value : postToUpdate.imageUrl,
+      imageRef: imageRef.value ? imageRef.value : postToUpdate.imageRef,
+      comments: [],
+      tags: tags.value,
+      timeToRead: avgTimeToRead.value,
+      userInfo: {
+        author: user.value!.displayName!,
+        userUid: user.value!.uid,
+      },
+      editedAt: Timestamp.fromDate(new Date()),
+    };
+    await updateDocument("posts", postId, updatePost);
+    //delete updateDraft
+    await deleteDocument("updateDraft", user.value!.uid);
+    isPending.value = false;
+    if (!error.value) {
+      editor.value?.destroy();
+      coverImage.value = undefined;
+      imagePreviewUrl.value = "";
+      tags.value = [];
+
+      router.push("/all-posts");
+      isPending.value = false;
+    }
+  }
+
+  //create post
+  if (!props.postToUpdate && route.path === "/create-post") {
+    isPending.value = true;
+    postUpdated.value = true;
+    await uploadImage("covers", coverImage.value);
+    const { avgTimeToRead } = getAvgTimeToRead(html);
+
+    let newPost = {
+      html,
+      title: title.value,
+      imageUrl: imageUrl.value,
+      imageRef: imageRef.value,
+      comments: [],
+      tags: tags.value,
+      timeToRead: avgTimeToRead.value,
+      userInfo: {
+        author: user.value!.displayName!,
+        userUid: user.value!.uid,
+      },
+      createdAt: Timestamp.fromDate(new Date()),
+    };
+    await addDocument("posts", newPost);
+    //delete createDraft
+    await deleteDocument("createDraft", user.value!.uid);
+
+    isPending.value = false;
+    if (!error.value) {
+      editor.value?.destroy();
+      coverImage.value = undefined;
+      imagePreviewUrl.value = "";
+      tags.value = [];
+
+      router.push("/all-posts");
+      isPending.value = false;
+    }
+  }
+};
+
+watch(props, () => {
+  let count = 0;
+  // set drafts once when data is available
+  if (props.postToSetDraft && count < 1) {
+    count++;
+    console.log("postToSetDraft available");
+    let post = props.postToSetDraft;
+    title.value = post.title;
+    tags.value = post.tags;
+    editor.value?.commands.setContent(post.html);
+  }
+  // set post to update once when data is available
+  if (props.postToUpdate && count < 1) {
+    count++;
+    console.log("postToUpdate available");
+    let post = props.postToUpdate;
+    title.value = post.title;
+    tags.value = post.tags;
+    editor.value?.commands.setContent(post.html);
+    imagePreviewUrl.value = post.imageUrl;
+  }
+});
+
+onActivated(() => {
+  console.log("onActivated");
+  if (props.postToUpdate && !imagePreviewUrl.value) {
+    imagePreviewUrl.value = props.postToUpdate.imageUrl;
+  }
+});
+onDeactivated(async () => {
+  console.log("ondeactivate run");
+  let html = editor.value!.getHTML();
+  let { avgTimeToRead } = getAvgTimeToRead(html);
+
+  //save as draft in create-post
+  if (props.setDraft && !postUpdated.value) {
+    emit("update:draft");
+    console.log("sending draft to fs");
+
+    await setDocument("createDraft", user.value!.uid, {
+      html,
+      title: title.value,
+      tags: tags.value,
+      timeToRead: avgTimeToRead.value,
+      userInfo: {
+        author: user.value!.displayName!,
+        userUid: user.value!.uid,
+      },
+    });
+  }
+  imagePreviewUrl.value = "";
+  //save as draft in update-post
+  if (props.postToUpdate) {
+    emit("update:updateDraft");
+    console.log("sending edit draft to fs");
+
+    await setDocument("updateDraft", user.value!.uid, {
+      html,
+      title: title.value,
+      imageUrl: props.postToUpdate.imageUrl,
+      imageRef: props.postToUpdate.imageRef,
+      comments: [],
+      tags: tags.value,
+      timeToRead: avgTimeToRead.value,
+      userInfo: {
+        author: user.value!.displayName!,
+        userUid: user.value!.uid,
+      },
+      createdAt: Timestamp.fromDate(new Date()),
+    });
+  }
+  imagePreviewUrl.value = "";
 });
 </script>
 
 <style lang="scss">
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
-
+@import "@/globals";
 .form-submit {
   margin: 0 auto;
   background-color: $color-gray-2;

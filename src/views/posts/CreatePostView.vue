@@ -2,15 +2,15 @@
   <div class="create-post">
     <form-nav
       class="nav"
-      @update:change="handleChange"
-      @update:preview="handlePreview"
+      @update:change="changeView = true"
+      @update:preview="changeView = false"
     />
     <keep-alive>
       <component
         class="component"
         @update:draft="updateDraft"
         :setDraft="true"
-        :is="currentView"
+        :is="changeView ? SubmitForm : PreviewPost"
         :postToSetDraft="draft"
         :post="draft"
         btnText="Cоздать"
@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref, KeepAlive, computed } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
@@ -36,39 +36,15 @@ import getDocument from "@/composables/firestore/getDocument";
 
 import { useUserStore } from "@/stores/user";
 
-import { defineComponent } from "vue";
+onMounted(async () => await getDoc("createDraft", user.value!.uid));
 
-export default defineComponent({
-  name: "Create Post View",
+let changeView = ref(true);
 
-  components: { SubmitForm, PreviewPost, FormNav, KeepAlive },
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 
-  setup() {
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
-
-    const { getDoc, document: draft } = getDocument();
-
-    let currentView = ref("SubmitForm");
-    const handleChange = () => {
-      currentView.value = "SubmitForm";
-    };
-    const handlePreview = () => {
-      currentView.value = "PreviewPost";
-    };
-
-    const updateDraft = async () => {
-      await getDoc("createDraft", user.value!.uid);
-    };
-
-    onMounted(async () => {
-      console.log("mounting create-post");
-      await getDoc("createDraft", user.value!.uid);
-    });
-
-    return { currentView, handleChange, handlePreview, draft, updateDraft };
-  },
-});
+const { getDoc, document: draft } = getDocument();
+const updateDraft = async () => await getDoc("createDraft", user.value!.uid);
 </script>
 
 <style lang="scss" scoped>

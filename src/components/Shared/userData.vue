@@ -12,33 +12,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from "vue";
+<script lang="ts" setup>
+import { defineProps, computed } from "vue";
 import { Timestamp } from "firebase/firestore";
 
 import { useUserStore } from "@/stores/user";
 
-export default defineComponent({
-  name: "UserData",
-  props: {
-    date: {
-      required: false,
-      type: Timestamp,
-    },
-  },
-  setup() {
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
-
-    return { user };
+defineProps({
+  date: {
+    required: false,
+    type: Timestamp,
   },
 });
+
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 </script>
 
 <style lang=scss>
-$ff-mserrat: "Montserrat", sans-serif;
-
-$color-main-1: #d84f2a;
+@import "@/globals";
 .user-data {
   display: flex;
   gap: 1rem;

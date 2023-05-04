@@ -4,20 +4,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineProps } from "vue";
 
 import SinglePost from "@/components/Posts/Post/SinglePost.vue";
 
-export default defineComponent({
-  name: "PostView",
-
-  components: { SinglePost },
-  props: {
-    id: {
-      required: true,
-      type: String,
-    },
+defineProps({
+  id: {
+    required: true,
+    type: String,
   },
 });
 </script>

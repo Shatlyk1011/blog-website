@@ -41,80 +41,50 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+<script lang="ts" setup>
+import { defineProps, defineEmits, PropType, ref } from "vue";
 import { Comment as IComment } from "@/assets/Types";
 
 import { OnClickOutside } from "@vueuse/components";
 
-import useDocument from "@/composables/firestore/useDocument";
+const emit = defineEmits(["delete:comment", "update:comment"]);
 
-export default defineComponent({
-  name: "Comment",
-
-  emits: ["delete:comment", "update:comment"],
-
-  props: {
-    comment: {
-      type: Object as PropType<IComment>,
-    },
-    postId: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  comment: {
+    type: Object as PropType<IComment>,
+    required: true,
   },
-  components: { OnClickOutside },
-  setup(props, { emit }) {
-    const dropdown = ref(false);
-    const change = ref(false);
-
-    const toggleMenu = () => (dropdown.value = !dropdown.value);
-    const closeMenu = () => (dropdown.value = false);
-
-    const emitDeleteComment = () => {
-      closeMenu();
-      if (props.comment) {
-        let id = props.comment.id;
-        emit("delete:comment", id);
-      }
-    };
-
-    const emitUpdateComment = () => {
-      if (props.comment) {
-        let text = props.comment.text;
-        let id = props.comment.id;
-        emit("update:comment", id, text);
-      }
-    };
-
-    return {
-      dropdown,
-      toggleMenu,
-      closeMenu,
-      change,
-      emitUpdateComment,
-      emitDeleteComment,
-    };
+  postId: {
+    type: String,
+    required: true,
   },
 });
+
+const dropdown = ref(false);
+const change = ref(false);
+
+const toggleMenu = () => (dropdown.value = !dropdown.value);
+const closeMenu = () => (dropdown.value = false);
+
+const emitDeleteComment = () => {
+  closeMenu();
+  if (props.comment) {
+    let id = props.comment.id;
+    emit("delete:comment", id);
+  }
+};
+
+const emitUpdateComment = () => {
+  if (props.comment) {
+    let text = props.comment.text;
+    let id = props.comment.id;
+    emit("update:comment", id, text);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-red: #d92d20;
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
-
+@import "@/globals";
 .comment {
   margin-top: 3.2rem;
   &:not(:last-child) {

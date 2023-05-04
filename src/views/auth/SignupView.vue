@@ -17,24 +17,12 @@
       <h3>-или-</h3>
 
       <form @submit.prevent="handleSignup">
-        <Input
-          class="input"
-          v-model="userName"
-          placeholder="Ваше имя"
-          required
-        />
-        <Input
-          type="email"
-          class="input"
-          v-model="email"
-          placeholder="Email"
-          required
-        />
+        <Input v-model="userName" placeholder="Ваше имя" required />
+        <Input type="email" v-model="email" placeholder="Email" required />
         <div class="password">
           <Input
             ref="passwordRef"
             :type="passwordBool ? 'text' : 'password'"
-            class="input"
             v-model="password"
             placeholder="Пароль"
             required
@@ -62,64 +50,46 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { ref } from "vue";
 import router from "@/router";
+
 import Input from "@/components/Shared/Input.vue";
 
 import useSignup from "@/composables/auth/useSignup";
 import useSigninWithGoogle from "@/composables/auth/useSigninWithGoogle";
 import useSigninWithGithub from "@/composables/auth/useSigninWithGithub";
 
-import { ref } from "vue";
-import { defineComponent } from "vue";
+const userName = ref("");
+const email = ref("");
+const password = ref("");
+let passwordBool = ref(false);
 
-export default defineComponent({
-  components: { Input },
-  setup() {
-    const userName = ref("");
-    const email = ref("");
-    const password = ref("");
-    let passwordBool = ref(false);
+const { error, isPending, signup } = useSignup();
+const { error: googleAuthError, signinWithGoogle } = useSigninWithGoogle();
+const { error: githubAuthError, signinWithGithub } = useSigninWithGithub();
 
-    const { error, isPending, signup } = useSignup();
-    const { error: googleAuthError, signinWithGoogle } = useSigninWithGoogle();
-    const { error: githubAuthError, signinWithGithub } = useSigninWithGithub();
+const handleSignup = async () => {
+  await signup(email.value, password.value, userName.value);
+  if (!error.value) {
+    router.push("/");
+  }
+};
 
-    const handleSignup = async () => {
-      await signup(email.value, password.value, userName.value);
-      if (!error.value) {
-        router.push("/");
-      }
-    };
+const handleGoogleSignin = async () => {
+  await signinWithGoogle();
+  if (!googleAuthError.value) {
+    router.push("/");
+  }
+};
 
-    const handleGoogleSignin = async () => {
-      await signinWithGoogle();
-      if (!googleAuthError.value) {
-        router.push("/");
-      }
-    };
-
-    const handleGithubSignin = async () => {
-      await signinWithGithub();
-      if (!githubAuthError.value) {
-        router.push("/");
-      }
-    };
-
-    return {
-      userName,
-      email,
-      password,
-      passwordBool,
-      handleSignup,
-      handleGoogleSignin,
-      handleGithubSignin,
-      error,
-      googleAuthError,
-      githubAuthError,
-    };
-  },
-});
+//not working properly
+const handleGithubSignin = async () => {
+  await signinWithGithub();
+  if (!githubAuthError.value) {
+    router.push("/");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -205,7 +175,7 @@ $ff-mserrat: "Montserrat", sans-serif;
       width: 100%;
       // border: 1px solid $color-gray-2;
 
-      .input {
+      input {
         all: unset;
         border-bottom: 1px solid $color-gray-2;
         background-color: transparent;

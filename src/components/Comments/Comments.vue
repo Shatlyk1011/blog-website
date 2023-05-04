@@ -14,7 +14,7 @@
     </button>
     <button class="btn" v-if="isPending" disabled>Опубликовать</button>
     <div class="comments">
-      <comment
+      <Comment
         @delete:comment="deleteComment"
         @update:comment="updateComment"
         :comment="comment"
@@ -26,112 +26,84 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref, computed } from "vue";
+<script lang="ts" setup>
+import { defineProps, PropType, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { nanoid } from "nanoid";
 
 import { useUserStore } from "@/stores/user";
+import Comment from "@/components/Comments/Comment.vue";
 
 import { arrayUnion, FieldValue } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
 import { Timestamp } from "firebase/firestore";
 
-import Comment from "@/components/Comments/Comment.vue";
-
 import useDocument from "@/composables/firestore/useDocument";
 
-export default defineComponent({
-  name: "Comments",
-  props: {
-    comments: {
-      type: Array as PropType<IComment[]>,
-    },
-  },
-
-  components: { Comment },
-  setup(props) {
-    const route = useRoute();
-    let postId = route.params.id as string;
-
-    const comment = ref("");
-    let isPending = ref(false);
-
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
-
-    const { updateDocument } = useDocument();
-
-    const addComment = async () => {
-      //create unique id
-      let id = nanoid(5);
-      isPending.value = true;
-      let newComment: IComment = {
-        author: user.value!.displayName!,
-        text: comment.value.trim(),
-        createdAt: Timestamp.fromDate(new Date()),
-        likes: 0,
-        reply: [],
-        id,
-      };
-      if (comment.value !== "") {
-        await updateDocument("posts", postId, {
-          comments: arrayUnion(newComment),
-        });
-        isPending.value = false;
-      }
-      isPending.value = false;
-      comment.value = "";
-    };
-
-    const deleteComment = async (payload: string) => {
-      if (props.comments) {
-        let comments = props.comments.filter((comment: IComment) => {
-          return comment.id !== payload;
-        });
-        await updateDocument("posts", postId, {
-          comments,
-        });
-      }
-    };
-
-    //payload id, payload text
-    const updateComment = async (Pid: string, Ptext: string) => {
-      let id = nanoid(5);
-      if (props.comments) {
-        console.log("comments", props.comments);
-        /*         let comment = props.comments.find((comment) => {
-          return comment.id === Pid;
-        }); */
-      }
-    };
-    return {
-      comment,
-      addComment,
-      isPending,
-      deleteComment,
-      postId,
-      updateComment,
-    };
+const props = defineProps({
+  comments: {
+    type: Array as PropType<IComment[]>,
   },
 });
+
+const route = useRoute();
+let postId = route.params.id as string;
+
+const comment = ref("");
+let isPending = ref(false);
+
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
+
+const { updateDocument } = useDocument();
+
+const addComment = async () => {
+  //create unique id
+  let id = nanoid(5);
+  isPending.value = true;
+  let newComment: IComment = {
+    author: user.value!.displayName!,
+    text: comment.value.trim(),
+    createdAt: Timestamp.fromDate(new Date()),
+    likes: 0,
+    reply: [],
+    id,
+  };
+  if (comment.value !== "") {
+    await updateDocument("posts", postId, {
+      comments: arrayUnion(newComment),
+    });
+    isPending.value = false;
+  }
+  isPending.value = false;
+  comment.value = "";
+};
+
+const deleteComment = async (payload: string) => {
+  if (props.comments) {
+    let comments = props.comments.filter((comment: IComment) => {
+      return comment.id !== payload;
+    });
+    await updateDocument("posts", postId, {
+      comments,
+    });
+  }
+};
+
+//payload id, payload text
+const updateComment = async (Pid: string, Ptext: string) => {
+  let id = nanoid(5);
+  if (props.comments) {
+    console.log("comments", props.comments);
+    /*         let comment = props.comments.find((comment) => {
+          return comment.id === Pid;
+        }); */
+  }
+};
 </script>
 
 <style lang='scss' scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-red: #d92d20;
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import "@/globals";
 .grid {
   display: grid;
   grid-template-columns: 4rem 1fr;

@@ -73,8 +73,8 @@
   <div v-if="!post && !getError"><Loading /></div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script lang="ts" setup>
+import { ref, defineProps } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 
@@ -90,88 +90,51 @@ import useDocument from "@/composables/firestore/useDocument";
 import useStorage from "@/composables/storage/useStorage";
 import getDocSnap from "@/composables/firestore/getDocSnap";
 
-export default defineComponent({
-  name: "SinglePost",
-
-  components: { UserData, Tags, OnClickOutside, Modal, Comments, Loading },
-
-  props: {
-    postId: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    let menu = ref(false);
-    const modalActive = ref(false);
-    const toggleModal = () => {
-      modalActive.value = !modalActive.value;
-    };
-
-    const { deleteDocument, error } = useDocument();
-
-    const { document: post, error: getError } = getDocSnap(
-      "posts",
-      props.postId
-    );
-    setTimeout(() => {
-      console.log("EHEHEH", post.value);
-    }, 1000);
-
-    const { deleteImage, error: deleteError } = useStorage();
-
-    const route = useRoute();
-    let postId = route.params.id as string;
-
-    const toggleMenu = () => {
-      menu.value = !menu.value;
-    };
-    const closeMenu = () => {
-      menu.value = false;
-    };
-
-    const handleDelete = async () => {
-      if (post.value) {
-        await deleteImage(post.value!.imageRef); //nonsense
-        await deleteDocument("posts", props.postId);
-      }
-      if (!error.value) {
-        router.push("/all-posts");
-      }
-    };
-
-    return {
-      menu,
-      toggleMenu,
-      closeMenu,
-      postId,
-      handleDelete,
-      error,
-      post,
-      modalActive,
-      toggleModal,
-      getError,
-    };
+const props = defineProps({
+  postId: {
+    type: String,
+    required: true,
   },
 });
+
+let menu = ref(false);
+const modalActive = ref(false);
+const toggleModal = () => {
+  modalActive.value = !modalActive.value;
+};
+
+const { deleteDocument, error } = useDocument();
+
+const { document: post, error: getError } = getDocSnap("posts", props.postId);
+setTimeout(() => {
+  console.log("EHEHEH", post.value);
+}, 1000);
+
+const { deleteImage, error: deleteError } = useStorage();
+
+const route = useRoute();
+let postId = route.params.id as string;
+
+const toggleMenu = () => {
+  menu.value = !menu.value;
+};
+const closeMenu = () => {
+  menu.value = false;
+};
+
+const handleDelete = async () => {
+  if (post.value) {
+    await deleteImage(post.value!.imageRef); //nonsense
+    await deleteDocument("posts", props.postId);
+  }
+  if (!error.value) {
+    router.push("/all-posts");
+  }
+};
 </script>
 
 <style lang="scss" >
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-red: #d92d20;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import "@/globals";
 
 .single-post {
   max-width: 85rem;
