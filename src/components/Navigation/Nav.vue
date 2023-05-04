@@ -24,9 +24,9 @@
           tabindex="0"
           class="profile"
           v-if="user"
-          @trigger="closeDropdown"
+          @trigger="dropdown = false"
         >
-          <div class="info" @click="openDropdown">
+          <div class="info" @click="dropdown = true">
             <img :src="user.photoURL" alt="" v-if="user.photoURL" />
             <p v-else>{{ user.displayName?.slice(0, 1) }}</p>
           </div>
@@ -59,21 +59,23 @@
 </template>
 
 <script lang="ts" >
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
+
+import { useUserStore } from "@/stores/user";
 
 import { OnClickOutside } from "@vueuse/components";
 
-import getUser from "@/composables/auth/getUser";
 import useLogout from "@/composables/auth/useLogout";
 import router from "@/router";
 
 export default defineComponent({
   components: { OnClickOutside },
   setup() {
-    const { user } = getUser();
     const { logout, error, isPending } = useLogout();
-
     const dropdown = ref(false);
+
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
 
     const handleLogout = async () => {
       dropdown.value = false;
@@ -82,20 +84,10 @@ export default defineComponent({
         router.push("/");
       }
     };
-    const openDropdown = () => {
-      if (user.value) {
-        dropdown.value = true;
-      }
-    };
 
-    const closeDropdown = () => {
-      if (user.value) {
-        dropdown.value = false;
-      }
-    };
     // onClickOutside(profile, closeDropdown);
 
-    return { user, handleLogout, dropdown, openDropdown, closeDropdown };
+    return { user, handleLogout, dropdown };
   },
 });
 </script>

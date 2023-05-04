@@ -1,4 +1,5 @@
-import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { ref, computed, onMounted } from "vue";
 import { storage } from "@/firebase/config";
 import {
   uploadBytes,
@@ -7,13 +8,12 @@ import {
   getStorage,
   deleteObject,
 } from "firebase/storage";
-import getUser from "@/composables/auth/getUser";
-
-const { user } = getUser();
 
 const useStorage = () => {
+  const userStore = useUserStore();
+  const user = computed(() => userStore.user);
+
   const error = ref();
-  // covers/image.jpg
   const imageRef = ref();
   const imageUrl = ref();
 

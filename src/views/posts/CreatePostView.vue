@@ -26,14 +26,15 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, KeepAlive } from "vue";
+import { onMounted, ref, KeepAlive, computed } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
-import getUser from "@/composables/auth/getUser";
+
+import { useUserStore } from "@/stores/user";
 
 import { defineComponent } from "vue";
 
@@ -43,7 +44,9 @@ export default defineComponent({
   components: { SubmitForm, PreviewPost, FormNav, KeepAlive },
 
   setup() {
-    const { user } = getUser();
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
+
     const { getDoc, document: draft } = getDocument();
 
     let currentView = ref("SubmitForm");

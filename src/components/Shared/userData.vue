@@ -13,10 +13,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import { Timestamp } from "firebase/firestore";
 
-import getUser from "@/composables/auth/getUser";
+import { useUserStore } from "@/stores/user";
 
 export default defineComponent({
   name: "UserData",
@@ -27,7 +27,8 @@ export default defineComponent({
     },
   },
   setup() {
-    const { user } = getUser();
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
 
     return { user };
   },

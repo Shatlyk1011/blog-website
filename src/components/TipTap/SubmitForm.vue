@@ -93,6 +93,7 @@ import {
   watch,
   onActivated,
   onDeactivated,
+  computed,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EditorContent } from "@tiptap/vue-3";
@@ -103,7 +104,8 @@ import Tools from "@/components/TipTap/TipTapTools/Tools.vue";
 import Input from "@/components/Shared/Input.vue";
 import Tags from "@/components/Shared/Tags.vue";
 
-import getUser from "@/composables/auth/getUser";
+import { useUserStore } from "@/stores/user";
+
 import useTipTap from "@/composables/useTipTap";
 import useDocument from "@/composables/firestore/useDocument";
 import getInputImage from "@/composables/getInputImage";
@@ -150,7 +152,8 @@ export default defineComponent({
     const isPending = ref(false);
     const postUpdated = ref(false);
 
-    const { user } = getUser();
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
 
     const route = useRoute();
     const router = useRouter();

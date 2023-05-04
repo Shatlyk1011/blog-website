@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, KeepAlive, defineComponent } from "vue";
+import { ref, onMounted, KeepAlive, defineComponent, computed } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
-import getUser from "@/composables/auth/getUser";
+import { useUserStore } from "@/stores/user";
 
 export default defineComponent({
   name: "UpdatePost",
@@ -38,7 +38,8 @@ export default defineComponent({
 
   setup(props) {
     const { getDoc, document: post, error } = getDocument();
-    const { user } = getUser();
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
 
     let currentView = ref("SubmitForm");
     const handleChange = () => {

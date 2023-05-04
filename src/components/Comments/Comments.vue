@@ -27,9 +27,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { nanoid } from "nanoid";
+
+import { useUserStore } from "@/stores/user";
 
 import { arrayUnion, FieldValue } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
@@ -38,7 +40,6 @@ import { Timestamp } from "firebase/firestore";
 import Comment from "@/components/Comments/Comment.vue";
 
 import useDocument from "@/composables/firestore/useDocument";
-import getUser from "@/composables/auth/getUser";
 
 export default defineComponent({
   name: "Comments",
@@ -50,11 +51,14 @@ export default defineComponent({
 
   components: { Comment },
   setup(props) {
-    const comment = ref("");
     const route = useRoute();
     let postId = route.params.id as string;
+
+    const comment = ref("");
     let isPending = ref(false);
-    const { user } = getUser();
+
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
 
     const { updateDocument } = useDocument();
 
