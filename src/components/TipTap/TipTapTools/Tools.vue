@@ -1,9 +1,11 @@
 <template>
   <div class="base-tools">
-    <MarkTools :editor="editor" />
-    <TextTools :editor="editor" />
-    <ImageTool :editor="editor" />
-    <RedoUndoTool :editor="editor" />
+    <div class="tools">
+      <MarkTools :editor="editor" />
+      <TextTools :editor="editor" />
+      <ImageTool :editor="editor" />
+      <RedoUndoTool :editor="editor" />
+    </div>
   </div>
 </template>
 
@@ -45,18 +47,23 @@ $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
 .base-tools {
-  background-color: $color-text;
-  border-radius: 4px;
-  display: flex;
-  gap: 5rem;
+  background-color: $color-gray-3;
+
   padding: 1rem;
   position: sticky;
   position: -webkit-sticky;
   top: 0;
+  z-index: 1000;
 
   &:focus {
     box-shadow: 0 0 0 0.4rem rgba(#000, 0.7);
     outline: none;
+  }
+
+  .tools {
+    padding: 0 2rem;
+    display: flex;
+    gap: 5rem;
   }
 }
 </style>

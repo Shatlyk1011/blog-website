@@ -67,7 +67,11 @@ a {
 //Tip tap editor
 .editor {
   color: $color-text;
-  height: 100%;
+  z-index: 10;
+
+  height: max-content;
+  padding: 2rem 0;
+
   .ProseMirror p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);
     color: rgba($color-text, 0.5);
@@ -79,15 +83,16 @@ a {
 
   .ProseMirror {
     outline: none;
-    flex-grow: 1;
-    overflow-wrap: anywhere;
+    height: inherit;
+    box-sizing: border-box;
     border: 1px solid rgba($color-black, 0.2);
     border-radius: 2px;
     padding: 1.6rem;
     font-family: $ff-roboto;
     font-size: 2rem;
-    height: 100%;
-    box-sizing: border-box;
+    margin: 0 2rem;
+
+    grid-row: 2 /-1;
 
     h1,
     h2,

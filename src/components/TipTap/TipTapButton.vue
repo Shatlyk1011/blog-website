@@ -38,6 +38,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+$color-black: #000;
+$color-white: #fff;
 $color-text: #e9ecef;
 
 $color-gray-1: #212529;
@@ -52,7 +54,7 @@ $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
 .btn {
-  color: $color-gray-2;
+  color: $color-white;
   position: relative;
   padding: 2px;
   user-select: none;

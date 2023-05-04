@@ -32,7 +32,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .app {
-  padding: 0 11rem;
+  // padding: 0 11rem;
   max-width: 144rem; //??
   height: calc(100vh - 6rem);
   box-sizing: border-box;

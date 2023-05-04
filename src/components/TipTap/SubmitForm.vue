@@ -1,6 +1,6 @@
 <template>
   <div class="form-submit" v-if="editor">
-    <form @submit.prevent="handleSubmit">
+    <form>
       <div class="head">
         <!-- Cover Image Preview -->
         <div class="wrap" v-if="!imagePreviewUrl">
@@ -61,34 +61,25 @@
           id="Itag"
           placeholder="Добавьте теги (max 3)"
         />
-        <Tags :tags="tags" :white="true" v-if="tags">
-          <template #default="slotProps">
+
+        <ul class="tags" v-if="tags.length">
+          <li class="tag" v-for="tag in tags" :key="tag">
+            <span>#{{ tag }}</span>
             <font-awesome-icon
-              @click="removeTag(slotProps.tag)"
+              @click="removeTag(tag)"
               title="Удалить тег"
               class="icon"
               icon="fa-solid fa-x"
               size="xs"
             />
-          </template>
-        </Tags>
-
-        <!-- Editor Tools -->
-        <div class="toolbar">
-          <Tools :editor="editor" tabindex="0" />
-        </div>
+          </li>
+        </ul>
       </div>
       <!-- Editor -->
-      <editor-content class="editor" :editor="editor" />
-      <div class="submit">
-        <button class="submit__btn" v-if="!isPending">{{ btnText }}</button>
-        <button
-          class="submit__btn submit__btn--isPending"
-          v-if="isPending"
-          disabled
-        >
-          {{ btnText }}
-        </button>
+
+      <div class="toolbar">
+        <Tools :editor="editor" tabindex="0" />
+        <editor-content class="editor" :editor="editor" />
       </div>
     </form>
   </div>
@@ -391,10 +382,8 @@ $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
 .form-submit {
-  max-width: 80rem;
   margin: 0 auto;
   background-color: $color-gray-2;
-  padding: 2rem;
 
   & *:focus {
     box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
@@ -402,15 +391,16 @@ $ff-mserrat: "Montserrat", sans-serif;
   }
   form {
     color: $color-text;
-    min-height: 85vh;
-    display: grid;
-    grid-template-rows: min-content 1fr min-content;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+    height: 100%;
 
     .head {
       display: flex;
       flex-direction: column;
       gap: 2rem;
+      padding: 2rem 2rem 0;
 
       .wrap {
         display: flex;
@@ -509,9 +499,6 @@ $ff-mserrat: "Montserrat", sans-serif;
         }
       }
 
-      .toolbar {
-      }
-
       .imagePreview {
         max-width: 20%;
         max-height: 100%;
@@ -568,40 +555,11 @@ $ff-mserrat: "Montserrat", sans-serif;
         }
       }
     }
-    .editor {
-      z-index: 10;
-      margin-top: 1rem;
-      box-sizing: border-box;
-
-      .E-paragraph {
-        font-size: 1.8rem;
-      }
+    .toolbar {
     }
-    .submit {
-      &__btn {
-        padding: 1rem 1.6rem;
-        color: $color-text;
-        background-color: $color-main-1;
-        display: inline-block;
-        justify-self: start;
-
-        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-        &:hover {
-          background-color: rgba($color-main-1, 0.8);
-        }
-
-        &:active {
-          transform: translateY(4px) scale(0.98);
-        }
-        &--isPending {
-          background-color: rgba($color-gray-3, 0.5);
-          color: rgba($color-text, 0.5);
-
-          &:hover {
-            background-color: rgba($color-gray-3, 0.4);
-          }
-        }
-      }
+    .E-paragraph {
+      font-size: 1.6rem;
+      line-height: 1.4;
     }
   }
 }

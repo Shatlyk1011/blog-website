@@ -5,8 +5,18 @@
         >set-web</router-link
       >
       <div class="btns">
-        <button class="btn--update" @click="emitChange">Изменить</button>
-        <button class="btn--update" @click="emitPreview">Превью</button>
+        <button
+          :class="['btn--update', { active: change }]"
+          @click="emitChange"
+        >
+          Изменить
+        </button>
+        <button
+          :class="['btn--update', { active: preview }]"
+          @click="emitPreview"
+        >
+          Превью
+        </button>
       </div>
     </nav>
   </div>
@@ -18,14 +28,22 @@ import { defineComponent, ref } from "vue";
 export default defineComponent({
   emits: ["update:change", "update:preview"],
   setup(props, { emit }) {
+    let change = ref(true);
+    let preview = ref(false);
+
     const emitChange = () => {
+      change.value = true;
+      preview.value = false;
       emit("update:change");
     };
 
     const emitPreview = () => {
+      change.value = false;
+      preview.value = true;
+
       emit("update:preview");
     };
-    return { emitChange, emitPreview };
+    return { emitChange, emitPreview, change, preview };
   },
 });
 </script>
@@ -49,18 +67,7 @@ $ff-mserrat: "Montserrat", sans-serif;
     box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
     outline: none;
   }
-  &.update {
-    .btn--update {
-      color: $color-main-2;
-      font-weight: 500;
-    }
-  }
-  &.preview {
-    .btn--preview {
-      color: $color-main-2;
-      font-weight: 500;
-    }
-  }
+
   nav {
     display: flex;
     justify-content: space-between;
@@ -87,6 +94,11 @@ $ff-mserrat: "Montserrat", sans-serif;
 
         &:hover {
           background-color: $color-gray-2;
+        }
+
+        &.active {
+          color: $color-main-1;
+          font-weight: 500;
         }
       }
     }

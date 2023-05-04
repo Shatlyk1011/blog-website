@@ -1,8 +1,13 @@
 <template>
   <div class="create-post">
-    <form-nav @update:change="handleChange" @update:preview="handlePreview" />
+    <form-nav
+      class="nav"
+      @update:change="handleChange"
+      @update:preview="handlePreview"
+    />
     <keep-alive>
       <component
+        class="component"
         @update:draft="updateDraft"
         :setDraft="true"
         :is="currentView"
@@ -11,6 +16,12 @@
         btnText="Cоздать"
       />
     </keep-alive>
+    <div class="submit">
+      <button class="submit__btn">submit</button>
+      <button class="submit__btn submit__btn--isPending" v-if="false" disabled>
+        submit
+      </button>
+    </div>
   </div>
 </template>
 
@@ -71,10 +82,55 @@ $color-gray-3: #868e96;
 
 $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
-.create-post-view {
-  max-width: 80rem;
+.create-post {
+  max-width: 128rem;
   margin: 0 auto;
-  background-color: $color-gray-2;
-  padding: 2rem;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 0 2rem 2rem;
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  grid-template-rows: min-content 1fr min-content;
+  margin: 0 auto;
+
+  .nav {
+    grid-column: 1 / -1;
+  }
+
+  .component {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  .submit {
+    grid-column: 1 / -1;
+    grid-row: 3 / -1;
+    &__btn {
+      padding: 1rem 1.6rem;
+      margin-top: 1rem;
+      color: $color-text;
+      background-color: $color-main-1;
+      display: inline-block;
+      justify-self: start;
+
+      transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+      &:hover {
+        background-color: rgba($color-main-1, 0.8);
+      }
+
+      &:active {
+        transform: translateY(4px) scale(0.98);
+      }
+      &--isPending {
+        background-color: rgba($color-gray-3, 0.5);
+        color: rgba($color-text, 0.5);
+
+        &:hover {
+          background-color: rgba($color-gray-3, 0.4);
+        }
+      }
+    }
+  }
 }
 </style>
