@@ -3,6 +3,7 @@
     <tip-tap-button
       faIcon="fa-solid fa-bold"
       tooltip="Жирный"
+      command="CTRL + B"
       @click="editor.chain().focus().toggleBold().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleBold().run()"
       :class="{ isActive: editor?.isActive('bold') }"
@@ -11,6 +12,7 @@
     <tip-tap-button
       faIcon="fa-solid fa-italic"
       tooltip="Курсив"
+      command="CTRL + I"
       @click="editor.chain().focus().toggleItalic().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleItalic().run()"
       :class="{ isActive: editor?.isActive('italic') }"
@@ -19,6 +21,7 @@
     <tip-tap-button
       faIcon="fa-solid fa-strikethrough"
       tooltip="Зачеркнуть"
+      command="CTRL + SHIFT + X"
       @click="editor.chain().focus().toggleStrike().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleStrike().run()"
       :class="{ isActive: editor?.isActive('strike') }"
@@ -27,6 +30,7 @@
     <tip-tap-button
       faIcon="fa-solid fa-underline"
       tooltip="Подчеркнуть"
+      command="CTRL + U"
       @click="editor.chain().focus().toggleUnderline().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleUnderline().run()"
       :class="{
@@ -36,6 +40,7 @@
     <tip-tap-button
       faIcon="fa-solid fa-code"
       tooltip="Код"
+      command="CTRL + E"
       @click="editor.chain().focus().toggleCode().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleCode().run()"
       :class="{ isActive: editor?.isActive('code') }"
@@ -50,7 +55,7 @@
 
     <tip-tap-button
       faIcon="fa-solid fa-highlighter"
-      tooltip="Выделить "
+      tooltip="Выделить"
       @click="editor.chain().focus().toggleHighlight().run()"
       @keypress.enter.prevent="editor.chain().focus().toggleHighlight().run()"
       :class="{ isActive: editor?.isActive('highlight') }"
@@ -109,16 +114,13 @@ export default defineComponent({
     const setLink = () => {
       const previousUrl = props.editor.getAttributes("link").href;
       const url = window.prompt("URL", previousUrl);
-
       // cancelled
       if (url === null) {
         return;
       }
-
       // empty
       if (url === "") {
         props.editor.chain().focus().extendMarkRange("link").unsetLink().run();
-
         return;
       }
 

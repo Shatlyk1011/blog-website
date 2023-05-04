@@ -9,7 +9,7 @@
       />
       <tip-tap-button
         faIcon="fa-solid fa-heading"
-        tooltip="H1-H6 нажмите 'space'"
+        tooltip="H1-H4 нажмите 'space'"
         @click="handleHeading"
       />
     </div>
@@ -34,7 +34,12 @@ export default defineComponent({
   },
   setup(props) {
     const handleHeading = () => {
-      props.editor.commands.insertContent("#");
+      let text = props.editor.getText();
+      if (text.length < 4) {
+        props.editor.commands.insertContent("#");
+      } else {
+        props.editor.commands.clearContent();
+      }
     };
     return { handleHeading };
   },

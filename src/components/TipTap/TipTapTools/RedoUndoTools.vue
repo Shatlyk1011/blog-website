@@ -3,12 +3,14 @@
     <TipTapButton
       faIcon="fa-solid fa-arrow-left"
       tooltip="отменить"
+      command="CTRL + Z"
       @click="editor.chain().focus().undo().run()"
       :disabled="!editor?.can().chain().focus().undo().run()"
     />
     <TipTapButton
       faIcon="fa-solid fa-arrow-right"
       tooltip="вернуть"
+      command="CTRL + Y"
       @click="editor.chain().focus().redo().run()"
       :disabled="!editor?.can().chain().focus().redo().run()"
     />

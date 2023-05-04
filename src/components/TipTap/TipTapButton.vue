@@ -2,7 +2,12 @@
   <div class="btn" role="button" tabindex="0">
     <font-awesome-icon class="faIcon" :icon="faIcon" :size="size" />
     <slot />
-    <div class="tooltip" v-if="tooltip">{{ tooltip }}</div>
+    <div class="tooltip" v-if="tooltip">
+      {{ tooltip }} <br />
+      <span>
+        {{ command }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -24,6 +29,10 @@ export default defineComponent({
       required: false,
       type: String,
     },
+    command: {
+      required: false,
+      type: String,
+    },
   },
 });
 </script>
@@ -37,6 +46,9 @@ $color-gray-3: #868e96;
 
 $color-main-1: #d84f2a;
 
+$color-red: #d92d20;
+
+$ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 
 .btn {
@@ -71,13 +83,14 @@ $ff-mserrat: "Montserrat", sans-serif;
   opacity: 0;
   user-select: none;
   visibility: hidden;
-  z-index: 10000;
+  display: block;
+  z-index: 1000;
   position: absolute;
   left: 50%;
   transform: translate(-50%, -8px);
   padding: 4px 8px;
   border-radius: 4px;
-  background-color: $color-gray-1;
+  background-color: #000;
   color: $color-text;
   font-size: 1.28rem;
   font-weight: 400;
@@ -89,5 +102,12 @@ $ff-mserrat: "Montserrat", sans-serif;
   letter-spacing: -0.4px;
 
   transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
+
+  span {
+    font-family: $ff-mserrat;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba($color-text, 0.7);
+  }
 }
 </style>

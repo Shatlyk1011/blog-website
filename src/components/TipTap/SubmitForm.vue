@@ -568,6 +568,15 @@ $ff-mserrat: "Montserrat", sans-serif;
         }
       }
     }
+    .editor {
+      z-index: 10;
+      margin-top: 1rem;
+      box-sizing: border-box;
+
+      .E-paragraph {
+        font-size: 1.8rem;
+      }
+    }
     .submit {
       &__btn {
         padding: 1rem 1.6rem;
