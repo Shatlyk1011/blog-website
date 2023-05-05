@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from "vue";
-import { Post } from "@/assets/Types";
+import { PropType } from "vue";
+import { type Post } from "@/assets/Types";
 
 defineProps({
   post: {
@@ -71,9 +71,11 @@ defineProps({
     gap: 2.4rem;
 
     padding: 2rem;
-    box-shadow: 0 0 4rem rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 4rem rgba(0, 0, 0, 0.2);
+
+    transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);
     &:hover {
-      box-shadow: 0 0 4rem rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 4rem rgba(0, 0, 0, 0.4);
     }
 
     .description {
@@ -138,7 +140,7 @@ defineProps({
         align-items: center;
         background-color: rgba(0, 0, 0, 0.8);
 
-        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
 
         &:hover,
         &:focus-within {

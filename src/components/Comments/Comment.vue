@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, PropType, ref } from "vue";
+import { PropType, ref } from "vue";
 import { Comment as IComment } from "@/assets/Types";
 
 import { OnClickOutside } from "@vueuse/components";

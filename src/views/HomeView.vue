@@ -26,7 +26,9 @@ $color-gray-2: #495057;
 $color-gray-3: #868e96;
 
 .homeview {
+  padding: 6rem;
   .heading {
+    margin-top: 3.2rem;
     font-size: 3.1rem;
     font-weight: 600;
     border-bottom: 1px solid $color-gray-3;
@@ -37,6 +39,7 @@ $color-gray-3: #868e96;
   .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
 }
 </style>

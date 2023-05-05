@@ -16,7 +16,7 @@ const { documents: posts } = getCollection("posts");
 
 <style lang="scss" scoped>
 .all-posts {
-  margin-top: 4.8rem;
+  padding: 6rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3.2rem;

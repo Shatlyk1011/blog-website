@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { Timestamp } from "firebase/firestore";
 
 import { useUserStore } from "@/stores/user";

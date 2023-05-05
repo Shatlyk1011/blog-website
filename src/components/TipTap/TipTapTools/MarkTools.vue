@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType } from "vue";
+import { PropType } from "vue";
 import { Editor } from "@tiptap/vue-3";
 
 import TipTapButton from "@/components/TipTap/TipTapButton.vue";

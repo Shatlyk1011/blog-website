@@ -5,11 +5,11 @@
     </div>
     <div class="container">
       <div class="wrapper">
-        <OnClickOutside class="menu" @trigger="closeMenu">
+        <OnClickOutside class="menu" @trigger="menu = false">
           <font-awesome-icon
             class="icon"
             icon="fa-solid fa-ellipsis"
-            @click="toggleMenu"
+            @click="menu = !menu"
           />
           <ul class="dropdown" v-if="menu">
             <router-link
@@ -17,10 +17,10 @@
               :to="{ name: 'UpdatePost', params: { id: postId } }"
               >Изменить</router-link
             >
-            <li @click="toggleModal">Удалить</li>
+            <li @click="modalActive = true">Удалить</li>
           </ul>
         </OnClickOutside>
-        <Modal :modalActive="modalActive" @close="toggleModal">
+        <Modal :modalActive="modalActive">
           <div class="modal-content">
             <div class="icon-wrap">
               <font-awesome-icon
@@ -36,7 +36,7 @@
             </p>
 
             <div class="btns">
-              <button class="btn btn--cancel" @click="toggleModal">
+              <button class="btn btn--cancel" @click="modalActive = false">
                 Отмена
               </button>
               <button class="btn btn--delete" @click="handleDelete">
@@ -74,11 +74,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 
 import { OnClickOutside } from "@vueuse/components";
+
 
 import UserData from "@/components/Shared/UserData.vue";
 import Tags from "@/components/Shared/Tags.vue";
@@ -99,9 +100,6 @@ const props = defineProps({
 
 let menu = ref(false);
 const modalActive = ref(false);
-const toggleModal = () => {
-  modalActive.value = !modalActive.value;
-};
 
 const { deleteDocument, error } = useDocument();
 
@@ -114,13 +112,6 @@ const { deleteImage, error: deleteError } = useStorage();
 
 const route = useRoute();
 let postId = route.params.id as string;
-
-const toggleMenu = () => {
-  menu.value = !menu.value;
-};
-const closeMenu = () => {
-  menu.value = false;
-};
 
 const handleDelete = async () => {
   if (post.value) {

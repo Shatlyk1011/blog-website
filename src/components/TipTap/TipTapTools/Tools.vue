@@ -17,8 +17,6 @@ import TextTools from "@/components/TipTap/TipTapTools/TextTools.vue";
 import ImageTool from "@/components/TipTap/TipTapTools/ImageTool.vue";
 import RedoUndoTool from "@/components/TipTap/TipTapTools/RedoUndoTools.vue";
 
-import { defineProps, ref } from "vue";
-
 defineProps({
   editor: {
     required: true,
@@ -33,7 +31,7 @@ defineProps({
 .base-tools {
   background-color: $color-gray-3;
 
-  padding: 1rem;
+  padding: 6px 1rem;
   position: sticky;
   position: -webkit-sticky;
   top: 0;

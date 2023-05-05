@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, PropType, ref, computed } from "vue";
+import { PropType, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { nanoid } from "nanoid";
 

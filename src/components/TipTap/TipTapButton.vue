@@ -12,8 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
-
 defineProps({
   faIcon: {
     type: String,
@@ -88,8 +86,7 @@ defineProps({
   overflow-wrap: break-word;
   letter-spacing: -0.4px;
 
-  transition: 0.4s cubic-bezier(0.83, 0, 0.17, 1);
-
+  transition: all 0.4s cubic-bezier(0.83, 0, 0.17, 1);
   span {
     font-family: $ff-mserrat;
     font-size: 1rem;

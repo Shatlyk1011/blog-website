@@ -82,7 +82,6 @@
         <editor-content class="editor" :editor="editor" />
       </div>
     </form>
-    <button @click="handleSubmit">xaoaxoaxo</button>
   </div>
 </template>
 
@@ -344,6 +343,7 @@ onDeactivated(async () => {
 .form-submit {
   margin: 0 auto;
   background-color: $color-gray-2;
+  border-radius: 2px;
 
   & *:focus {
     box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
@@ -359,7 +359,7 @@ onDeactivated(async () => {
     .head {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.6rem;
       padding: 2rem 2rem 0;
 
       .wrap {
@@ -516,6 +516,10 @@ onDeactivated(async () => {
       }
     }
     .toolbar {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      // justify-content: stretch;
     }
     .E-paragraph {
       font-size: 1.6rem;

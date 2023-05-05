@@ -17,7 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
 import TipTapButton from "@/components/TipTap/TipTapButton.vue";
 import { Editor } from "@tiptap/vue-3";
 

@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { Post } from "@/assets/Types";
 
 import PostItem from "@/components/Posts/Post/PostItem.vue";
@@ -23,7 +23,7 @@ const date = new Date();
 const formatDate = computed(() => {
   if (props.posts) {
     return props.posts.map((post: Post) => {
-      let newFormat = Number(post.createdAt!.toDate());
+      let newFormat = Number(post.createdAt?.toDate());
       let newTime = formatRelative(newFormat, date, { locale: ru });
       return { ...post, createdAt: newTime };
     });

@@ -7,19 +7,19 @@
     />
     <keep-alive>
       <component
-        class="component"
+        :class="['component', { preview: !changeView }]"
         @update:draft="updateDraft"
         :setDraft="true"
         :is="changeView ? SubmitForm : PreviewPost"
         :postToSetDraft="draft"
         :post="draft"
-        btnText="Cоздать"
       />
     </keep-alive>
-    <div class="submit">
-      <button class="submit__btn">submit</button>
-      <button class="submit__btn submit__btn--isPending" v-if="false" disabled>
-        submit
+    <HelperBoard class="helper-board" v-if="changeView" />
+    <div class="submit" v-if="changeView">
+      <button class="btn btn--submit">Опубликовать</button>
+      <button class="btn btn--isPending" v-if="false" disabled>
+        Опубликовать
       </button>
     </div>
   </div>
@@ -31,6 +31,7 @@ import { onMounted, ref, KeepAlive, computed } from "vue";
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
+import HelperBoard from "@/components/TipTap/HelperBoard.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 
@@ -63,17 +64,17 @@ $ff-roboto: "Roboto", sans-serif;
 $ff-mserrat: "Montserrat", sans-serif;
 .create-post {
   max-width: 128rem;
+  display: grid;
+  grid-template-columns: 6.4rem 7fr 3fr;
+  grid-template-rows: min-content 1fr min-content;
+  column-gap: 1rem;
   margin: 0 auto;
   height: 100vh;
   box-sizing: border-box;
   padding: 0 2rem 2rem;
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  grid-template-rows: min-content 1fr min-content;
-  margin: 0 auto;
 
   .nav {
-    grid-column: 1 / -1;
+    grid-column: 1 / 3;
   }
 
   .component {
@@ -81,33 +82,40 @@ $ff-mserrat: "Montserrat", sans-serif;
     height: 100%;
     box-sizing: border-box;
     overflow: auto;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+
+    &.preview {
+      grid-column: 1 / 3;
+      max-width: 85rem;
+      margin: 0 auto;
+    }
+  }
+  .helper-board {
+    grid-column: 3 / 4;
+    grid-row: 2 / -2;
   }
   .submit {
-    grid-column: 1 / -1;
+    grid-column: 2 / 3;
     grid-row: 3 / -1;
-    &__btn {
+    .btn {
       padding: 1rem 1.6rem;
       margin-top: 1rem;
       color: $color-text;
       background-color: $color-main-1;
       display: inline-block;
       justify-self: start;
-
-      transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-      &:hover {
-        background-color: rgba($color-main-1, 0.8);
+      border-radius: 2px;
+      transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+      &--submit {
+        &:hover {
+          background-color: rgba($color-main-1, 0.8);
+        }
       }
 
-      &:active {
-        transform: translateY(4px) scale(0.98);
-      }
       &--isPending {
         background-color: rgba($color-gray-3, 0.5);
         color: rgba($color-text, 0.5);
-
-        &:hover {
-          background-color: rgba($color-gray-3, 0.4);
-        }
       }
     }
   }

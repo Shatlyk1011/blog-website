@@ -224,7 +224,7 @@ $ff-mserrat: "Montserrat", sans-serif;
         width: 100%;
         text-align: center;
 
-        transition: 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+        transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
 
         &:hover {
           background-color: $color-main-2;

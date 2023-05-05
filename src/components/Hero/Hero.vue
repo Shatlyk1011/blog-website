@@ -3,11 +3,8 @@
     <div class="container">
       <div class="description">
         <h1>
-          Все о <br />
-
-          <span>{{ action }}</span>
-
-          разработке
+          <span>{{ action }}</span> <br />
+          вместе с нами!
         </h1>
         <p>
           Блог о веб разработке, дизайне и о многом другом. Просто о сложном!
@@ -26,12 +23,12 @@
 import nextElementList from "@/composables/nextElementList";
 import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 
-const action = ref("веб");
+const action = ref("Создавай");
 let interval = ref();
 
 const changeActionWord = () => {
   interval.value = setInterval(() => {
-    const actions = ref(["веб", "дизайн"]);
+    const actions = ref(["Создавай", "Делись", "Разрабатывай", "Тестируй"]);
     action.value = nextElementList(actions.value, action.value);
   }, 2700);
 };
@@ -46,10 +43,11 @@ onBeforeUnmount(() => {
 @import "@/globals";
 
 .hero {
-  padding: 6rem 0rem;
   .container {
+    // padding: 6rem;
     display: flex;
-    gap: 4.8rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
     max-width: 120rem;
     margin: 0 auto;
     .description {
@@ -58,21 +56,18 @@ onBeforeUnmount(() => {
       justify-content: center;
       text-align: left;
       gap: 2rem;
-      .blog-text {
-        font-weight: 600;
-        font-size: 0.82rem;
-        color: $color-main-1;
-      }
+      grid-column: 1 / span 5;
+
       h1 {
         font-family: $ff-mserrat;
-        font-size: 6.1rem;
+        font-size: 4.8rem;
         font-weight: 600;
         line-height: 1;
         letter-spacing: -2px;
         margin-left: -3px;
 
         span {
-          font-size: 72px;
+          font-size: 6.1rem;
           background: linear-gradient(180deg, $color-main-1, $color-main-2);
           background: -webkit-linear-gradient(
             180deg,
@@ -112,8 +107,9 @@ onBeforeUnmount(() => {
     }
 
     .img-container {
-      max-width: 64rem;
-      max-height: 43rem;
+      grid-column: 7 / -1;
+      width: 100%;
+      height: 100%;
       margin-left: auto;
       border-radius: 0.8rem;
       overflow: hidden;

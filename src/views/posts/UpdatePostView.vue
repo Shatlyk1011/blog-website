@@ -1,80 +1,122 @@
 <template>
   <div class="update-post">
-    <form-nav @update:change="handleChange" @update:preview="handlePreview" />
+    <form-nav
+      class="nav"
+      @update:change="changeView = true"
+      @update:preview="changeView = false"
+    />
     <keep-alive>
       <component
+        :class="['component', { preview: !changeView }]"
         @update:updateDraft="updateDraft"
-        :is="currentView"
+        :is="changeView ? SubmitForm : PreviewPost"
         :postToUpdate="post"
         :post="post"
-        btnText="Сохранить"
       />
     </keep-alive>
-    <!-- :updateDraft="" -->
+    <HelperBoard class="helper-board" v-if="changeView" />
+    <div class="submit" v-if="changeView">
+      <button class="btn btn--submit">Опубликовать</button>
+      <button class="btn btn--isPending" v-if="false" disabled>
+        Опубликовать
+      </button>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { ref, onMounted, KeepAlive, defineComponent, computed } from "vue";
+<script lang="ts" setup>
+import { ref, onMounted, KeepAlive, computed } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
+import HelperBoard from "@/components/TipTap/HelperBoard.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 import { useUserStore } from "@/stores/user";
 
-export default defineComponent({
-  name: "UpdatePost",
-
-  components: { SubmitForm, PreviewPost, FormNav, KeepAlive },
-
-  props: {
-    id: {
-      required: true,
-      type: String,
-    },
+const props = defineProps({
+  id: {
+    required: true,
+    type: String,
   },
+});
 
-  setup(props) {
-    const { getDoc, document: post, error } = getDocument();
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
+const { getDoc, document: post, error } = getDocument();
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 
-    let currentView = ref("SubmitForm");
-    const handleChange = () => {
-      currentView.value = "SubmitForm";
-    };
-    const handlePreview = () => {
-      currentView.value = "PreviewPost";
-    };
-    const updateDraft = async () => {
-      console.log("updateDraft for update post");
-      await getDoc("updateDraft", user.value!.uid);
-    };
+let changeView = ref(true);
 
-    onMounted(async () => {
-      await getDoc("posts", props.id);
-      console.log("post to edit", post.value);
-    });
+const updateDraft = async () => {
+  console.log("updateDraft for update post");
+  await getDoc("updateDraft", user.value!.uid);
+};
 
-    return { post, handleChange, handlePreview, currentView, updateDraft };
-  },
+onMounted(async () => {
+  await getDoc("posts", props.id);
+  console.log("post to edit", post.value);
 });
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
+@import "@/globals";
+.update-post {
+  max-width: 128rem;
+  display: grid;
+  grid-template-columns: 6.4rem 7fr 3fr;
+  grid-template-rows: min-content 1fr min-content;
+  column-gap: 1rem;
+  margin: 0 auto;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 0 2rem 2rem;
+  .nav {
+    grid-column: 1 / 3;
+  }
+  .component {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
 
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
+    &.preview {
+      grid-column: 1 / 3;
+      max-width: 85rem;
+      margin: 0 auto;
+    }
+  }
 
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
+  .helper-board {
+    grid-column: 3 / 4;
+    grid-row: 2 / -2;
+  }
 
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+  .submit {
+    grid-column: 2 / 3;
+    grid-row: 3 / -1;
+    .btn {
+      padding: 1rem 1.6rem;
+      margin-top: 1rem;
+      color: $color-text;
+      background-color: $color-main-1;
+      display: inline-block;
+      justify-self: start;
+      border-radius: 2px;
+      transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+      &--submit {
+        &:hover {
+          background-color: rgba($color-main-1, 0.8);
+        }
+      }
+
+      &--isPending {
+        background-color: rgba($color-gray-3, 0.5);
+        color: rgba($color-text, 0.5);
+      }
+    }
+  }
+}
 </style>

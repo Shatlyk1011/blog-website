@@ -5,16 +5,10 @@
         >set-web</router-link
       >
       <div class="btns">
-        <button
-          :class="['btn--update', { active: change }]"
-          @click="emitChange"
-        >
+        <button :class="{ active: change }" @click="emitChange">
           Изменить
         </button>
-        <button
-          :class="['btn--update', { active: preview }]"
-          @click="emitPreview"
-        >
+        <button :class="[{ active: preview }]" @click="emitPreview">
           Превью
         </button>
       </div>
@@ -23,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 const emit = defineEmits(["update:change", "update:preview"]);
 
 let change = ref(true);
@@ -58,7 +52,7 @@ const emitPreview = () => {
     align-items: center;
     max-width: 110rem;
     margin: 0 auto;
-    padding: 1rem 3rem;
+    padding: 1rem 0 1rem 3rem;
 
     .logo {
       color: $color-main-1;
@@ -72,8 +66,7 @@ const emitPreview = () => {
       font-size: 1.6rem;
 
       button {
-        padding: 1rem;
-
+        padding: 6px;
         transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 
         &:hover {
@@ -82,7 +75,7 @@ const emitPreview = () => {
 
         &.active {
           color: $color-main-1;
-          font-weight: 500;
+          font-weight: 600;
         }
       }
     }

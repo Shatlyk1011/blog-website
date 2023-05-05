@@ -19,7 +19,6 @@
 
 <script lang="ts" setup>
 import TipTapButton from "@/components/TipTap/TipTapButton.vue";
-import { defineProps } from "vue";
 
 defineProps({
   editor: {
