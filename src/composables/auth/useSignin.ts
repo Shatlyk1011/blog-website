@@ -14,7 +14,7 @@ const login = async (email: string, password: string) => {
     const res = await signInWithEmailAndPassword(auth, email, password);
     console.log();
     if (!res) {
-      throw new Error("Could not login");
+      throw new Error();
     }
 
     error.value = null;

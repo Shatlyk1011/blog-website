@@ -1,25 +1,18 @@
 <template>
   <div class="form-submit" v-if="editor">
+    <div class="error form-submit__error" v-if="submitError">
+      <h4>Опачки, чото не хватает:</h4> 
+      <span>{{ submitError }}</span>
+    </div>
     <form>
       <div class="head">
         <!-- Cover Image Preview -->
         <div class="wrap" v-if="!imagePreviewUrl">
           <label tabindex="0" id="coverSelect" for="image">
             <span>Выберите обложку</span>
-            <Input
-              @input="handleImage"
-              id="image"
-              type="file"
-              required
-              tabindex="-1"
-            />
+            <Input tabindex="-1" @input="handleImage" id="image" type="file" required />
           </label>
-          <div
-            type="button"
-            @click="setFormerImage"
-            v-if="postToUpdate"
-            class="old-cover"
-          >
+          <div type="button" @click="setFormerImage" v-if="postToUpdate" class="old-cover">
             Вставить прежнее фото
           </div>
         </div>
@@ -85,15 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  
-  PropType,
-  watch,
-  onActivated,
-  onDeactivated,
-  computed,
-} from "vue";
+import {ref, PropType, watch, onActivated, onDeactivated, computed, type Ref} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -128,31 +113,24 @@ const props = defineProps({
     required: false,
     type: Object as PropType<PostDraft> | null,
   },
-  btnText: {
-    required: true,
-    type: String,
-  },
   id: {
     type: String,
   },
 });
+
+
 
 const isPending = ref(false);
 const postUpdated = ref(false);
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
+let submitError = ref<null| string>()
 
 const route = useRoute();
 const router = useRouter();
 
-const {
-  addDocument,
-  error: docError,
-  deleteDocument,
-  setDocument,
-  updateDocument,
-} = useDocument();
+const {addDocument, error: docError, deleteDocument, setDocument, updateDocument} = useDocument();
 const {
   handleImage,
   image: coverImage,
@@ -183,7 +161,19 @@ const setFormerImage = () => {
 
 const handleSubmit = async () => {
   const html = await getInnerHTML();
+  submitError.value = null
+  if(title.value.trim() === '') {
+    submitError.value = null
+    // submitError.value = 'Загаловок не может быть пустым'
+    submitError.value = 'Загаловок заполни да, че сложно что ли'
 
+    return;
+  } else if((coverImage.value === null && !props.postToUpdate) || (coverImage.value === undefined && !props.postToUpdate)) {
+    submitError.value = null
+    // submitError.value = 'Пожалуйста выберите обложку'
+    submitError.value = `Выберите законное, четкое фото ежжи.`
+    return;
+  }
   //update post
   if (props.postToUpdate) {
     console.log("UPDATING YOUR POST");
@@ -261,6 +251,7 @@ const handleSubmit = async () => {
     }
   }
 };
+defineExpose({handleSubmit})
 
 let posted = ref(false);
 watch(props, () => {
@@ -287,20 +278,17 @@ watch(props, () => {
 });
 
 onActivated(() => {
-  console.log("onActivated");
   if (props.postToUpdate && !imagePreviewUrl.value) {
     imagePreviewUrl.value = props.postToUpdate.imageUrl;
   }
 });
 onDeactivated(async () => {
-  console.log("ondeactivate run");
   let html = editor.value!.getHTML();
   let { avgTimeToRead } = getAvgTimeToRead(html);
 
   //save as draft in create-post
   if (props.setDraft && !postUpdated.value) {
     emit("update:draft");
-    console.log("sending draft to fs");
 
     await setDocument("createDraft", user.value!.uid, {
       html,
@@ -317,7 +305,6 @@ onDeactivated(async () => {
   //save as draft in update-post
   if (props.postToUpdate) {
     emit("update:updateDraft");
-    console.log("sending edit draft to fs");
 
     await setDocument("updateDraft", user.value!.uid, {
       html,
@@ -344,7 +331,21 @@ onDeactivated(async () => {
   margin: 0 auto;
   background-color: $color-gray-2;
   border-radius: 2px;
-  
+
+  &__error {
+    background-color: rgba(#b91c1c, 0.2);
+    padding: 1.6rem 2rem;
+    
+
+    h4 {
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+      color: orange;
+    }
+    span {
+      color: $color-text
+    }
+  }
 
   & *:focus {
     box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
@@ -371,30 +372,21 @@ onDeactivated(async () => {
         display: flex;
         align-items: center;
         gap: 1rem;
+        font-size: 1.4rem;
 
         label {
           &:focus {
             box-shadow: 0 0 0 0.3rem rgba($color-black, 0.6);
           }
         }
-
-        .old-cover {
-          background-color: $color-main-2;
-          color: $color-text;
-          padding: 1rem 1.6rem;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-      }
-
-      #coverSelect {
+        #coverSelect {
         position: relative;
         align-self: flex-start;
         padding: 1rem 1.6rem;
         border-radius: 4px;
         // text-align: center;
         font-weight: 600;
-        font-size: 1.4rem;
+
         cursor: pointer;
         background-color: $color-gray-3;
 
@@ -413,6 +405,17 @@ onDeactivated(async () => {
 
         }
       }
+
+        .old-cover {
+          background-color: $color-main-2;
+          color: $color-text;
+          padding: 1rem 1.6rem;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+
+
 
       #Ititle,
       #Itag {

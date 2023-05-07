@@ -12,15 +12,13 @@
         :setDraft="true"
         :is="changeView ? SubmitForm : PreviewPost"
         :postToSetDraft="draft"
-        :post="draft"
+        ref="childComponent"
       />
     </keep-alive>
     <HelperBoard class="helper-board" v-if="changeView" />
     <div class="submit" v-if="changeView">
-      <button class="btn btn--submit">Опубликовать</button>
-      <button class="btn btn--isPending" v-if="false" disabled>
-        Опубликовать
-      </button>
+      <button class="btn btn--submit" @click="handleSubmit">Опубликовать</button>
+      <button class="btn btn--isPending" v-if="false" disabled>Опубликовать</button>
     </div>
   </div>
 </template>
@@ -40,12 +38,19 @@ import { useUserStore } from "@/stores/user";
 onMounted(async () => await getDoc("createDraft", user.value!.uid));
 
 let changeView = ref(true);
+const childComponent = ref()
+
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
 
 const { getDoc, document: draft } = getDocument();
 const updateDraft = async () => await getDoc("createDraft", user.value!.uid);
+
+
+const handleSubmit = () => {
+  childComponent.value.handleSubmit()
+}
 </script>
 
 <style lang="scss" scoped>

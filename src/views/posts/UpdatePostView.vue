@@ -12,13 +12,14 @@
         :is="changeView ? SubmitForm : PreviewPost"
         :postToUpdate="post"
         :post="post"
+        ref="childComponent"
       />
     </keep-alive>
     <HelperBoard class="helper-board" v-if="changeView" />
     <div class="submit" v-if="changeView">
-      <button class="btn btn--submit">Опубликовать</button>
+      <button class="btn btn--submit" @click="handleUpdate">Сохранить</button>
       <button class="btn btn--isPending" v-if="false" disabled>
-        Опубликовать
+        Сохранить
       </button>
     </div>
   </div>
@@ -45,6 +46,7 @@ const props = defineProps({
 const { getDoc, document: post, error } = getDocument();
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
+const childComponent = ref()
 
 let changeView = ref(true);
 
@@ -57,6 +59,10 @@ onMounted(async () => {
   await getDoc("posts", props.id);
   console.log("post to edit", post.value);
 });
+
+const handleUpdate = () => {
+  childComponent.value.handleSubmit()
+}
 </script>
 
 <style lang="scss" scoped>

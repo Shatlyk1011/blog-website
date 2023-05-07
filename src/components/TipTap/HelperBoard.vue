@@ -27,8 +27,7 @@
 <style lang="scss" scoped>
 @import "@/globals";
 .helper-board {
-  display: inline;
-
+  display: flex;
   flex-direction: column;
   gap: 1rem;
   border: 1px solid $color-gray-2;
