@@ -85,6 +85,7 @@ $ff-mserrat: "Montserrat", sans-serif;
     grid-column: 2 / 3;
     grid-row: 2 / 3;
 
+
     &.preview {
       grid-column: 1 / 3;
       max-width: 85rem;

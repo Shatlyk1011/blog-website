@@ -1,11 +1,9 @@
 <template>
-  <div class="base-tools">
-    <div class="tools">
-      <MarkTools :editor="editor" />
-      <TextTools :editor="editor" />
-      <ImageTool :editor="editor" />
-      <RedoUndoTool :editor="editor" />
-    </div>
+  <div class="tools">
+    <MarkTools :editor="editor" />
+    <TextTools :editor="editor" />
+    <ImageTool :editor="editor" />
+    <RedoUndoTool :editor="editor" />
   </div>
 </template>
 
@@ -28,24 +26,21 @@ defineProps({
 
 <style lang="scss" scoped>
 @import "@/globals";
-.base-tools {
+.tools {
   background-color: $color-gray-3;
-
   padding: 6px 1rem;
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   z-index: 1000;
+  padding: 6px 3rem;
+  display: flex;
+  gap: 5rem;
 
   &:focus {
     box-shadow: 0 0 0 0.4rem rgba(#000, 0.7);
     outline: none;
   }
-
-  .tools {
-    padding: 0 2rem;
-    display: flex;
-    gap: 5rem;
-  }
 }
+
 </style>

@@ -15,9 +15,8 @@
     <button class="btn" v-if="isPending" disabled>Опубликовать</button>
     <div class="comments">
       <Comment
-        @delete:comment="deleteComment"
-        @update:comment="updateComment"
         :comment="comment"
+        :comments = "comments"
         :postId="postId"
         v-for="(comment, index) in comments"
         :key="index"
@@ -34,7 +33,7 @@ import { nanoid } from "nanoid";
 import { useUserStore } from "@/stores/user";
 import Comment from "@/components/Comments/Comment.vue";
 
-import { arrayUnion, FieldValue } from "firebase/firestore";
+import { arrayUnion } from "firebase/firestore";
 import { Comment as IComment } from "@/assets/Types";
 import { Timestamp } from "firebase/firestore";
 
@@ -58,14 +57,13 @@ const user = computed(() => userStore.user);
 const { updateDocument } = useDocument();
 
 const addComment = async () => {
-  //create unique id
   let id = nanoid(5);
   isPending.value = true;
   let newComment: IComment = {
     author: user.value!.displayName!,
     text: comment.value.trim(),
     createdAt: Timestamp.fromDate(new Date()),
-    likes: 0,
+    likedBy: [] ,
     reply: [],
     id,
   };
@@ -79,27 +77,8 @@ const addComment = async () => {
   comment.value = "";
 };
 
-const deleteComment = async (payload: string) => {
-  if (props.comments) {
-    let comments = props.comments.filter((comment: IComment) => {
-      return comment.id !== payload;
-    });
-    await updateDocument("posts", postId, {
-      comments,
-    });
-  }
-};
-
 //payload id, payload text
-const updateComment = async (Pid: string, Ptext: string) => {
-  let id = nanoid(5);
-  if (props.comments) {
-    console.log("comments", props.comments);
-    /*         let comment = props.comments.find((comment) => {
-          return comment.id === Pid;
-        }); */
-  }
-};
+
 </script>
 
 <style lang='scss' scoped>

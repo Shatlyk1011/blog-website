@@ -12,26 +12,30 @@
             class="icon"
             icon="fa-solid fa-ellipsis"
             size="sm"
-            @click="toggleMenu"
+            @click="dropdown = !dropdown"
           />
           <ul class="dropdown" v-if="dropdown">
             <li @click="(change = !change), (dropdown = false)">Изменить</li>
-            <li @click="emitDeleteComment">Удалить</li>
+            <li @click="deleteComment(comment.id)">Удалить</li>
           </ul>
         </OnClickOutside>
       </div>
-      <p v-if="change">
+      <p v-if="!change">
         {{ comment.text }}
       </p>
-      <div class="change-comment">
-        <textarea v-if="!change" v-model="comment.text" />
-        <button @click="emitUpdateComment">Изменить</button>
+      <div class="change-comment" v-if="change">
+        <textarea  v-model="comment.text" />
+        <button @click="updateComment(comment.id, comment.text)">Изменить</button>
       </div>
     </div>
     <div class="actions">
-      <div class="likes">
-        <font-awesome-icon icon="fa-solid fa-heart" size="sm" />
-        <span>{{ comment.likes }} лайков</span>
+      <div class="likes" @click="reactComment(comment.id)" v-if="!delay">
+        <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
+        <span>{{ comment.likedBy?.length | 0 }} лайков</span>
+      </div>
+      <div class="likes delay" @click="reactComment(comment.id)" v-if="delay">
+        <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
+        <span>{{ comment.likedBy?.length | 0 }} лайков</span>
       </div>
       <div class="reply">
         <font-awesome-icon icon="fa-solid fa-reply" size="sm" />
@@ -42,45 +46,89 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from "vue";
+import { PropType, ref, computed } from "vue";
 import { Comment as IComment } from "@/assets/Types";
+import { nanoid } from "nanoid";
+
+import { useUserStore } from "@/stores/user";
 
 import { OnClickOutside } from "@vueuse/components";
 
-const emit = defineEmits(["delete:comment", "update:comment"]);
+import useDocument from "@/composables/firestore/useDocument";
 
 const props = defineProps({
   comment: {
     type: Object as PropType<IComment>,
-    required: true,
+    required: true
+  },
+  comments: {
+    type: Array as PropType <IComment[]>,
+    required: true
   },
   postId: {
     type: String,
     required: true,
   },
 });
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 
 const dropdown = ref(false);
 const change = ref(false);
+const delay = ref(false)
 
-const toggleMenu = () => (dropdown.value = !dropdown.value);
 const closeMenu = () => (dropdown.value = false);
 
-const emitDeleteComment = () => {
+const { updateDocument } = useDocument();
+
+const deleteComment = async (id: string) => {
   closeMenu();
-  if (props.comment) {
-    let id = props.comment.id;
-    emit("delete:comment", id);
+    let comments = props.comments.filter((comment: IComment) => {
+      return comment.id !== id;
+    });
+    await updateDocument("posts", props.postId, {
+      comments,
+    });
+
+};
+
+const updateComment = async (id: string, text:string) => {
+  let newId = nanoid(5);
+  let comments = props.comments
+  if (comments) {
+    let commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
+    comments[commentIndex].text = text
+    comments[commentIndex].id = newId
+    await updateDocument('posts', props.postId, {
+      comments
+    })
+    change.value = false
   }
 };
 
-const emitUpdateComment = () => {
-  if (props.comment) {
-    let text = props.comment.text;
-    let id = props.comment.id;
-    emit("update:comment", id, text);
+const reactComment = async (id: string) => {
+  delay.value = true
+  const comments = props.comments
+  const userName = user.value!.displayName
+  
+  if (comments && userName) {
+    const commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
+    const comment = comments[commentIndex]
+    let userIndex = comment.likedBy.indexOf(userName)
+    if(userIndex === -1) {
+      comment.likedBy.push(userName)
+    } else {
+      comment.likedBy.splice(userIndex, 1)
+    }
+    await updateDocument('posts', props.postId, {
+      comments
+    })
   }
-};
+  setTimeout(() => {
+    delay.value = false
+  }, 500);
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -242,6 +290,12 @@ const emitUpdateComment = () => {
       &:hover {
         background-color: $color-gray-3;
       }
+    }
+
+    .likes.delay {
+      background-color: $color-gray-3;
+      cursor: not-allowed;
+      color: rgba($color-text, 0.7)
     }
   }
 }

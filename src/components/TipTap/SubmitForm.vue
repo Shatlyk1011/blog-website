@@ -76,8 +76,7 @@
         </ul>
       </div>
       <!-- Editor -->
-
-      <div class="toolbar">
+      <div class="editor-container">
         <Tools :editor="editor" tabindex="0" />
         <editor-content class="editor" :editor="editor" />
       </div>
@@ -88,7 +87,7 @@
 <script lang="ts" setup>
 import {
   ref,
-  defineComponent,
+  
   PropType,
   watch,
   onActivated,
@@ -263,11 +262,12 @@ const handleSubmit = async () => {
   }
 };
 
+let posted = ref(false);
 watch(props, () => {
-  let count = 0;
   // set drafts once when data is available
-  if (props.postToSetDraft && count < 1) {
-    count++;
+  if (props.postToSetDraft && !posted.value) {
+    posted.value = true
+    console.log('c',posted.value);
     console.log("postToSetDraft available");
     let post = props.postToSetDraft;
     title.value = post.title;
@@ -275,8 +275,8 @@ watch(props, () => {
     editor.value?.commands.setContent(post.html);
   }
   // set post to update once when data is available
-  if (props.postToUpdate && count < 1) {
-    count++;
+  if (props.postToUpdate && !posted.value) {
+    posted.value = true
     console.log("postToUpdate available");
     let post = props.postToUpdate;
     title.value = post.title;
@@ -344,15 +344,20 @@ onDeactivated(async () => {
   margin: 0 auto;
   background-color: $color-gray-2;
   border-radius: 2px;
+  
 
   & *:focus {
     box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
     outline: none;
+    border: none;
   }
   form {
     color: $color-text;
-    display: flex;
-    flex-direction: column;
+/*     display: flex;
+    flex-direction: column; */
+    display: grid;
+    grid-template-rows: min-content 1fr;
+
     gap: 1rem;
     height: 100%;
 
@@ -405,6 +410,7 @@ onDeactivated(async () => {
           top: 50%;
           left: 90%;
           transform: translate(-50%, -50%);
+
         }
       }
 
@@ -515,11 +521,11 @@ onDeactivated(async () => {
         }
       }
     }
-    .toolbar {
-      height: 100%;
+    .editor-container {
+      position: relative;
       display: flex;
       flex-direction: column;
-      // justify-content: stretch;
+   
     }
     .E-paragraph {
       font-size: 1.6rem;

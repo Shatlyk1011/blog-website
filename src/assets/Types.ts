@@ -5,7 +5,7 @@ export interface Comment {
   text: string;
   createdAt: Timestamp;
   editedAt?: Timestamp;
-  likes: number | string;
+  likedBy: string[];
   reply: [];
   id: string;
 }
