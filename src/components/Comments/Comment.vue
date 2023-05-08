@@ -15,7 +15,7 @@
             @click="dropdown = !dropdown"
           />
           <ul class="dropdown" v-if="dropdown">
-            <li @click="(change = !change), (dropdown = false)">Изменить</li>
+            <li @click="(change = true), (dropdown = false)">Изменить</li>
             <li @click="deleteComment(comment.id)">Удалить</li>
           </ul>
         </OnClickOutside>
@@ -25,7 +25,10 @@
       </p>
       <div class="change-comment" v-if="change">
         <textarea  v-model="comment.text" />
-        <button @click="updateComment(comment.id, comment.text)">Изменить</button>
+        <div class="btns">
+          <button class="btn btn--update" @click="updateComment(comment.id, comment.text)">Изменить</button>
+          <button class="btn btn--cancel" @click="">Отмена</button>
+        </div>
       </div>
     </div>
     <div class="actions">
@@ -250,22 +253,42 @@ const reactComment = async (id: string) => {
         outline: 1px solid rgba($color-gray-3, 0.6);
         font-size: 1.6rem;
       }
-      button {
-        padding: 6px 10px;
-        font-size: 1.28rem;
-        font-weight: 500;
-        color: $color-text;
-        border-radius: 2px;
-        background-color: $color-main-2;
-        align-self: flex-start;
 
-        transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+      .btns {
+        display: flex;
+        gap: 1rem;
 
-        &:hover {
-          background-color: $color-main-1;
-          color: rgba($color-text, 0.8);
+        .btn {
+          padding: 6px 10px;
+          font-size: 1.28rem;
+          font-weight: 500;
+          color: $color-text;
+          border-radius: 2px;
+          transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+          &--update {
+            background-color: $color-main-2;
+
+            &:hover {
+            background-color: $color-main-1;
+            color: rgba($color-text, 0.8);
+          }
+          }
+
+          &--cancel {
+            background-color: $color-gray-3;
+              &:hover {
+              background-color: rgba($color-gray-3, 0.8);
+            }
+          }
+        }
+
+        
+        .btn-cancel {
+          background-color: $color-gray-3;
         }
       }
+
     }
   }
   .actions {

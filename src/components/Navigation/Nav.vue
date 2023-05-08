@@ -6,11 +6,10 @@
 
       <div class="wrapper" ref="wrapper">
         <ul>
-          <router-link class="link" to="#">Поиск</router-link>
           <router-link class="link" to="/all-posts">Все посты</router-link>
+          <router-link class="link" to="#">Поиск</router-link>
           <!-- <router-link class="link" to="#">Обо мне</router-link> -->
         </ul>
-        <!-- show login-register or create-logout? -->
         <div class="btns">
           <router-link
             v-if="user"
@@ -103,8 +102,6 @@ const handleLogout = async () => {
 .nav {
   border-bottom: 1px solid $color-gray-3;
   position: relative;
-
-
 
   & *:focus {
     box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
