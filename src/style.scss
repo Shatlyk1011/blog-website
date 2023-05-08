@@ -9,13 +9,20 @@
 html {
   font-size: 62.5%;
   font-family: $ff-roboto;
+  overflow-x: hidden;
+  height: 100%;
+
+  @include respond(smallest) {
+    font-size: 50%;
+  }
 }
 
 body {
   font-size: 1.6rem;
+  height: 100%;
   box-sizing: border-box;
   background-color: $color-gray-1;
-
+  overflow-x: hidden;
   color: $color-text;
 }
 
@@ -43,6 +50,10 @@ a {
   padding: 2rem 0;
 
   position: relative;
+
+  @include respond(phone) {
+    padding: 1rem 0;
+  }
 
   .ProseMirror p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);
@@ -73,6 +84,12 @@ a {
       font-family: $ff-mserrat;
       line-height: 1.1;
     }
+    @include respond(tab-port) {
+      padding: 1rem 1.6rem;
+    }
+    @include respond(phone) {
+      margin: 0 1.6rem;
+    }
   }
 
   img {
@@ -92,6 +109,10 @@ a {
 .E-bulletList,
 ol {
   padding: 0 2rem;
+
+  @include respond(phone) {
+    padding: 1rem;
+  }
 }
 
 .E-codeLowlight {
@@ -169,6 +190,10 @@ ol {
   line-height: 1.6;
   position: relative;
   z-index: 10;
+  @include respond(phone) {
+    font-size: 1.8rem;
+    line-height: 1.5;
+  }
 }
 
 u {

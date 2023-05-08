@@ -54,15 +54,11 @@ defineProps({
 .preview-post {
   max-width: 85rem;
   margin: 0 auto;
-
-  background-color: $color-gray-2; // ?
-
+  background-color: $color-gray-2; 
   border-radius: 2px;
   overflow: hidden;
   .cover-image {
     width: 100%;
-    // height: 42rem;
-    // position: relative;
     .img {
       width: 100%;
       max-height: 32rem;
@@ -74,6 +70,9 @@ defineProps({
   .container {
     padding: 3.2rem 6.4rem;
     position: relative;
+    @include respond(tab-land) {
+      padding: 2.4rem 3.2rem;
+    }
     .menu {
       position: absolute;
       right: 2rem;

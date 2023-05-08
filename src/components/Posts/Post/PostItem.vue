@@ -28,7 +28,7 @@
       </div>
       <div class="credentials">
         <div class="posted">
-          Опубликовано: <span>{{ post.createdAt }}</span>
+          Создан: <span>{{ post.createdAt }}</span>
         </div>
         <div class="author">
           Автор: <span>{{ post.userInfo.author }}</span>
@@ -59,19 +59,20 @@ defineProps({
     box-shadow: 0 0 0 0.4rem rgba(#fff, 0.4);
     box-sizing: content-box;
     border-radius: 1px;
-
     outline: none;
   }
-
   .container {
     height: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
-
     padding: 2rem;
     box-shadow: 0 0 4rem rgba(0, 0, 0, 0.2);
+
+    @include respond(tab-port) {
+      padding: 1.6rem
+    }
 
     transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);
     &:hover {
@@ -182,7 +183,7 @@ defineProps({
       flex-direction: column;
       justify-self: flex-end;
       gap: 4px;
-      // margin-top: auto;
+      font-size: 1.28rem;
       color: rgba($color-gray-3, 0.7);
       .posted {
         span {

@@ -1,96 +1,99 @@
 <template>
   <div class="marks">
-    <tip-tap-button
-      faIcon="fa-solid fa-bold"
-      tooltip="Жирный"
-      command="CTRL + B"
-      @click="editor.chain().focus().toggleBold().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleBold().run()"
-      :class="{ isActive: editor?.isActive('bold') }"
-      :disabled="!editor?.can().chain().focus().toggleBold().run()"
-    />
-    <tip-tap-button
-      faIcon="fa-solid fa-italic"
-      tooltip="Курсив"
-      command="CTRL + I"
-      @click="editor.chain().focus().toggleItalic().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleItalic().run()"
-      :class="{ isActive: editor?.isActive('italic') }"
-      :disabled="!editor?.can().chain().focus().toggleItalic().run()"
-    />
-    <tip-tap-button
-      faIcon="fa-solid fa-strikethrough"
-      tooltip="Зачеркнуть"
-      command="CTRL + SHIFT + X"
-      @click="editor.chain().focus().toggleStrike().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleStrike().run()"
-      :class="{ isActive: editor?.isActive('strike') }"
-      :disabled="!editor?.can().chain().focus().toggleStrike().run()"
-    />
-    <tip-tap-button
-      faIcon="fa-solid fa-underline"
-      tooltip="Подчеркнуть"
-      command="CTRL + U"
-      @click="editor.chain().focus().toggleUnderline().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleUnderline().run()"
-      :class="{
-        isActive: editor?.isActive('underline'),
-      }"
-    />
-    <tip-tap-button
-      faIcon="fa-solid fa-code"
-      tooltip="Код"
-      command="CTRL + E"
-      @click="editor.chain().focus().toggleCode().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleCode().run()"
-      :class="{ isActive: editor?.isActive('code') }"
-    />
-    <tip-tap-button
-      faIcon="fa-solid fa-laptop-code"
-      tooltip="Блок кода"
-      @click="editor.chain().focus().toggleCodeBlock().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleCodeBlock().run()"
-      :class="{ isActive: editor?.isActive('codeBlock') }"
-    />
 
-    <tip-tap-button
-      faIcon="fa-solid fa-highlighter"
-      tooltip="Выделить"
-      @click="editor.chain().focus().toggleHighlight().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleHighlight().run()"
-      :class="{ isActive: editor?.isActive('highlight') }"
-    />
+    <div class="container">
+      <tip-tap-button
+        faIcon="fa-solid fa-bold"
+        tooltip="Жирный"
+        command="CTRL + B"
+        @click="editor.chain().focus().toggleBold().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleBold().run()"
+        :class="{ isActive: editor?.isActive('bold') }"
+        :disabled="!editor?.can().chain().focus().toggleBold().run()"
+      />
+      <tip-tap-button
+        faIcon="fa-solid fa-italic"
+        tooltip="Курсив"
+        command="CTRL + I"
+        @click="editor.chain().focus().toggleItalic().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleItalic().run()"
+        :class="{ isActive: editor?.isActive('italic') }"
+        :disabled="!editor?.can().chain().focus().toggleItalic().run()"
+      />
+      <tip-tap-button
+        faIcon="fa-solid fa-strikethrough"
+        tooltip="Зачеркнуть"
+        command="CTRL + SHIFT + X"
+        @click="editor.chain().focus().toggleStrike().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleStrike().run()"
+        :class="{ isActive: editor?.isActive('strike') }"
+        :disabled="!editor?.can().chain().focus().toggleStrike().run()"
+      />
+      <tip-tap-button
+        faIcon="fa-solid fa-underline"
+        tooltip="Подчеркнуть"
+        command="CTRL + U"
+        @click="editor.chain().focus().toggleUnderline().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleUnderline().run()"
+        :class="{
+          isActive: editor?.isActive('underline'),
+        }"
+      />
+      <tip-tap-button
+        faIcon="fa-solid fa-code"
+        tooltip="Код"
+        command="CTRL + E"
+        @click="editor.chain().focus().toggleCode().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleCode().run()"
+        :class="{ isActive: editor?.isActive('code') }"
+      />
+      <tip-tap-button
+        faIcon="fa-solid fa-laptop-code"
+        tooltip="Блок кода"
+        @click="editor.chain().focus().toggleCodeBlock().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleCodeBlock().run()"
+        :class="{ isActive: editor?.isActive('codeBlock') }"
+      />
 
-    <tip-tap-button
-      faIcon="fa-solid fa-list-ul"
-      tooltip="Список пуля"
-      @click="editor.commands.toggleBulletList()"
-      @keypress.enter.prevent="editor.commands.toggleBulletList()"
-      :class="{ isActive: editor?.isActive('bulletList') }"
-    />
+      <tip-tap-button
+        faIcon="fa-solid fa-highlighter"
+        tooltip="Выделить"
+        @click="editor.chain().focus().toggleHighlight().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleHighlight().run()"
+        :class="{ isActive: editor?.isActive('highlight') }"
+      />
 
-    <tip-tap-button
-      faIcon="fa-solid fa-list-ol"
-      tooltip="Упорядоченный список"
-      @click="editor.commands.toggleOrderedList()"
-      @keypress.enter.prevent="editor.commands.toggleOrderedList()"
-      :class="{ isActive: editor?.isActive('orderedList') }"
-    />
+      <tip-tap-button
+        faIcon="fa-solid fa-list-ul"
+        tooltip="Список пуля"
+        @click="editor.commands.toggleBulletList()"
+        @keypress.enter.prevent="editor.commands.toggleBulletList()"
+        :class="{ isActive: editor?.isActive('bulletList') }"
+      />
 
-    <tip-tap-button
-      faIcon="fa-solid fa-quote-left"
-      tooltip="Цитата"
-      @click="editor.chain().focus().toggleBlockquote().run()"
-      @keypress.enter.prevent="editor.chain().focus().toggleBlockquote().run()"
-      :class="{ isActive: editor?.isActive('blockquote') }"
-    />
+      <tip-tap-button
+        faIcon="fa-solid fa-list-ol"
+        tooltip="Упорядоченный список"
+        @click="editor.commands.toggleOrderedList()"
+        @keypress.enter.prevent="editor.commands.toggleOrderedList()"
+        :class="{ isActive: editor?.isActive('orderedList') }"
+      />
 
-    <tip-tap-button
-      faIcon="fa-solid fa-link"
-      tooltip=" Добавить ссылку"
-      @click="setLink"
-      @keypress.enter.prevent="setLink"
-    />
+      <tip-tap-button
+        faIcon="fa-solid fa-quote-left"
+        tooltip="Цитата"
+        @click="editor.chain().focus().toggleBlockquote().run()"
+        @keypress.enter.prevent="editor.chain().focus().toggleBlockquote().run()"
+        :class="{ isActive: editor?.isActive('blockquote') }"
+      />
+
+      <tip-tap-button
+        faIcon="fa-solid fa-link"
+        tooltip=" Добавить ссылку"
+        @click="setLink"
+        @keypress.enter.prevent="setLink"
+      />
+    </div>
   </div>
 </template>
 
@@ -131,8 +134,21 @@ const setLink = () => {
 </script>
 
 <style lang="scss">
+@import '@/globals';
 .marks {
-  display: flex;
-  gap: 1rem;
+  .icon {
+    display: none;
+    position: relative;
+  }
+
+  .container {
+    display: flex;
+    gap: 1rem;
+
+    @include respond(phone) { 
+      gap: 6px;
+    }
+  }
+
 }
 </style>

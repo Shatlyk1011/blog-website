@@ -14,3 +14,14 @@ defineProps({
   },
 });
 </script>
+
+<style lang='scss'>
+@import '@/globals'; 
+.post-view {
+  padding: 2rem;
+
+  @include respond(phone) {
+    padding: 0
+  }
+}
+</style>

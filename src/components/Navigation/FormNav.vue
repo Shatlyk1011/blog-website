@@ -53,6 +53,9 @@ const emitPreview = () => {
     max-width: 110rem;
     margin: 0 auto;
     padding: 1rem 0 1rem 3rem;
+    @include respond(smallest) {
+      padding: 1rem
+    }
 
     .logo {
       color: $color-main-1;

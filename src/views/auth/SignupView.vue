@@ -93,35 +93,39 @@ const handleGithubSignin = async () => {
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
+@import '@/globals';
 
 .signup {
-  margin: 6.4rem 0;
+  margin: 4.8rem 0;
   display: grid;
   grid-template-columns: 6fr 7fr;
-  height: 65%;
-  width: 100%;
   text-align: center;
   border-radius: 4px;
   border: 1px solid $color-gray-2;
+  margin: 4rem;
+
+  @include respond(tab-land) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include respond(tab-port) {
+    grid-template-columns: 1fr ;
+  }
+
+  @include respond(phone) {
+    margin: 2.4rem 1.6rem ;
+  }
+
 
   .img-container {
     background-image: url("@/assets/images/login.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-origin: 50% 50%;
+    background-position: center center;
+
+    @include respond(tab-port) {
+      display: none;
+    }
   }
 
   .form-container {
@@ -130,12 +134,27 @@ $ff-mserrat: "Montserrat", sans-serif;
     margin-left: -0.8rem;
     background-color: $color-gray-1;
 
+    @include respond(tab-land) {
+      padding: 3.2rem 2.4rem;
+
+    }
+    @include respond(tab-port) {
+      margin: 0;
+    }
+    @include respond(phone) {
+      padding: 2.4rem;
+    }
+
     h2 {
       font-size: 3.1rem;
       font-weight: 600;
       color: $color-main-1;
-      width: 100%;
+;
       margin-bottom: 4.2rem;
+
+      @include respond(phone) {
+        margin-bottom: 2.4rem;
+      }
     }
     .sign-btns {
       display: flex;
@@ -155,6 +174,9 @@ $ff-mserrat: "Montserrat", sans-serif;
           border-color: $color-gray-3;
           box-shadow: 6.7px 6.7px 8.4px rgba(#fff, 0.06);
         }
+        @include respond(phone) {
+          padding: 1rem ;
+        }
       }
     }
 
@@ -164,6 +186,9 @@ $ff-mserrat: "Montserrat", sans-serif;
       font-weight: 700;
       color: $color-gray-3;
       font-family: $ff-mserrat;
+      @include respond(phone) {
+        margin-top: 3.2rem;
+      }
     }
 
     form {
@@ -223,12 +248,13 @@ $ff-mserrat: "Montserrat", sans-serif;
         padding: 1.8rem 0;
         width: 100%;
         text-align: center;
-
         transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
 
         &:hover {
           background-color: $color-main-2;
         }
+        
+
       }
 
       span {

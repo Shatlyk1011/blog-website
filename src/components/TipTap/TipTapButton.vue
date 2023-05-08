@@ -58,6 +58,13 @@ defineProps({
     visibility: visible;
     transform: translate(-50%, 6px);
   }
+
+  @include respond(phone) { 
+    .faIcon {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
 }
 
 .isActive {
@@ -92,6 +99,10 @@ defineProps({
     font-size: 1rem;
     font-weight: 500;
     color: rgba($color-text, 0.7);
+  }
+
+  @include respond(next) {
+    display: none;
   }
 }
 </style>

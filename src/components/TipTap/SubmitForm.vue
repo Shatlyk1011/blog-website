@@ -118,8 +118,6 @@ const props = defineProps({
   },
 });
 
-
-
 const isPending = ref(false);
 const postUpdated = ref(false);
 
@@ -354,11 +352,9 @@ onDeactivated(async () => {
   }
   form {
     color: $color-text;
-/*     display: flex;
-    flex-direction: column; */
     display: grid;
     grid-template-rows: min-content 1fr;
-
+    // overflow-x:hidden;
     gap: 1rem;
     height: 100%;
 
@@ -367,6 +363,10 @@ onDeactivated(async () => {
       flex-direction: column;
       gap: 1.6rem;
       padding: 2rem 2rem 0;
+
+      @include respond(phone) {
+        padding: 1.6rem 1.6rem 0 ;
+      }
 
       .wrap {
         display: flex;
@@ -384,7 +384,7 @@ onDeactivated(async () => {
         align-self: flex-start;
         padding: 1rem 1.6rem;
         border-radius: 4px;
-        // text-align: center;
+        text-align: center;
         font-weight: 600;
 
         cursor: pointer;
@@ -528,6 +528,7 @@ onDeactivated(async () => {
       position: relative;
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
    
     }
     .E-paragraph {

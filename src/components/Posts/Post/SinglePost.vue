@@ -129,10 +129,8 @@ const handleDelete = async () => {
 
 .single-post {
   max-width: 85rem;
-
-  margin: 2rem auto;
+  margin: 0 auto;
   background-color: $color-gray-2; // ?
-
   border-radius: 2px;
   overflow: hidden;
 
@@ -142,14 +140,19 @@ const handleDelete = async () => {
   }
   .cover-image {
     width: 100%;
-    // height: 42rem;
-    // position: relative;
     .img {
       width: 100%;
       max-height: 32rem;
       object-fit: cover;
       position: relative;
       top: 0;
+      @include respond(phone) {
+        max-height: 25rem;
+      }
+      
+      @include respond(smallest) {
+        max-height: 20rem;
+      }
     }
   }
   .container {
@@ -157,6 +160,15 @@ const handleDelete = async () => {
 
     .wrapper {
       padding: 3.2rem 6.4rem;
+      @include respond(tab-land) {
+        padding: 3.2rem 4.8rem;
+      }
+      @include respond(tab-port) {
+        padding: 2.4rem 3.2rem;
+      }
+      @include respond(phone) {
+        padding: 1.6rem;
+      }
 
       .menu {
         position: absolute;
@@ -217,6 +229,10 @@ const handleDelete = async () => {
         font-weight: 700;
         color: white;
         margin-bottom: 2rem;
+
+        @include respond(phone) {
+          font-size: 3.9rem;
+        }
       }
 
       .wrap {
@@ -262,9 +278,15 @@ const handleDelete = async () => {
     }
 
     .comments-container {
-      // margin-top: 4rem;
       padding: 4.8rem 6.4rem;
       border-top: 1px solid $color-gray-3;
+
+      @include respond(tab-port) {
+        padding: 3.2rem 4.8rem
+      }
+      @include respond(phone) {
+        padding: 3.2rem 2.4rem
+      }
     }
   }
 }

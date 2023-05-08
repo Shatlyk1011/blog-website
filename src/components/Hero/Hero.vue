@@ -28,7 +28,7 @@ let interval = ref();
 
 const changeActionWord = () => {
   interval.value = setInterval(() => {
-    const actions = ref(["Создавай", "Делись", "Разрабатывай", "Тестируй"]);
+    const actions = ref(["Создавай", "Делись", "Узнавай"]);
     action.value = nextElementList(actions.value, action.value);
   }, 2700);
 };
@@ -44,12 +44,15 @@ onBeforeUnmount(() => {
 
 .hero {
   .container {
-    // padding: 6rem;
-    display: flex;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     max-width: 120rem;
     margin: 0 auto;
+    @include respond(tab-port) {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
     .description {
       display: flex;
       flex-direction: column;
@@ -57,6 +60,16 @@ onBeforeUnmount(() => {
       text-align: left;
       gap: 2rem;
       grid-column: 1 / span 5;
+      @include respond(tab-land) {
+        grid-column: 1 / span 6;
+        gap: 1.6rem;
+      }
+      @include respond(tab-port) {
+        text-align: center;
+      }
+
+
+
 
       h1 {
         font-family: $ff-mserrat;
@@ -103,6 +116,9 @@ onBeforeUnmount(() => {
           background-color: $color-main-1;
           // color: $color-gray-1;
         }
+        @include respond(tab-port) {
+          align-self: center
+        }
       }
     }
 
@@ -117,6 +133,9 @@ onBeforeUnmount(() => {
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+      @include respond(tab-land) {
+        grid-column: 8 / -1
       }
     }
   }

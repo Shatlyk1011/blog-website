@@ -1,20 +1,4 @@
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$color-red: #d92d20;
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
-
 // transition: cubic-bezier(0.83, 0, 0.17, 1);
-
 /* 
 FONT-SIZES
 95.37px
@@ -30,3 +14,46 @@ FONT-SIZES
 10.24px
 8.19px
 */
+
+$color-black: #000;
+$color-white: #fff;
+$color-text: #e9ecef;
+
+$color-main-1: #d84f2a;
+$color-main-2: #f9744b;
+
+$color-gray-1: #212529;
+$color-gray-2: #495057;
+$color-gray-3: #868e96;
+
+$color-red: #d92d20;
+$ff-roboto: "Roboto", sans-serif;
+$ff-mserrat: "Montserrat", sans-serif;
+
+@mixin respond($breakpoint) {
+  @if $breakpoint == smallest {
+    @media only screen and (max-width: 25em) {
+      @content;
+    } //400px
+  }
+  @if $breakpoint == phone {
+    @media only screen and (max-width: 37.5em) {
+      @content;
+    } //600px
+  }
+  @if $breakpoint == tab-port {
+    @media only screen and (max-width: 50em) {
+      @content;
+    } //800px
+  }
+  @if $breakpoint == tab-land {
+    @media only screen and (max-width: 65em) {
+      @content;
+    } //1040px
+  }
+  /*   @if $breakpoint == big-desktop {
+    @media only screen and (min-width: 65em) {
+      @content;
+    } //1800
+  } */
+}

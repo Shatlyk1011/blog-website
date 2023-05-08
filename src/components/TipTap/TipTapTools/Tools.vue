@@ -1,6 +1,6 @@
 <template>
   <div class="tools">
-    <MarkTools :editor="editor" />
+    <MarkTools class="marks" :editor="editor" />
     <TextTools :editor="editor" />
     <ImageTool :editor="editor" />
     <RedoUndoTool :editor="editor" />
@@ -27,20 +27,33 @@ defineProps({
 <style lang="scss" scoped>
 @import "@/globals";
 .tools {
+  display: flex;
+  column-gap: 5rem;
+  padding: 6px 3rem;
   background-color: $color-gray-3;
-  padding: 6px 1rem;
   position: sticky;
   position: -webkit-sticky;
   top: 0;
   z-index: 1000;
-  padding: 6px 3rem;
-  display: flex;
-  gap: 5rem;
 
   &:focus {
     box-shadow: 0 0 0 0.4rem rgba(#000, 0.7);
     outline: none;
   }
+
+  @include respond(tab-port) {
+    column-gap: 1rem;
+    row-gap: 4px;
+    padding: 6px 1.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  @include respond(phone) {
+    padding: 4px 1rem;
+    box-sizing: content-box;
+  }
+
 }
 
 </style>

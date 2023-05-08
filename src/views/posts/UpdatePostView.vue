@@ -70,15 +70,24 @@ const handleUpdate = () => {
 .update-post {
   max-width: 128rem;
   display: grid;
-  grid-template-columns: 6.4rem 7fr 3fr;
+  grid-template-columns: 6.4rem 7fr 3fr 6.4rem;
   grid-template-rows: min-content 1fr min-content;
   column-gap: 1rem;
   margin: 0 auto;
+  padding-bottom: 2rem;
   height: 100vh;
   box-sizing: border-box;
-  padding: 0 2rem 2rem;
+  @include respond(tab-port) {
+    grid-template-columns: 3.2rem 7fr 3fr 3.2rem;
+  }
+  @include respond(phone) {
+   grid-template-columns: 1rem 7fr 3fr 1rem;
+  }
   .nav {
     grid-column: 1 / 3;
+    @include respond(tab-land) {
+      grid-column: 1 / 4;
+    }
   }
   .component {
     width: 100%;
@@ -88,16 +97,27 @@ const handleUpdate = () => {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
 
+    @include respond(tab-land) {
+      grid-column: 2/4;
+    }
+
     &.preview {
       grid-column: 1 / 3;
       max-width: 85rem;
       margin: 0 auto;
+
+      @include respond(tab-land) {
+        grid-column: 2/4
+      }
     }
   }
 
   .helper-board {
     grid-column: 3 / 4;
     grid-row: 2 / -2;
+    @include respond(tab-land) {
+      display: none;
+    }
   }
 
   .submit {

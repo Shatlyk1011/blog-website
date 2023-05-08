@@ -29,14 +29,14 @@
       </div>
     </div>
     <div class="actions">
-      <div class="likes" @click="reactComment(comment.id)" v-if="!delay">
+      <button class="like" @click="reactComment(comment.id)" v-if="!delay">
         <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
-      </div>
-      <div class="likes delay" @click="reactComment(comment.id)" v-if="delay">
+      </button>
+      <button  class="like delay" @click="reactComment(comment.id)" v-if="delay" disabled>
         <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
-      </div>
+      </button>
       <div class="reply">
         <font-awesome-icon icon="fa-solid fa-reply" size="sm" />
         <span>Ответить</span>
@@ -83,13 +83,13 @@ const { updateDocument } = useDocument();
 
 const deleteComment = async (id: string) => {
   closeMenu();
-    let comments = props.comments.filter((comment: IComment) => {
-      return comment.id !== id;
-    });
-    await updateDocument("posts", props.postId, {
-      comments,
-    });
-
+  change.value = false;
+  let comments = props.comments.filter((comment: IComment) => {
+    return comment.id !== id;
+  });
+  await updateDocument("posts", props.postId, {
+    comments,
+  });
 };
 
 const updateComment = async (id: string, text:string) => {
@@ -273,7 +273,7 @@ const reactComment = async (id: string) => {
     display: flex;
     gap: 1rem;
 
-    .likes,
+    .like,
     .reply {
       display: flex;
       align-items: center;
@@ -292,7 +292,7 @@ const reactComment = async (id: string) => {
       }
     }
 
-    .likes.delay {
+    .like.delay {
       background-color: $color-gray-3;
       cursor: not-allowed;
       color: rgba($color-text, 0.7)
