@@ -3,7 +3,7 @@
     <Posts :posts="posts" v-if="posts" />
     <Loading v-else />
   </div>
-  <Footer/>
+  <Footer v-if="posts"/>
 </template>
 
 <script lang="ts" setup>

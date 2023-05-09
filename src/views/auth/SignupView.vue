@@ -1,6 +1,8 @@
 <template>
   <div class="signup">
-    <div class="img-container"></div>
+    <div class="img-container">
+      <img src="@/assets/images/login.jpg" alt="">
+    </div>
     <div class="form-container">
       <h2>Создайте аккаунт</h2>
       <div class="sign-btns">
@@ -25,6 +27,7 @@
             :type="passwordBool ? 'text' : 'password'"
             v-model="password"
             placeholder="Пароль"
+            autocomplete="on"
             required
           />
           <font-awesome-icon
@@ -105,7 +108,7 @@ const handleGithubSignin = async () => {
   margin: 4rem;
 
   @include respond(tab-land) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 5fr 4fr;
   }
 
   @include respond(tab-port) {
@@ -118,10 +121,12 @@ const handleGithubSignin = async () => {
 
 
   .img-container {
-    background-image: url("@/assets/images/login.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
 
     @include respond(tab-port) {
       display: none;

@@ -17,6 +17,7 @@
             class="input"
             v-model="password"
             placeholder="Пароль"
+            autocomplete="on"
             required
           />
           <font-awesome-icon

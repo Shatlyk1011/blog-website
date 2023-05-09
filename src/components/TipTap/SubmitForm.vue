@@ -256,8 +256,7 @@ watch(props, () => {
   // set drafts once when data is available
   if (props.postToSetDraft && !posted.value) {
     posted.value = true
-    console.log('c',posted.value);
-    console.log("postToSetDraft available");
+    // console.log("postToSetDraft available");
     let post = props.postToSetDraft;
     title.value = post.title;
     tags.value = post.tags;
@@ -266,7 +265,7 @@ watch(props, () => {
   // set post to update once when data is available
   if (props.postToUpdate && !posted.value) {
     posted.value = true
-    console.log("postToUpdate available");
+    // console.log("postToUpdate available");
     let post = props.postToUpdate;
     title.value = post.title;
     tags.value = post.tags;

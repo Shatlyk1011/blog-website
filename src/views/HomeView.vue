@@ -6,11 +6,13 @@
       <Posts :posts="posts" />
     </div>
   </div>
+  <Footer/>
 </template>
 
 <script lang="ts" setup>
 import Hero from "@/components/Hero/Hero.vue";
 import Posts from "@/components/Posts/Posts.vue";
+import Footer from '@/components/Footer/Footer.vue'
 
 import getPosts from "@/composables/firestore/getPosts";
 

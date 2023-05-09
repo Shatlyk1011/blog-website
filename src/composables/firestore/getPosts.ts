@@ -1,6 +1,6 @@
 import { ref, watchEffect } from "vue";
 
-import { db } from "@/firebase/config.ts";
+import { db } from "@/firebase/config";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { Post } from "@/assets/Types";
 
