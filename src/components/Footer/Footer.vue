@@ -22,7 +22,7 @@
 @import '@/globals';
   footer {
     .container {
-      background-color: $color-gray-2; 
+      border-top: 1px solid $color-gray-3;
       padding: 3rem 0;
       display: flex;
       flex-direction: column;
