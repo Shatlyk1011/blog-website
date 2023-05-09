@@ -15,7 +15,7 @@
             @click="dropdown = !dropdown"
           />
           <ul class="dropdown" v-if="dropdown">
-            <li @click="(change = true), (dropdown = false)">Изменить</li>
+            <li @click="handleChange(comment.text)">Изменить</li>
             <li @click="deleteComment(comment.id)">Удалить</li>
           </ul>
         </OnClickOutside>
@@ -24,10 +24,11 @@
         {{ comment.text }}
       </p>
       <div class="change-comment" v-if="change">
-        <textarea  v-model="comment.text" />
+        <textarea  v-model="updatedComment" />
         <div class="btns">
-          <button class="btn btn--update" @click="updateComment(comment.id, comment.text)">Изменить</button>
-          <button class="btn btn--cancel" @click="">Отмена</button>
+          <button class="btn btn--update" @click="updateComment(comment.id, comment.text)" v-if="!isPending">Сохранить</button>
+          <button class="btn btn--update" v-if="isPending" disabled>Сохранить</button>
+          <button class="btn btn--cancel" @click="cancelUpdate">Отмена</button>
         </div>
       </div>
     </div>
@@ -75,39 +76,54 @@ const props = defineProps({
 });
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
+const { updateDocument } = useDocument();
 
 const dropdown = ref(false);
 const change = ref(false);
-const delay = ref(false)
+const delay = ref(false);
+const updatedComment = ref('')
+const isPending = ref(false)
 
 const closeMenu = () => (dropdown.value = false);
 
-const { updateDocument } = useDocument();
+
+const handleChange = (text: string) => {
+  if(change.value === false) {
+    change.value = true;
+    dropdown.value = false;
+    updatedComment.value = text
+  }
+}
 
 const deleteComment = async (id: string) => {
   closeMenu();
   change.value = false;
-  let comments = props.comments.filter((comment: IComment) => {
-    return comment.id !== id;
-  });
+  let comments = props.comments.filter((comment: IComment) => comment.id !== id);
   await updateDocument("posts", props.postId, {
     comments,
   });
 };
 
 const updateComment = async (id: string, text:string) => {
+  isPending.value = true
   let newId = nanoid(5);
   let comments = props.comments
   if (comments) {
     let commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
-    comments[commentIndex].text = text
+    comments[commentIndex].text = updatedComment.value
     comments[commentIndex].id = newId
     await updateDocument('posts', props.postId, {
       comments
     })
+    isPending.value = false
     change.value = false
   }
 };
+
+const cancelUpdate = () => {
+  change.value = false;
+
+}
 
 const reactComment = async (id: string) => {
   delay.value = true
@@ -270,9 +286,14 @@ const reactComment = async (id: string) => {
             background-color: $color-main-2;
 
             &:hover {
-            background-color: $color-main-1;
-            color: rgba($color-text, 0.8);
-          }
+              background-color: $color-main-1;
+              color: rgba($color-text, 0.8);
+            }
+
+            &[disabled] {
+              background-color: rgba($color-main-2, 0.6);
+              color: rgba($color-text, 0.4);
+            }
           }
 
           &--cancel {

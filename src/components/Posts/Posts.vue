@@ -11,6 +11,7 @@ import PostItem from "@/components/Posts/Post/PostItem.vue";
 //форматирование времени
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
+import { Timestamp } from "firebase/firestore";
 
 const props = defineProps({
   posts: {
@@ -23,7 +24,7 @@ const date = new Date();
 const formatDate = computed(() => {
   if (props.posts) {
     return props.posts.map((post: Post) => {
-      let newFormat = Number(post.createdAt?.toDate());
+      let newFormat = Number((post.createdAt as Timestamp).toDate());
       let newTime = formatRelative(newFormat, date, { locale: ru });
       return { ...post, createdAt: newTime };
     });

@@ -21,7 +21,7 @@ export interface Post {
     author: string;
     userUid: string;
   };
-  createdAt?: Timestamp;
+  createdAt?: Timestamp | string;
   editedAt?: Timestamp | null;
   readonly id?: string;
 }
