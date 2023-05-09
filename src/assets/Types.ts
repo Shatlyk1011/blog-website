@@ -1,7 +1,8 @@
-import { Timestamp, FieldValue } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export interface Comment {
   author: string;
+  authorId: string | number;
   text: string;
   createdAt: Timestamp;
   editedAt?: Timestamp;
@@ -21,7 +22,7 @@ export interface Post {
     author: string;
     userUid: string;
   };
-  createdAt?: Timestamp | string;
+  createdAt: string;
   editedAt?: Timestamp | null;
   readonly id?: string;
 }

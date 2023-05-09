@@ -5,24 +5,29 @@
       <div class="name" v-else>{{ user?.displayName?.slice(0, 1) }}</div>
     </div>
     <div class="info">
-      <div class="name">{{ user?.displayName }}</div>
-      <!-- <div class="date">{{ date }}</div> -->
-      <div class="date">{{ date }}</div>
+      <div class="name">Автор: <span>{{ user!.displayName }}</span></div>
+      <div class="date">
+        <div class="created">Создано: <span>{{ createdAt }}</span></div>
+        <div v-if="editedAt" class="edited">Изменено: <span>{{ editedAt }}</span></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { Timestamp } from "firebase/firestore";
+import { computed, PropType } from "vue";
 
 import { useUserStore } from "@/stores/user";
 
 defineProps({
-  date: {
-    required: false,
-    type: Timestamp,
+  createdAt: {
+    required: true,
+    type: String as PropType<String>,
   },
+  editedAt: {
+    required: false,
+    type: String as PropType<String>
+  }
 });
 
 const userStore = useUserStore();
@@ -72,11 +77,18 @@ const user = computed(() => userStore.user);
     .name {
       font-size: 1.6rem;
       font-weight: 500;
+      span {
+        font-weight: 600;
+        color: $color-main-2;
+      }
     }
     .date {
       font-size: 1.28rem;
       font-weight: 600;
       color: rgba(#fff, 0.5);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: nowrap; 
     }
   }
 }

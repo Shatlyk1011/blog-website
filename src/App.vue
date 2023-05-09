@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent} from "vue";
 import { useRoute } from "vue-router";
 
 import Nav from "@/components/Navigation/Nav.vue";
@@ -18,11 +18,8 @@ export default defineComponent({
     const route = useRoute();
 
     const showNav = computed(() => {
-      if (route.name == "CreatePost" || route.name == "UpdatePost")
-        return false;
-      else {
-        return true;
-      }
+      if (route.name == "CreatePost" || route.name == "UpdatePost") return false;
+      else return true;
     });
 
     return { showNav };

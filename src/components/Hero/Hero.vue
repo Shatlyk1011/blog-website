@@ -10,7 +10,7 @@
           Блог о веб разработке, дизайне и о многом другом. Просто о сложном!
         </p>
 
-        <button tabindex="0" class="btn">Перейти к постам</button>
+        <router-link to="/all-posts" type="button" tabindex="0" class="btn">Перейти к постам</router-link>
       </div>
       <div class="img-container">
         <img src="../../assets/images/hero.jpg" alt="Hero image" />
@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
         line-height: 1.5;
       }
 
-      button {
+      .btn {
         padding: 1.6rem 3.2rem;
         border: 1px solid $color-main-1;
         align-self: flex-start;

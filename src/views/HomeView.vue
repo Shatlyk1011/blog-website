@@ -12,9 +12,9 @@
 import Hero from "@/components/Hero/Hero.vue";
 import Posts from "@/components/Posts/Posts.vue";
 
-import getCollection from "@/composables/firestore/getCollection";
+import getPosts from "@/composables/firestore/getPosts";
 
-const { documents: posts } = getCollection("posts");
+const { posts } = getPosts();
 </script>
 
 <style lang="scss" scoped>

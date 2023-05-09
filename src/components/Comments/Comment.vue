@@ -2,12 +2,11 @@
   <div class="comment" v-if="comment">
     <div class="container">
       <div class="info">
-        <img src="@/assets/images/hero.jpg" alt="" />
+        <div class="img" alt="">{{ comment.author?.slice(0, 1).toUpperCase() }}</div>
         <div class="author">{{ comment.author }}</div>
-        <!-- <div class="time">{{ comment.createdAt }}</div> -->
-        <div class="time">14.02.1999</div>
+        <div class="time">{{createdAt}}</div>
 
-        <OnClickOutside class="menu" @trigger="closeMenu">
+        <OnClickOutside class="menu" @trigger="closeMenu" v-if="owner">
           <font-awesome-icon
             class="icon"
             icon="fa-solid fa-ellipsis"
@@ -26,7 +25,7 @@
       <div class="change-comment" v-if="change">
         <textarea  v-model="updatedComment" />
         <div class="btns">
-          <button class="btn btn--update" @click="updateComment(comment.id, comment.text)" v-if="!isPending">Сохранить</button>
+          <button class="btn btn--update" @click="updateComment(comment.id)" v-if="!isPending">Сохранить</button>
           <button class="btn btn--update" v-if="isPending" disabled>Сохранить</button>
           <button class="btn btn--cancel" @click="cancelUpdate">Отмена</button>
         </div>
@@ -34,7 +33,7 @@
     </div>
     <div class="actions">
       <button class="like" @click="reactComment(comment.id)" v-if="!delay">
-        <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
+        <font-awesome-icon :class="ifLiked ? 'liked' : ''" icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
       </button>
       <button  class="like delay" @click="reactComment(comment.id)" v-if="delay" disabled>
@@ -53,12 +52,16 @@
 import { PropType, ref, computed } from "vue";
 import { Comment as IComment } from "@/assets/Types";
 import { nanoid } from "nanoid";
+import { Timestamp } from "firebase/firestore";
 
 import { useUserStore } from "@/stores/user";
 
 import { OnClickOutside } from "@vueuse/components";
 
 import useDocument from "@/composables/firestore/useDocument";
+
+import { formatRelative } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const props = defineProps({
   comment: {
@@ -67,7 +70,7 @@ const props = defineProps({
   },
   comments: {
     type: Array as PropType <IComment[]>,
-    required: true
+    required: false
   },
   postId: {
     type: String,
@@ -86,7 +89,6 @@ const isPending = ref(false)
 
 const closeMenu = () => (dropdown.value = false);
 
-
 const handleChange = (text: string) => {
   if(change.value === false) {
     change.value = true;
@@ -95,25 +97,41 @@ const handleChange = (text: string) => {
   }
 }
 
+let createdAt = computed(() => {
+  let comment = props.comment
+  let date = new Date()
+  if(comment) {
+    let newFormat = Number(comment.createdAt.toDate())
+    return formatRelative(newFormat, date, {locale: ru})
+  }
+})
+
+let comments = computed(() => {
+  if(props.comments) {
+    return [...props.comments]
+  }
+})
+
 const deleteComment = async (id: string) => {
   closeMenu();
   change.value = false;
-  let comments = props.comments.filter((comment: IComment) => comment.id !== id);
-  await updateDocument("posts", props.postId, {
-    comments,
-  });
+  if(comments.value) {
+    let filtered = comments.value.filter((comment: IComment) => comment.id !== id);
+    await updateDocument("posts", props.postId, {
+      comments: filtered
+    });
+  }
 };
 
-const updateComment = async (id: string, text:string) => {
+const updateComment = async (id: string) => {
   isPending.value = true
   let newId = nanoid(5);
-  let comments = props.comments
-  if (comments) {
-    let commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
-    comments[commentIndex].text = updatedComment.value
-    comments[commentIndex].id = newId
+  if (comments.value) {
+    let commentIndex = comments.value.findIndex((comment: IComment) => comment.id === id)
+    comments.value[commentIndex].text = updatedComment.value
+    comments.value[commentIndex].id = newId
     await updateDocument('posts', props.postId, {
-      comments
+      comments: comments.value
     })
     isPending.value = false
     change.value = false
@@ -122,8 +140,13 @@ const updateComment = async (id: string, text:string) => {
 
 const cancelUpdate = () => {
   change.value = false;
-
 }
+
+const ifLiked = computed(() => {
+  if(user.value) {
+    return props.comment.likedBy.find((n) => n === user.value?.displayName )
+  }
+})
 
 const reactComment = async (id: string) => {
   delay.value = true
@@ -148,6 +171,10 @@ const reactComment = async (id: string) => {
   }, 500);
 }
 
+const owner = computed(() => {
+  return user.value && user.value.uid === props.comment.authorId
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -171,8 +198,12 @@ const reactComment = async (id: string) => {
       gap: 1rem;
       align-items: center;
 
-      img {
+      .img {
+        background-color: $color-main-2;
         border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 3rem;
         height: 3rem;
         object-fit: cover;
@@ -304,12 +335,10 @@ const reactComment = async (id: string) => {
           }
         }
 
-        
         .btn-cancel {
           background-color: $color-gray-3;
         }
       }
-
     }
   }
   .actions {
@@ -341,6 +370,13 @@ const reactComment = async (id: string) => {
       cursor: not-allowed;
       color: rgba($color-text, 0.7)
     }
+    .like {
+      .liked {
+        color: $color-red;
+        font-size: 1.6rem;
+      }
+      }
+    
   }
 }
 </style>

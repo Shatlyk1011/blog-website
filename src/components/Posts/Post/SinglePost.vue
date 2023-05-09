@@ -5,18 +5,16 @@
     </div>
     <div class="container">
       <div class="wrapper">
-        <OnClickOutside class="menu" @trigger="menu = false">
+        <OnClickOutside class="menu" @trigger="menu = false" v-if="owner">
           <font-awesome-icon
             class="icon"
             icon="fa-solid fa-ellipsis"
             @click="menu = !menu"
           />
           <ul class="dropdown" v-if="menu">
-            <router-link
-              class="li"
-              :to="{ name: 'UpdatePost', params: { id: postId } }"
-              >Изменить</router-link
-            >
+            <router-link class="li" :to="{ name: 'UpdatePost', params: { id: postId } }">
+              Изменить
+            </router-link>
             <li @click="modalActive = true">Удалить</li>
           </ul>
         </OnClickOutside>
@@ -46,7 +44,13 @@
           </div>
         </Modal>
 
-        <UserData :date="post.createdAt" class="user-data" />
+        <div class="post-info">
+          <div class="author">Автор: <span>{{ post.userInfo.author }}</span></div>
+          <div class="dates">
+            <div class="create">Создано: <span>{{ post.createdAt }}</span></div>
+            <div class="edit" v-if="post.editedAt">Изменено: <span>{{ post.editedAt }}</span></div>
+          </div>
+        </div>
 
         <div class="title">{{ post.title }}</div>
         <div class="wrap">
@@ -74,14 +78,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed} from "vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 
+import { useUserStore } from "@/stores/user";
 import { OnClickOutside } from "@vueuse/components";
 
-
-import UserData from "@/components/Shared/UserData.vue";
 import Tags from "@/components/Shared/Tags.vue";
 import Modal from "@/components/Shared/Modal.vue";
 import Comments from "@/components/Comments/Comments.vue";
@@ -90,6 +93,9 @@ import Loading from "@/components/Shared/Loading.vue";
 import useDocument from "@/composables/firestore/useDocument";
 import useStorage from "@/composables/storage/useStorage";
 import getDocSnap from "@/composables/firestore/getDocSnap";
+
+import { formatRelative } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const props = defineProps({
   postId: {
@@ -101,14 +107,30 @@ const props = defineProps({
 let menu = ref(false);
 const modalActive = ref(false);
 
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
+
 const { deleteDocument, error } = useDocument();
 
 const { document: post, error: getError } = getDocSnap("posts", props.postId);
-setTimeout(() => {
-  console.log("EHEHEH", post.value);
-}, 1000);
 
 const { deleteImage, error: deleteError } = useStorage();
+
+//update comment time format
+/* const date = new Date();
+let comments = computed(() => {
+  if(post.value && post.value.comments?.length) {
+    return post.value?.comments.map((comment) => {
+      let newFormat = Number(comment.createdAt?.toDate())
+      let newTime = formatRelative(newFormat, date, {locale: ru})
+      return {...comment, createdAt: newTime}
+    })
+  }
+}) */
+
+const owner = computed(() => {
+  return user.value && user.value.uid === post.value?.userInfo.userUid
+})
 
 const route = useRoute();
 let postId = route.params.id as string;
@@ -218,8 +240,42 @@ const handleDelete = async () => {
         }
       }
 
-      .user-data {
-        margin-bottom: 2rem;
+      .post-info {
+        margin-bottom: 1rem;
+        .author {
+          margin-bottom: 1rem;
+          font-size: 2.4rem;
+          span {
+            font-weight: 500;
+            color: $color-main-2;
+          }
+        }
+        .dates {
+          font-size: 1.28rem;
+          align-items: center;
+          color: rgba($color-text, 0.6);
+          display: flex;
+          gap: 1.4rem;
+
+          span {
+            font-weight: 500;
+            color: rgba($color-text, 0.8);
+          }
+
+          .edit {
+            position: relative;
+            &::before {
+              content: '\00B7';
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              font-size: 3rem;
+              line-height: 1;
+              left: -1rem;
+              color: rgba($color-gray-3, 0.7);
+            }
+          }
+        }
       }
 
       .title {

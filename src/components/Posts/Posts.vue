@@ -1,33 +1,18 @@
 <template>
-  <PostItem v-for="post in formatDate" :key="post.id" :post="post" />
+  <PostItem v-for="post in posts" :key="post.id" :post="post" />
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType } from "vue";
+import { PropType } from "vue";
 import { Post } from "@/assets/Types";
 
 import PostItem from "@/components/Posts/Post/PostItem.vue";
 
-//форматирование времени
-import formatRelative from "date-fns/formatRelative";
-import { ru } from "date-fns/locale";
-import { Timestamp } from "firebase/firestore";
-
-const props = defineProps({
+defineProps({
   posts: {
-    required: true,
-    type: Array as PropType<Post[]>,
+    type: Array as PropType<Post[] | null>,
   },
 });
 
-const date = new Date();
-const formatDate = computed(() => {
-  if (props.posts) {
-    return props.posts.map((post: Post) => {
-      let newFormat = Number((post.createdAt as Timestamp).toDate());
-      let newTime = formatRelative(newFormat, date, { locale: ru });
-      return { ...post, createdAt: newTime };
-    });
-  }
-});
+
 </script>

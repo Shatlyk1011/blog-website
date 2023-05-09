@@ -21,6 +21,7 @@
           <router-link class="btn login-btn" to="/signup" v-if="!user"
             >Войти</router-link
           >
+          <!-- dropdown -->
           <OnClickOutside
             tabindex="0"
             class="profile"

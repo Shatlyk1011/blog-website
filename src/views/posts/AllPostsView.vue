@@ -9,9 +9,9 @@
 import Posts from "@/components/Posts/Posts.vue";
 import Loading from "@/components/Shared/Loading.vue";
 
-import getCollection from "@/composables/firestore/getCollection";
+import getPosts from "@/composables/firestore/getPosts";
 
-const { documents: posts } = getCollection("posts");
+const { posts } = getPosts();
 </script>
 
 <style lang="scss" scoped>

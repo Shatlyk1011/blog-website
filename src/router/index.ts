@@ -72,6 +72,7 @@ const routes = [
     name: "UpdatePost",
     component: UpdatePostView,
     props: true,
+    beforeEnter: requireAuth,
   },
 ];
 
