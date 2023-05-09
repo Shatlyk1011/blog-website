@@ -3,28 +3,22 @@
   <main class="app">
     <router-view />
   </main>
-  <!-- <Footer /> -->
 </template>
 
-<script lang="ts">
-import { computed, defineComponent} from "vue";
+<script lang="ts" setup>
+import { computed} from "vue";
 import { useRoute } from "vue-router";
 
 import Nav from "@/components/Navigation/Nav.vue";
 
-export default defineComponent({
-  components: { Nav },
-  setup() {
-    const route = useRoute();
+const route = useRoute();
 
-    const showNav = computed(() => {
-      if (route.name == "CreatePost" || route.name == "UpdatePost") return false;
-      else return true;
-    });
-
-    return { showNav };
-  },
+const showNav = computed(() => {
+  if (route.name == "CreatePost" || route.name == "UpdatePost") return false;
+  else return true;
 });
+
+
 </script>
 
 <style lang="scss" scoped>

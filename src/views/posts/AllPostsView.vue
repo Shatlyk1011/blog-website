@@ -3,11 +3,13 @@
     <Posts :posts="posts" v-if="posts" />
     <Loading v-else />
   </div>
+  <Footer/>
 </template>
 
 <script lang="ts" setup>
 import Posts from "@/components/Posts/Posts.vue";
 import Loading from "@/components/Shared/Loading.vue";
+import Footer from "@/components/Footer/Footer.vue";
 
 import getPosts from "@/composables/firestore/getPosts";
 
