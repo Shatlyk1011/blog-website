@@ -3,10 +3,10 @@
     <div class="container">
       <div class="description">
         <h1>
-          <span>{{ action }}</span> <br />
+          <span>{{ action }} <br></span>
           вместе с нами!
         </h1>
-        <p>
+          <p>
           Блог о веб разработке, дизайне и о многом другом. Просто о сложном!
         </p>
 
@@ -21,9 +21,11 @@
 
 <script lang="ts" setup>
 import nextElementList from "@/composables/nextElementList";
-import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
+import {TransitionPresets, useTransition} from '@vueuse/core'
 
 const action = ref("Создавай");
+
 let interval = ref();
 
 const changeActionWord = () => {
@@ -33,7 +35,13 @@ const changeActionWord = () => {
   }, 2700);
 };
 
-onBeforeMount(changeActionWord);
+/* const output = useTransition(action, {
+  duration: 1000,
+  transition: TransitionPresets.easeInOutCubic,
+})
+ */
+
+onMounted(changeActionWord);
 onBeforeUnmount(() => {
   clearInterval(interval.value);
 });
@@ -140,4 +148,33 @@ onBeforeUnmount(() => {
     }
   }
 }
+
+.switch-enter-from, .switch-leave-to {
+    opacity: 0;
+    transform: translateY(20px);
+  } 
+
+  .switch-enter-active,
+  .switch-leave-active {
+    transition: all 0.5s ease
+  }
+
+.action-enter-from {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.action-enter-active {
+  transition: all 0.3s ease-out;
+}
+.action-leave-to {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.action-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+
 </style>

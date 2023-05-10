@@ -38,7 +38,6 @@ import { PropType } from "vue";
 
 import { Post, PostDraft } from "@/assets/Types";
 
-import UserData from "@/components/Shared/UserData.vue";
 import Loading from "@/components/Shared/Loading.vue";
 
 defineProps({

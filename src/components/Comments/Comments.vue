@@ -21,16 +21,16 @@
       <p>Пожалуйста войдите что бы оставлять коментарии</p>
       <router-link class="link" to="/signin">Войти</router-link>
     </div>
-    <div class="wrap">
-      <Comment
-        :comment="comment"
-        :comments = "comments"
-        :postId="postId"
-        v-for="(comment, index) in comments"
-        :key="index"
-      />
+      <transition-group tag="div" name="fade" class="wrap">
+        <Comment
+          :comment="comment"
+          :comments = "comments"
+          :postId="postId"
+          v-for="(comment, index) in comments"
+          :key="index"
+        />
+      </transition-group>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -168,7 +168,21 @@ const addComment = async () => {
     }
   }
   .wrap {
+    position: relative;
+    padding: 0
 
   }
 }
+
+
+.fade-enter-active {
+  transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);;
+}
+
+.fade-enter-from{
+  opacity: 0;
+  transform: scaleY(0.01) translateX(100px);
+}
+
+
 </style>

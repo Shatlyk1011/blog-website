@@ -5,16 +5,18 @@
       @update:change="changeView = true"
       @update:preview="changeView = false"
     />
-    <keep-alive>
-      <component
+    <transition name="switch" mode="out-in" appear>
+      <keep-alive>
+        <component
         :class="['component', { preview: !changeView }]"
         @update:updateDraft="updateDraft"
         :is="changeView ? SubmitForm : PreviewPost"
         :postToUpdate="post"
         :post="post"
         ref="childComponent"
-      />
-    </keep-alive>
+        />
+      </keep-alive>
+    </transition>
     <HelperBoard class="helper-board" v-if="changeView" />
     <div class="submit" v-if="changeView">
       <button class="btn btn--submit" @click="handleUpdate">Сохранить</button>
@@ -144,5 +146,15 @@ const handleUpdate = () => {
       }
     }
   }
+}
+
+//transition between components
+.switch-enter-active,
+.switch-leave-active {
+  transition: opacity 0.2s linear;
+}
+.switch-enter-from,
+.switch-leave-to {
+  opacity: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-const getAvgTimeToRead = (str: String) => {
+const getAvgTimeToRead = (str: string) => {
   const avgTimeToRead = ref();
   if (str) {
     const length = str.split(" ").length;

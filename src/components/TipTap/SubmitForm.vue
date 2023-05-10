@@ -24,15 +24,13 @@
               id="changeLabel"
               for="image"
               class="options__btn options--change"
-              @input="handleImage"
-            >
+              @input="handleImage">
               <span>Изменить</span>
               <Input @input="handleImage" id="image" type="file" />
             </label>
             <button
               class="options__btn options--delete"
-              @click="clearImageValues"
-            >
+              @click="clearImageValues">
               Удалить
             </button>
           </div>
@@ -50,12 +48,13 @@
 
         <!-- Tags -->
         <Input
+          autocomplete="none"
           @keydown.enter="addTag($event)"
           id="Itag"
           placeholder="Добавьте теги (max 3)"
         />
 
-        <ul class="tags" v-if="tags.length">
+        <transition-group tag="ul" name="animation-tags" class="tags" v-if="tags.length">
           <li class="tag" v-for="tag in tags" :key="tag">
             <span>#{{ tag }}</span>
             <font-awesome-icon
@@ -66,7 +65,7 @@
               size="xs"
             />
           </li>
-        </ul>
+        </transition-group>
       </div>
       <!-- Editor -->
       <div class="editor-container">
@@ -445,6 +444,7 @@ onDeactivated(async () => {
       .tags {
         display: flex;
         gap: 1rem;
+        position: relative;
 
         .tag {
           list-style: none;
@@ -535,5 +535,22 @@ onDeactivated(async () => {
       line-height: 1.4;
     }
   }
+}
+
+.animation-tags-move,
+.animation-tags-enter-active,
+.animation-tags-leave-active {
+  transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);;
+}
+
+.animation-tags-enter-from,
+.animation-tags-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translateX(30px);
+}
+
+
+.animation-tags-leave-active {
+  position: absolute;
 }
 </style>
