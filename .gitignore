@@ -13,7 +13,6 @@ dist-ssr
 .vscode
 *.local
 coverage
-src/firebase
 ideas.txt
 
 # Editor directories and files
