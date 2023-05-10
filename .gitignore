@@ -10,6 +10,7 @@ lerna-debug.log*
 
 node_modules
 dist-ssr
+.vscode
 *.local
 coverage
 src/firebase
