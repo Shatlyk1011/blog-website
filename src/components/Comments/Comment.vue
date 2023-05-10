@@ -32,11 +32,11 @@
       </div>
     </div>
     <div class="actions">
-      <button class="like" @click="reactComment(comment.id)" v-if="!delay">
+      <button class="like" @click="reactComment(comment.id)" v-if="!delay" :disabled="!user">
         <font-awesome-icon :class="ifLiked ? 'liked' : ''" icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
       </button>
-      <button  class="like delay" @click="reactComment(comment.id)" v-if="delay" disabled>
+      <button  class="like delay" v-if="delay" disabled>
         <font-awesome-icon  icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
       </button>
@@ -151,9 +151,9 @@ const ifLiked = computed(() => {
 const reactComment = async (id: string) => {
   delay.value = true
   const comments = props.comments
-  const userName = user.value!.displayName
+  const userName = user.value?.displayName
   
-  if (comments && userName) {
+  if (comments && userName && user.value) {
     const commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
     const comment = comments[commentIndex]
     let userIndex = comment.likedBy.indexOf(userName)
@@ -305,6 +305,8 @@ const owner = computed(() => {
         display: flex;
         gap: 1rem;
 
+
+
         .btn {
           padding: 6px 10px;
           font-size: 1.28rem;
@@ -362,6 +364,10 @@ const owner = computed(() => {
 
       &:hover {
         background-color: $color-gray-3;
+      }
+
+      &[disabled] {
+        cursor: not-allowed;
       }
     }
 
