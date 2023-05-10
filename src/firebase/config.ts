@@ -4,7 +4,7 @@ import { getAuth, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_APP_FIREBASE_API_KEY,
   authDomain: "blog-website-e2738.firebaseapp.com",
   projectId: "blog-website-e2738",
   storageBucket: "blog-website-e2738.appspot.com",

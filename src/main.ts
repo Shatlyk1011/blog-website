@@ -35,7 +35,6 @@ import {
 import router from "./router";
 import "./style.scss";
 import App from "./App.vue";
-import { useUserStore } from "@/stores/user";
 
 library.add(
   faBold,
