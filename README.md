@@ -22,6 +22,6 @@
 
 
 ### live: https://set-web.netlify.app
-Тестовый аккаунт: 
-email: test@mailru
-pass: test123
+Тестовый аккаунт: <br/>
+email: **test@mailru**  <br/>
+pass: **test123**
