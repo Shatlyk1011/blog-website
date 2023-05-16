@@ -35,12 +35,11 @@ const searchInput = ref()
 const searchResult = computed(() => {
   if(search.value !== '' && posts.value) {
     return posts.value.filter((post) => {
-      return post.title.includes(search.value) 
+      return post.title.toLowerCase().includes(search.value.toLowerCase())
     })
   }
   return posts.value
 })
-
 
 const clearSearch = () => {
   search.value = '';
