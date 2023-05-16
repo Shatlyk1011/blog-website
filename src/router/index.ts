@@ -36,7 +36,7 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/all-posts/",
+    path: "/all-posts/:tag?",
     name: "AllPosts",
     component: AllPostsView,
   },

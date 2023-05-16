@@ -5,13 +5,13 @@
         <router-link
           :to="{ name: 'Post', params: { id: post.id } }"
           class="heading"
-          >{{ post.title }}</router-link
-        >
-        <!--         <Tags :tags="post.tags" :white="true" /> -->
+          >{{ post.title }}
+        </router-link>
         <ul class="tags">
-          <li class="tag" v-for="tag in post.tags" :key="tag">
-            <span>#{{ tag }}</span>
-          </li>
+          <router-link :to="{name: 'AllPosts', params: {tag: tag}}"
+            class="tag" v-for="tag in post.tags" :key="tag">
+            #{{ tag }}
+          </router-link>
         </ul>
       </div>
       <div class="img-container">

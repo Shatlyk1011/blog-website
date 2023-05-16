@@ -1,6 +1,7 @@
 <template>
   <div class="all-posts">
     <div class="search">
+      <button class="clear" @click="clear" v-if="route.params.tag">Очистить результат</button>
       <div class="wrap">
         <font-awesome-icon icon="fa-solid fa-magnifying-glass"/>
         <input v-model.trim="search" type="search" placeholder="Поиск..." ref="searchInput">
@@ -9,7 +10,7 @@
     <!-- if no search result  -->
     <div class="no-result" v-if="posts && !searchResult?.length">
       <p>К сожалению такого поста нету. </p>
-      <button @click="clearSearch">Попробуйте еще раз</button>
+      <button @click="clear">Попробуйте еще раз</button>
     </div>
     <!--  -->
     <div class="posts" v-if="posts">
@@ -22,17 +23,31 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router';
 import Posts from "@/components/Posts/Posts.vue";
 import Loading from "@/components/Shared/Loading.vue";
 import Footer from "@/components/Footer/Footer.vue";
 
 import getPosts from "@/composables/firestore/getPosts";
 
+import {Post} from '@/assets/Types'
+import router from '@/router';
+
+let route = useRoute()
+console.log('route', route);
 const { posts } = getPosts();
 const search = ref('')
 const searchInput = ref()
-
+console.log('route', route.params);
 const searchResult = computed(() => {
+  console.log('tags', route.params.tag);
+  if(route.params.tag && posts.value) {
+    let tag = route.params.tag as string
+    return posts.value.filter((post: Post) => {
+      return post.tags.includes(tag)
+    })
+  }
+
   if(search.value !== '' && posts.value) {
     return posts.value.filter((post) => {
       return post.title.toLowerCase().includes(search.value.toLowerCase())
@@ -41,9 +56,10 @@ const searchResult = computed(() => {
   return posts.value
 })
 
-const clearSearch = () => {
+const clear = () => {
   search.value = '';
   searchInput.value.focus()
+  router.push('/all-posts')
 }
 
 
@@ -63,7 +79,7 @@ const clearSearch = () => {
 
   .search {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     justify-content: flex-end;
     align-items: center;
     padding: 1rem 1.6rem;
@@ -72,6 +88,19 @@ const clearSearch = () => {
 
     &:focus {
       border: 1px solid $color-gray-3;
+    }
+
+    .clear {
+      border-radius: 1rem;
+      text-align: center;
+      background-color: $color-gray-2;
+       cursor: pointer;
+       padding: 1rem;
+      transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
+
+      &:hover {
+        background-color: $color-gray-3;
+      }
     }
 
     .wrap {
