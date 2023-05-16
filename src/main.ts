@@ -30,6 +30,7 @@ import {
   faReply,
   faHighlighter,
   faBars,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 
 import router from "./router";
@@ -63,7 +64,8 @@ library.add(
   faHeart,
   faReply,
   faHighlighter,
-  faBars
+  faBars,
+  faMagnifyingGlass
 );
 
 const pinia = createPinia();
