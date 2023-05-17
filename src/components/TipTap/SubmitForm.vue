@@ -173,7 +173,6 @@ const handleSubmit = async () => {
   }
   //update post
   if (props.postToUpdate) {
-    console.log("UPDATING YOUR POST");
     let postId = route.params.id as string;
     let postToUpdate = props.postToUpdate;
     isPending.value = true;

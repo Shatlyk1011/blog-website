@@ -7,13 +7,13 @@ const useSigninWithGithub = () => {
 
   const signinWithGithub = () => {
     signInWithPopup(auth, githubProvider).then((res) => {
-      console.log("res", res, res.user);
+      // console.log("res", res, res.user);
       const credential = GithubAuthProvider.credentialFromResult(res);
 
       const token = credential?.accessToken;
-      console.log("token", token);
+      // console.log("token", token);
       const user = res.user;
-      console.log(user);
+      // console.log(user);
     });
   };
   return { error, signinWithGithub };

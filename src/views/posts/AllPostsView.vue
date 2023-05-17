@@ -34,13 +34,10 @@ import {Post} from '@/assets/Types'
 import router from '@/router';
 
 let route = useRoute()
-console.log('route', route);
 const { posts } = getPosts();
 const search = ref('')
 const searchInput = ref()
-console.log('route', route.params);
 const searchResult = computed(() => {
-  console.log('tags', route.params.tag);
   if(route.params.tag && posts.value) {
     let tag = route.params.tag as string
     return posts.value.filter((post: Post) => {

@@ -4,7 +4,8 @@
       <div class="info">
         <div class="img" alt="">{{ comment.author?.slice(0, 1).toUpperCase() }}</div>
         <div class="author">{{ comment.author }}</div>
-        <div class="time">{{createdAt}}</div>
+        <div class="time" v-if="!editedAt">{{ createdAt }}</div>
+        <div class="time" v-if="editedAt"><span>изменено:&nbsp;</span>{{ editedAt }}  </div>
 
         <OnClickOutside class="menu" @trigger="closeMenu" v-if="owner">
           <font-awesome-icon
@@ -14,8 +15,8 @@
             @click="dropdown = !dropdown"
           />
           <ul class="dropdown" v-if="dropdown">
-            <li @click="handleChange(comment.text)">Изменить</li>
-            <li @click="deleteComment(comment.id)">Удалить</li>
+            <li type="button" @click="handleChange(comment.text)">Изменить</li>
+            <li type="button" @click="deleteComment(comment.id)">Удалить</li>
           </ul>
         </OnClickOutside>
       </div>
@@ -25,15 +26,14 @@
       <div class="change-comment" v-if="change">
         <textarea  v-model="updatedComment" />
         <div class="btns">
-          <button class="btn btn--update" @click="updateComment(comment.id)" v-if="!isPending">Сохранить</button>
-          <button class="btn btn--update" v-if="isPending" disabled>Сохранить</button>
-          <button class="btn btn--cancel" @click="cancelUpdate">Отмена</button>
+          <button class="btn btn--update" @click="updateComment(comment.id)" :disabled="isPending">Сохранить</button>
+          <button class="btn btn--cancel" @click="change = false">Отмена</button>
         </div>
       </div>
     </div>
     <div class="actions">
       <button class="like" @click="reactComment(comment.id)" v-if="!delay" :disabled="!user">
-        <font-awesome-icon :class="ifLiked ? 'liked' : ''" icon="fa-solid fa-heart" size="sm" />
+        <font-awesome-icon :class="checkLikes ? 'liked' : ''" icon="fa-solid fa-heart" size="sm" />
         <span>{{ comment.likedBy?.length | 0 }} лайков</span>
       </button>
       <button  class="like delay" v-if="delay" disabled>
@@ -50,16 +50,15 @@
 
 <script lang="ts" setup>
 import { PropType, ref, computed } from "vue";
-import { Comment as IComment } from "@/assets/Types";
+import { type Comment as IComment } from "@/assets/Types";
 import { nanoid } from "nanoid";
+import { OnClickOutside } from "@vueuse/components";
 import { Timestamp } from "firebase/firestore";
 
 import { useUserStore } from "@/stores/user";
 
-import { OnClickOutside } from "@vueuse/components";
-
 import useDocument from "@/composables/firestore/useDocument";
-
+//date-fns
 import { formatRelative } from "date-fns";
 import { ru } from "date-fns/locale";
 
@@ -106,11 +105,16 @@ let createdAt = computed(() => {
   }
 })
 
-let comments = computed(() => {
-  if(props.comments) {
-    return [...props.comments]
+let editedAt = computed(() => {
+  let comment = props.comment
+  let date = new Date()
+  if(comment.editedAt) {
+    let newFormat = Number(comment.editedAt.toDate())
+    return formatRelative(newFormat, date, {locale: ru})
   }
 })
+
+let comments = computed(() => props.comments ? [...props.comments] : null)
 
 const deleteComment = async (id: string) => {
   closeMenu();
@@ -130,6 +134,7 @@ const updateComment = async (id: string) => {
     let commentIndex = comments.value.findIndex((comment: IComment) => comment.id === id)
     comments.value[commentIndex].text = updatedComment.value
     comments.value[commentIndex].id = newId
+    comments.value[commentIndex].editedAt = Timestamp.fromDate(new Date()),
     await updateDocument('posts', props.postId, {
       comments: comments.value
     })
@@ -138,15 +143,7 @@ const updateComment = async (id: string) => {
   }
 };
 
-const cancelUpdate = () => {
-  change.value = false;
-}
-
-const ifLiked = computed(() => {
-  if(user.value) {
-    return props.comment.likedBy.find((n) => n === user.value?.displayName )
-  }
-})
+const checkLikes = computed(() => props.comment.likedBy.find((n) => n === user.value?.displayName ))
 
 const reactComment = async (id: string) => {
   delay.value = true
@@ -157,38 +154,29 @@ const reactComment = async (id: string) => {
     const commentIndex = comments.findIndex((comment: IComment) => comment.id === id)
     const comment = comments[commentIndex]
     let userIndex = comment.likedBy.indexOf(userName)
-    if(userIndex === -1) {
-      comment.likedBy.push(userName)
-    } else {
-      comment.likedBy.splice(userIndex, 1)
-    }
-    await updateDocument('posts', props.postId, {
-      comments
-    })
+    if(userIndex === -1) comment.likedBy.push(userName)
+    else comment.likedBy.splice(userIndex, 1)
+    await updateDocument('posts', props.postId, {comments})
   }
-  setTimeout(() => {
-    delay.value = false
-  }, 500);
+  setTimeout(() => delay.value = false, 500);
 }
 
-const owner = computed(() => {
-  return user.value && user.value.uid === props.comment.authorId
-})
+const owner = computed(() => user.value && user.value.uid === props.comment.authorId)
 
 </script>
 
 <style lang="scss" scoped>
 @import "@/globals";
 .comment {
-  margin-top: 3.2rem;
+  margin-top: 2.4rem;
   &:not(:last-child) {
-    margin-bottom: 2rem;
+    margin-bottom: 1.6rem;
   }
   .container {
     display: flex;
-    position: relative;
     flex-direction: column;
     gap: 1.6rem;
+    position: relative;
     padding: 1rem 1.6rem;
     border-radius: 4px;
     border: 1px solid rgba($color-gray-3, 0.4);
@@ -217,10 +205,6 @@ const owner = computed(() => {
         font-size: 1.28rem;
         font-weight: 500;
         color: $color-gray-3;
-        line-height: 1.1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
         &::before {
           content: "\25CF";
@@ -242,9 +226,7 @@ const owner = computed(() => {
           border-radius: 4px;
           line-height: 1;
           cursor: pointer;
-
           transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-
           &:hover {
             background-color: $color-gray-3;
           }
@@ -304,8 +286,6 @@ const owner = computed(() => {
       .btns {
         display: flex;
         gap: 1rem;
-
-
 
         .btn {
           padding: 6px 10px;
@@ -381,8 +361,7 @@ const owner = computed(() => {
         color: $color-red;
         font-size: 1.6rem;
       }
-      }
-    
+    }
   }
 }
 </style>

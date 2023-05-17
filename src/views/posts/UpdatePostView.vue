@@ -53,13 +53,11 @@ const childComponent = ref()
 let changeView = ref(true);
 
 const updateDraft = async () => {
-  console.log("updateDraft for update post");
   await getDoc("updateDraft", user.value!.uid);
 };
 
 onMounted(async () => {
   await getDoc("posts", props.id);
-  console.log("post to edit", post.value);
 });
 
 const handleUpdate = () => {

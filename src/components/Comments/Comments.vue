@@ -4,23 +4,23 @@
       <div class="input-area">
         <div class="img" alt="">{{ user.displayName?.slice(0, 1).toUpperCase() }}</div>
         <textarea
-        v-if="!isPending"
-        @keydown.enter.prevent="addComment"
-        v-model.trim="comment"
-        placeholder="Добавить комментарий..."
-        maxlength="200"
-      />
-      <textarea v-if="isPending" placeholder="Отправляем..." disabled />
-    </div>
-      <button class="btn" v-if="!isPending" @click="addComment">
+          @keydown.enter.prevent="addComment"
+          v-model.trim="comment"
+          placeholder="Добавить комментарий..."
+          maxlength="200"
+          :disabled="isPending"
+        />
+     </div>
+      <button class="btn" @click="addComment" :disabled="isPending">
         Опубликовать
       </button>
-      <button class="btn" v-if="isPending" disabled>Опубликовать</button>
     </div>
+    <!-- if no user -->
     <div class="no-user" v-else>
       <p>Пожалуйста войдите что бы оставлять коментарии</p>
       <router-link class="link" to="/signin">Войти</router-link>
     </div>
+    <!--  -->
       <transition-group tag="div" name="fade" class="wrap">
         <Comment
           :comment="comment"
@@ -47,7 +47,7 @@ import { Timestamp } from "firebase/firestore";
 
 import useDocument from "@/composables/firestore/useDocument";
 
-const props = defineProps({
+defineProps({
   comments: {
     required: false,
     type: Array as PropType<IComment[]>,
@@ -92,7 +92,6 @@ const addComment = async () => {
 <style lang='scss' scoped>
 @import "@/globals";
 .comments {
-
   .submit {
     display: flex;
     flex-direction: column;
@@ -137,7 +136,7 @@ const addComment = async () => {
     }
 
     .btn {
-      grid-column: 2 /-1;
+      grid-column: 2 / -1;
       padding: 1rem 1.6rem;
       background-color: $color-main-1;
       justify-self: start;
@@ -169,20 +168,14 @@ const addComment = async () => {
   }
   .wrap {
     position: relative;
-    padding: 0
-
+    padding: 0;
   }
 }
-
-
 .fade-enter-active {
   transition: all 0.3s cubic-bezier(0.83, 0, 0.17, 1);;
 }
-
 .fade-enter-from{
   opacity: 0;
   transform: scaleY(0.01) translateX(100px);
 }
-
-
 </style>

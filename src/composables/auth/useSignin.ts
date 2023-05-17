@@ -12,7 +12,6 @@ const login = async (email: string, password: string) => {
 
   try {
     const res = await signInWithEmailAndPassword(auth, email, password);
-    console.log();
     if (!res) {
       throw new Error();
     }
