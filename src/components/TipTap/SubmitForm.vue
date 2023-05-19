@@ -96,7 +96,7 @@ import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
 import { Post, PostDraft } from "@/assets/Types";
 
-const emit = defineEmits(["update:draft", "update:updateDraft"]);
+const emit = defineEmits(["update:draft", "update:updateDraft", "update:isPending"]);
 
 const props = defineProps({
   setDraft: {
@@ -161,14 +161,11 @@ const handleSubmit = async () => {
   submitError.value = null
   if(title.value.trim() === '') {
     submitError.value = null
-    // submitError.value = 'Загаловок не может быть пустым'
-    submitError.value = 'Загаловок заполни да, че сложно что ли'
-
+    submitError.value = 'Загаловок не может быть пустым'
     return;
   } else if((coverImage.value === null && !props.postToUpdate) || (coverImage.value === undefined && !props.postToUpdate)) {
     submitError.value = null
-    // submitError.value = 'Пожалуйста выберите обложку'
-    submitError.value = `Выберите законное, четкое фото ежжи.`
+    submitError.value = 'Пожалуйста выберите обложку'
     return;
   }
   //update post
@@ -318,6 +315,9 @@ onDeactivated(async () => {
   }
   imagePreviewUrl.value = "";
 });
+
+watch(isPending, () => emit('update:isPending', isPending.value)
+)
 </script>
 
 <style lang="scss">

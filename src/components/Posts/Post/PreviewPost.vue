@@ -1,9 +1,10 @@
 <template>
   <div class="preview-post" v-if="post">
     <div class="cover-image">
+      <!-- src="@/assets/images/image-template.jpg" -->
       <img
         class="img"
-        src="@/assets/images/image-template.jpg"
+        :src="imagePreviewUrl"
         alt=""
         title="Ваша обложка тут "
       />
@@ -12,7 +13,6 @@
       <div class="menu">
         <font-awesome-icon class="icon" icon="fa-solid fa-ellipsis" />
       </div>
-      <!-- <UserData date="12.02.12" class="user-data" /> -->
 
       <div class="title">{{ post.title }}</div>
       <div class="wrap">
@@ -44,6 +44,9 @@ defineProps({
   post: {
     type: Object as PropType<Post | PostDraft>,
   },
+  imagePreviewUrl: {
+    type: String
+  }
 });
 </script>
 

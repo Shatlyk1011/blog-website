@@ -10,6 +10,7 @@
         <component
         :class="['component', { preview: !changeView }]"
         @update:updateDraft="updateDraft"
+        @update:isPending="pendingState"
         :is="changeView ? SubmitForm : PreviewPost"
         :postToUpdate="post"
         :post="post"
@@ -19,10 +20,7 @@
     </transition>
     <HelperBoard class="helper-board" v-if="changeView" />
     <div class="submit" v-if="changeView">
-      <button class="btn btn--submit" @click="handleUpdate">Сохранить</button>
-      <button class="btn btn--isPending" v-if="false" disabled>
-        Сохранить
-      </button>
+      <button class="btn " @click="handleUpdate" :disabled="isPending">Сохранить</button>
     </div>
   </div>
 </template>
@@ -51,6 +49,7 @@ const user = computed(() => userStore.user);
 const childComponent = ref()
 
 let changeView = ref(true);
+let isPending = ref(false)
 
 const updateDraft = async () => {
   await getDoc("updateDraft", user.value!.uid);
@@ -63,6 +62,10 @@ onMounted(async () => {
 const handleUpdate = () => {
   childComponent.value.handleSubmit()
 }
+
+const pendingState = (payload: boolean) => {
+  isPending.value = payload
+};
 </script>
 
 <style lang="scss" scoped>
@@ -132,13 +135,11 @@ const handleUpdate = () => {
       justify-self: start;
       border-radius: 2px;
       transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-      &--submit {
-        &:hover {
-          background-color: rgba($color-main-1, 0.8);
-        }
+      &:hover {
+        background-color: rgba($color-main-1, 0.8);
       }
 
-      &--isPending {
+      &[disabled] {
         background-color: rgba($color-gray-3, 0.5);
         color: rgba($color-text, 0.5);
       }

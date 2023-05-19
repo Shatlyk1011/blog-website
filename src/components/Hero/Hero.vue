@@ -3,7 +3,7 @@
     <div class="container">
       <div class="description">
         <h1>
-          <span>{{ action }} <br></span>
+          <span>{{ action }} <br/></span> 
           вместе с нами!
         </h1>
           <p>
@@ -34,12 +34,6 @@ const changeActionWord = () => {
     action.value = nextElementList(actions.value, action.value);
   }, 2700);
 };
-
-/* const output = useTransition(action, {
-  duration: 1000,
-  transition: TransitionPresets.easeInOutCubic,
-})
- */
 
 onMounted(changeActionWord);
 onBeforeUnmount(() => {
@@ -76,9 +70,6 @@ onBeforeUnmount(() => {
         text-align: center;
       }
 
-
-
-
       h1 {
         font-family: $ff-mserrat;
         font-size: 4.8rem;
@@ -102,7 +93,7 @@ onBeforeUnmount(() => {
       }
       p {
         font-size: 2rem;
-        line-height: 1.5;
+        line-height: 1.4;
       }
 
       .btn {
@@ -122,7 +113,6 @@ onBeforeUnmount(() => {
         &:hover {
           box-shadow: none;
           background-color: $color-main-1;
-          // color: $color-gray-1;
         }
         @include respond(tab-port) {
           align-self: center
@@ -148,33 +138,5 @@ onBeforeUnmount(() => {
     }
   }
 }
-
-.switch-enter-from, .switch-leave-to {
-    opacity: 0;
-    transform: translateY(20px);
-  } 
-
-  .switch-enter-active,
-  .switch-leave-active {
-    transition: all 0.5s ease
-  }
-
-.action-enter-from {
-  opacity: 0;
-  transform: translateX(100px);
-}
-
-.action-enter-active {
-  transition: all 0.3s ease-out;
-}
-.action-leave-to {
-  opacity: 0;
-  transform: translateX(-100px);
-}
-
-.action-leave-active {
-  transition: all 0.3s ease-in;
-}
-
 
 </style>

@@ -42,7 +42,7 @@ const emitPreview = () => {
 
 .form-nav {
   & *:focus {
-    box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
+    box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
     outline: none;
   }
 
@@ -54,7 +54,7 @@ const emitPreview = () => {
     margin: 0 auto;
     padding: 1rem 0 1rem 3rem;
     @include respond(smallest) {
-      padding: 1rem
+      padding: 1rem;
     }
 
     .logo {
@@ -67,7 +67,11 @@ const emitPreview = () => {
       display: flex;
       gap: 1rem;
       font-size: 1.6rem;
-
+      @include respond(smallest) {
+        font-size: 1.4rem;
+        gap: 3px;
+      }
+ 
       button {
         padding: 6px;
         transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);

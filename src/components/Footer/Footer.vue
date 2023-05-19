@@ -1,17 +1,16 @@
 <template>
   <footer> 
     <div class="container">
-      <!-- <div class="logo">set-/</div> -->
-      <p>Для сотрудничество над этим сайтом пишите в мессенджерах</p>
+      <p>Для сотрудничество напишите в мессенджерах</p>
       <div class="icons">
         <a target="_blank" href="https://instagram.com/shatlykabdullayew">
           <img src="@/assets/images/instagram.svg" alt="instagram">
         </a>
         <a target="_blank" href="https://vk.com/shatlyk99">
-          <img src="@/assets/images/telegram.svg" alt="telegram">
+          <img src="@/assets/images/vk.svg" alt="telegram">
         </a>
         <a target="_blank" href="https://t.me/sh_1415926535">
-          <img src="@/assets/images/vk.svg" alt="vk">
+          <img src="@/assets/images/telegram.svg" alt="vk">
         </a>
       </div>
     </div> 

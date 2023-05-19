@@ -6,7 +6,7 @@
 
       <div class="wrapper" ref="wrapper">
         <ul>
-          <router-link class="link" to="/all-posts">Все посты</router-link>
+          <router-link  outer-link class="link" to="/all-posts">Все посты</router-link>
           <router-link class="link" to="#">Поиск</router-link>
           <!-- <router-link class="link" to="#">Обо мне</router-link> -->
         </ul>
@@ -28,7 +28,7 @@
             v-if="user"
             @trigger="dropdown = false"
           >
-            <div class="info" @click="dropdown = true">
+            <div class="info" @click="dropdown = !dropdown">
               <img :src="user.photoURL" alt="" v-if="user.photoURL" />
               <p v-else-if="!user.photoURL">
                 {{ user.displayName?.slice(0, 1).toUpperCase() }}
@@ -67,8 +67,6 @@
 <script lang="ts" setup>
 import { computed, ref} from "vue";
 import { OnClickOutside } from "@vueuse/components";
-import router from "@/router";
-
 import { useUserStore } from "@/stores/user";
 
 import useLogout from "@/composables/auth/useLogout";
@@ -91,9 +89,7 @@ const toggleMenu = () => {
 const handleLogout = async () => {
   dropdown.value = false;
   await logout();
-  if (!error.value) {
-    router.push("/signin");
-  }
+
 };
 </script>
 
@@ -105,7 +101,7 @@ const handleLogout = async () => {
   position: relative;
 
   & *:focus {
-    box-shadow: 0 0 0 0.4rem rgba($color-text, 0.4);
+    box-shadow: 0 0 0 0.3rem rgba($color-text, 0.4);
     outline: none;
   }
   nav {
@@ -146,6 +142,11 @@ const handleLogout = async () => {
       &.active {
         transform: translateX(0)
       }
+
+      @include respond(tab-port) {
+        gap: 1.6rem;
+      }
+
       @include respond(phone) {
         position: absolute;
         backdrop-filter: blur(5px);
@@ -155,13 +156,13 @@ const handleLogout = async () => {
         justify-content: center;
         align-items: center;
         z-index: 999;
-        width: 50%;
+        width: 55%;
         height: 60vh;
         background-color: rgba($color-gray-1, 0.6);
         transform: translateX(100%)
       }
       @include respond(smallest) {
-        width: 60%;
+        width: 65%;
       }
     }
 
@@ -170,6 +171,10 @@ const handleLogout = async () => {
       display: flex;
       align-items: center;
       gap: 2rem;
+
+      @include respond(tab-port) {
+        gap: 1rem;
+      }
 
       @include respond(phone) {
         flex-direction: column;
@@ -199,7 +204,6 @@ const handleLogout = async () => {
 
       .btn {
         padding: 1rem 1.6rem;
-
       }
 
       .create-btn {

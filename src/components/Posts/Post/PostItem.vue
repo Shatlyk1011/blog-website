@@ -56,7 +56,7 @@ defineProps({
   max-width: 100%;
 
   & *:focus {
-    box-shadow: 0 0 0 0.4rem rgba(#fff, 0.4);
+    box-shadow: 0 0 0 0.3rem rgba(#fff, 0.4);
     box-sizing: content-box;
     border-radius: 1px;
     outline: none;
@@ -84,7 +84,6 @@ defineProps({
       flex-direction: column;
       justify-content: space-between;
       gap: 1.2rem;
-      // justify-content: center;
       .heading {
         font-size: 2.4rem;
         font-family: $ff-mserrat;
@@ -199,17 +198,6 @@ defineProps({
 
           &:hover {
             border-bottom: 1px solid currentColor;
-          }
-        }
-      }
-      .source {
-        span {
-          color: $color-main-2;
-          border-bottom: 1px solid currentColor;
-          cursor: pointer;
-
-          &:hover {
-            border-bottom: 1px solid transparent;
           }
         }
       }
