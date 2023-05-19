@@ -32,6 +32,7 @@ export interface PostDraft {
   title: string;
   tags: string[];
   timeToRead: number;
+  imageUrl?: string;
   userInfo: {
     author: string;
     userUid: string;

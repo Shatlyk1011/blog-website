@@ -11,9 +11,11 @@
         :class="['component', { preview: !changeView }]"
         @update:updateDraft="updateDraft"
         @update:isPending="pendingState"
+        @update:imagePreviewUrl="setImagePreviewUrl"
         :is="changeView ? SubmitForm : PreviewPost"
         :postToUpdate="post"
         :post="post"
+        :imagePreviewUrl="imagePreviewUrl"
         ref="childComponent"
         />
       </keep-alive>
@@ -26,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, KeepAlive, computed } from "vue";
+import { ref, onMounted, KeepAlive, computed, type Ref } from "vue";
 
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
@@ -50,6 +52,7 @@ const childComponent = ref()
 
 let changeView = ref(true);
 let isPending = ref(false)
+let imagePreviewUrl = ref('')
 
 const updateDraft = async () => {
   await getDoc("updateDraft", user.value!.uid);
@@ -66,6 +69,11 @@ const handleUpdate = () => {
 const pendingState = (payload: boolean) => {
   isPending.value = payload
 };
+
+const setImagePreviewUrl = (payload: Ref<string>) => {
+  console.log('payload', payload);
+  imagePreviewUrl = payload
+}
 </script>
 
 <style lang="scss" scoped>

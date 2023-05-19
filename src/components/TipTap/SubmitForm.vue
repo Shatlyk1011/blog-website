@@ -96,7 +96,7 @@ import getAvgTimeToRead from "@/composables/getAvgTimeToRead";
 
 import { Post, PostDraft } from "@/assets/Types";
 
-const emit = defineEmits(["update:draft", "update:updateDraft", "update:isPending"]);
+const emit = defineEmits(["update:draft", "update:updateDraft", "update:isPending", "update:imagePreviewUrl"]);
 
 const props = defineProps({
   setDraft: {
@@ -293,7 +293,7 @@ onDeactivated(async () => {
       },
     });
   }
-  imagePreviewUrl.value = "";
+  // imagePreviewUrl.value = "";
   //save as draft in update-post
   if (props.postToUpdate) {
     emit("update:updateDraft");
@@ -313,11 +313,13 @@ onDeactivated(async () => {
       createdAt: Timestamp.fromDate(new Date()),
     });
   }
-  imagePreviewUrl.value = "";
+  // imagePreviewUrl.value = "";
 });
 
-watch(isPending, () => emit('update:isPending', isPending.value)
-)
+watch(isPending, () => emit('update:isPending', isPending.value));
+
+watch(imagePreviewUrl, () => emit('update:imagePreviewUrl', imagePreviewUrl.value))
+
 </script>
 
 <style lang="scss">

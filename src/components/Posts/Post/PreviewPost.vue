@@ -1,12 +1,11 @@
 <template>
   <div class="preview-post" v-if="post">
     <div class="cover-image">
-      <!-- src="@/assets/images/image-template.jpg" -->
-      <img
-        class="img"
-        :src="imagePreviewUrl"
-        alt=""
-        title="Ваша обложка тут "
+      <img v-if="setImage" class="img" :src="setImage"
+        alt="preview image" title="Ваша обложка тут"
+      />
+      <img v-else class="img" src="@/assets/images/image-template.jpg"
+        alt="preview image" title="Ваша обложка тут"
       />
     </div>
     <div class="container">
@@ -34,13 +33,13 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from "vue";
+import { PropType, computed } from "vue";
 
 import { Post, PostDraft } from "@/assets/Types";
 
 import Loading from "@/components/Shared/Loading.vue";
 
-defineProps({
+const props = defineProps({
   post: {
     type: Object as PropType<Post | PostDraft>,
   },
@@ -48,6 +47,13 @@ defineProps({
     type: String
   }
 });
+
+const setImage = computed(() => {
+  if(props.imagePreviewUrl) return props.imagePreviewUrl;
+  else if(props.post?.imageUrl) return props.post?.imageUrl;
+  else return null;  
+})
+console.log('imagePreviewUrl', props.imagePreviewUrl);
 </script>
 
 <style lang="scss" scoped>
