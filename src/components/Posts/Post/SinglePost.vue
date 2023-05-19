@@ -62,6 +62,7 @@
         </div>
 
         <div class="html" v-html="post.html"></div>
+        <h4>Остались вопросы? Задайте их в коментариях!</h4>
       </div>
       <div class="comments-container">
         <comments :comments="post.comments" />
@@ -116,18 +117,6 @@ const { document: post, error: getError } = getDocSnap("posts", props.postId);
 
 const { deleteImage, error: deleteError } = useStorage();
 
-//update comment time format
-/* const date = new Date();
-let comments = computed(() => {
-  if(post.value && post.value.comments?.length) {
-    return post.value?.comments.map((comment) => {
-      let newFormat = Number(comment.createdAt?.toDate())
-      let newTime = formatRelative(newFormat, date, {locale: ru})
-      return {...comment, createdAt: newTime}
-    })
-  }
-}) */
-
 const owner = computed(() => {
   return user.value && user.value.uid === post.value?.userInfo.userUid
 })
@@ -140,9 +129,8 @@ const handleDelete = async () => {
     await deleteImage(post.value!.imageRef); //nonsense
     await deleteDocument("posts", props.postId);
   }
-  if (!error.value) {
-    router.push("/all-posts");
-  }
+  if (!error.value && !deleteError.value) router.push("/all-posts");
+
 };
 </script>
 
@@ -152,7 +140,7 @@ const handleDelete = async () => {
 .single-post {
   max-width: 85rem;
   margin: 0 auto;
-  background-color: $color-gray-2; // ?
+  background-color: rgba($color-gray-2, 0.6); // ?
   border-radius: 2px;
   overflow: hidden;
 
@@ -330,6 +318,14 @@ const handleDelete = async () => {
         li {
           font-size: 2rem;
         }
+      }
+
+      h4 {
+        margin-top: 3.2rem;
+        font-size: 2.5rem;
+        font-family: $ff-mserrat;
+        font-weight: 700;
+        color: $color-gray-3;
       }
     }
 

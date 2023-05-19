@@ -53,7 +53,6 @@ const setImage = computed(() => {
   else if(props.post?.imageUrl) return props.post?.imageUrl;
   else return null;  
 })
-console.log('imagePreviewUrl', props.imagePreviewUrl);
 </script>
 
 <style lang="scss" scoped>
@@ -72,7 +71,6 @@ console.log('imagePreviewUrl', props.imagePreviewUrl);
       max-height: 32rem;
       object-fit: cover;
       position: relative;
-      top: 0;
     }
   }
   .container {
@@ -99,38 +97,6 @@ console.log('imagePreviewUrl', props.imagePreviewUrl);
           background-color: $color-gray-3;
         }
       }
-
-      .dropdown {
-        padding: 6px 1rem;
-        text-align: left;
-        border-radius: 4px;
-        background-color: $color-gray-1;
-        list-style: none;
-        color: $color-text;
-        width: 8rem;
-        .li,
-        li {
-          font-size: 1rem;
-          padding: 2px 4px;
-          border-radius: 3px;
-          cursor: pointer;
-
-          &:hover {
-            color: $color-main-2;
-          }
-          &:last-child {
-            margin-top: 6px;
-
-            &:hover {
-              color: $color-text;
-            }
-          }
-        }
-      }
-    }
-
-    .user-data {
-      margin-bottom: 2rem;
     }
 
     .title {

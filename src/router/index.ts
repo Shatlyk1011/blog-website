@@ -8,8 +8,8 @@ import {
 import HomeView from "@/views/HomeView.vue";
 const AllPostsView = () => import("@/views/posts/AllPostsView.vue");
 const CreatePostView = () => import("@/views/posts/CreatePostView.vue");
-const SigninView = () => import("@/views/auth/SigninView.vue");
-const SignupView = () => import("@/views/auth/SignupView.vue");
+const SigninView = () => import(/* webpackChunkName: "register" */ "@/views/auth/SigninView.vue");
+const SignupView = () => import(/* webpackChunkName: "register" */ "@/views/auth/SignupView.vue");
 const PostView = () => import("@/views/posts/PostView.vue");
 const DraftsView = () => import("@/views/DraftsView.vue");
 const UpdatePostView = () => import("@/views/posts/UpdatePostView.vue");
