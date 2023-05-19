@@ -64,7 +64,6 @@ const pendingState = (payload: boolean) => {
 };
 
 const setImagePreviewUrl = (payload: Ref<string>) => {
-  console.log('payload', payload);
   imagePreviewUrl = payload
 }
 

@@ -6,13 +6,13 @@ import {
 } from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
-import AllPostsView from "@/views/posts/AllPostsView.vue";
-import CreatePostView from "@/views/posts/CreatePostView.vue";
-import SigninView from "@/views/auth/SigninView.vue";
-import SignupView from "@/views/auth/SignupView.vue";
-import PostView from "@/views/posts/PostView.vue";
-import DraftsView from "@/views/DraftsView.vue";
-import UpdatePostView from "@/views/posts/UpdatePostView.vue";
+const AllPostsView = () => import("@/views/posts/AllPostsView.vue");
+const CreatePostView = () => import("@/views/posts/CreatePostView.vue");
+const SigninView = () => import("@/views/auth/SigninView.vue");
+const SignupView = () => import("@/views/auth/SignupView.vue");
+const PostView = () => import("@/views/posts/PostView.vue");
+const DraftsView = () => import("@/views/DraftsView.vue");
+const UpdatePostView = () => import("@/views/posts/UpdatePostView.vue");
 
 import { auth } from "@/firebase/config";
 
