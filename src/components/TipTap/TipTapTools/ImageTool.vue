@@ -20,7 +20,6 @@ const props = defineProps({
 
 const addImage = () => {
   const url = window.prompt("URL");
-
   if (url) {
     props.editor.chain().focus().setImage({ src: url }).run();
   }

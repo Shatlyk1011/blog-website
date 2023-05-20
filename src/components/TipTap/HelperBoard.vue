@@ -3,22 +3,16 @@
     <h2>Доска помощи при использовании редоктора</h2>
     <ul>
       <li>
-        <strong>**text** или __text__</strong>
+        <strong>**text**</strong> или <strong>__text__</strong>
       </li>
-      <li><em>*text* или _text_</em></li>
-      <li><s>~~text~~</s> ~~~~</li>
+      <li><em>*text*</em> или <em>_text_</em></li>
+      <li><s>~~text~~</s> ~~text~~</li>
       <li><code>`text`</code> (код)</li>
 
-      <li><code>```</code> (блок кода)</li>
+      <li><code>```ts/css/html</code> (блок кода)</li>
       <li>
-        <ul>
-          <li>+ или * + space</li>
-        </ul>
+        <blockquote>> </blockquote>
       </li>
-      <li>
-        <blockquote>></blockquote>
-      </li>
-      <li># h1-h6</li>
     </ul>
   </div>
 </template>

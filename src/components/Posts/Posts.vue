@@ -13,6 +13,4 @@ defineProps({
     type: Array as PropType<Post[] | null>,
   },
 });
-
-
 </script>

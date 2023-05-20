@@ -95,9 +95,6 @@ import useDocument from "@/composables/firestore/useDocument";
 import useStorage from "@/composables/storage/useStorage";
 import getDocSnap from "@/composables/firestore/getDocSnap";
 
-import { formatRelative } from "date-fns";
-import { ru } from "date-fns/locale";
-
 const props = defineProps({
   postId: {
     type: String,

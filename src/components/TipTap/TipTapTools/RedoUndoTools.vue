@@ -1,5 +1,5 @@
 <template>
-  <div class="redo-undo">
+  <div class="actions">
     <TipTapButton
       faIcon="fa-solid fa-arrow-left"
       tooltip="отменить"
@@ -29,7 +29,7 @@ defineProps({
 </script>
 
 <style lang='scss' scoped>
-.redo-undo {
+.actions {
   display: flex;
   gap: 1rem;
 }

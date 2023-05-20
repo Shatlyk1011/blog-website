@@ -10,7 +10,7 @@
         <div class="wrap" v-if="!imagePreviewUrl">
           <label tabindex="0" id="coverSelect" for="image">
             <span>Выберите обложку</span>
-            <Input tabindex="-1" @input="handleImage" id="image" type="file" required />
+            <Input tabindex="-1" @input="handleImage" id="image" type="file"/>
           </label>
           <div type="button" @click="setFormerImage" v-if="postToUpdate" class="old-cover">
             Вставить прежнее фото
@@ -43,7 +43,6 @@
           id="Ititle"
           placeholder="Загаловок вашего поста..."
           autocomplete="off"
-          required
         />
 
         <!-- Tags -->
@@ -77,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, PropType, watch, onActivated, onDeactivated, computed, type Ref} from "vue";
+import {ref, PropType, watch, onActivated, onDeactivated, computed, type Ref, onBeforeUnmount} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EditorContent } from "@tiptap/vue-3";
 
@@ -122,7 +121,7 @@ const postUpdated = ref(false);
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
-let submitError = ref<null| string>()
+let submitError = ref<null| string>(null)
 
 const route = useRoute();
 const router = useRouter();
@@ -160,11 +159,9 @@ const handleSubmit = async () => {
   const html = await getInnerHTML();
   submitError.value = null
   if(title.value.trim() === '') {
-    submitError.value = null
     submitError.value = 'Загаловок не может быть пустым'
     return;
-  } else if((coverImage.value === null && !props.postToUpdate) || (coverImage.value === undefined && !props.postToUpdate)) {
-    submitError.value = null
+  } else if(!coverImage.value || coverImage.value === '' ) {
     submitError.value = 'Пожалуйста выберите обложку'
     return;
   }
@@ -229,7 +226,7 @@ const handleSubmit = async () => {
       createdAt: Timestamp.fromDate(new Date()),
     };
     await addDocument("posts", newPost);
-    //delete createDraft
+    //delete drafts
     await deleteDocument("createDraft", user.value!.uid);
 
     isPending.value = false;
@@ -319,6 +316,7 @@ onDeactivated(async () => {
 watch(isPending, () => emit('update:isPending', isPending.value));
 
 watch(imagePreviewUrl, () => emit('update:imagePreviewUrl', imagePreviewUrl.value))
+onBeforeUnmount(() => imagePreviewUrl.value = "");
 
 </script>
 
