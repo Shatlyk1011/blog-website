@@ -1,14 +1,6 @@
 import { ref } from "vue";
 import { db } from "@/firebase/config";
-import {
-  addDoc,
-  collection,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+import { addDoc, collection, setDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { Post, PostDraft, Comment } from "@/assets/Types";
 
 const error = ref<string | null>(null);

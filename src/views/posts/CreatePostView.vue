@@ -21,7 +21,7 @@
         />
       </keep-alive>
     </transition>
-    <HelperBoard class="helper-board" v-if="changeView" />
+    <HelperBoard class="helper-board" :changeView="changeView" />
     <div class="submit" v-if="changeView">
       <button class="btn" @click="handleSubmit" :disabled="isPending">Опубликовать</button>
     </div>
@@ -54,18 +54,10 @@ const user = computed(() => userStore.user);
 const { getDoc, document: draft } = getDocument();
 const updateDraft = async () => await getDoc("createDraft", user.value!.uid);
 
+const handleSubmit = () => childComponent.value.handleSubmit()
 
-const handleSubmit = () => {
-  childComponent.value.handleSubmit()
-}
-
-const pendingState = (payload: boolean) => {
-  isPending.value = payload
-};
-
-const setImagePreviewUrl = (payload: Ref<string>) => {
-  imagePreviewUrl = payload
-}
+const pendingState = (payload: boolean) => isPending.value = payload
+const setImagePreviewUrl = (payload: Ref<string>) => imagePreviewUrl = payload
 
 </script>
 

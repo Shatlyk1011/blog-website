@@ -12,7 +12,7 @@
       <p>К сожалению такого поста нету. </p>
       <button @click="clear">Попробуйте еще раз</button>
     </div>
-    <!--  -->
+    <!---->
     <div class="posts" v-if="posts">
       <Posts :posts="searchResult"  />
     </div>
@@ -38,13 +38,14 @@ const { posts } = getPosts();
 const search = ref('')
 const searchInput = ref()
 const searchResult = computed(() => {
+  //filter by tags
   if(route.params.tag && posts.value) {
     let tag = route.params.tag as string
     return posts.value.filter((post: Post) => {
       return post.tags.includes(tag)
     })
   }
-
+  //search filter
   if(search.value !== '' && posts.value) {
     return posts.value.filter((post) => {
       return post.title.toLowerCase().includes(search.value.toLowerCase())
@@ -58,8 +59,6 @@ const clear = () => {
   searchInput.value.focus()
   router.push('/all-posts')
 }
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -91,8 +90,8 @@ const clear = () => {
       border-radius: 1rem;
       text-align: center;
       background-color: $color-gray-2;
-       cursor: pointer;
-       padding: 1rem;
+      cursor: pointer;
+      padding: 1rem;
       transition: all 0.2s cubic-bezier(0.83, 0, 0.17, 1);
 
       &:hover {
@@ -120,6 +119,7 @@ const clear = () => {
     display:flex;
     flex-direction: column;
     gap: 1.6rem;
+    
     p {
       font-size: 3.1rem
     }

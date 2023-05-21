@@ -1,8 +1,8 @@
 import { ref, watchEffect } from "vue";
+import { Post } from "@/assets/Types";
 
 import { db } from "@/firebase/config";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { Post } from "@/assets/Types";
 
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
@@ -20,11 +20,11 @@ const getPosts = () => {
     snap.docs.forEach((doc) => {
       //formatting date
       let newFormat = Number((doc.data().createdAt as Timestamp).toDate());
-      let newTime = formatRelative(newFormat, date, { locale: ru });
+      let formatTime = formatRelative(newFormat, date, { locale: ru });
       results.push({
         ...(doc.data() as Post),
         id: doc.id,
-        createdAt: newTime,
+        createdAt: formatTime,
       });
     });
 

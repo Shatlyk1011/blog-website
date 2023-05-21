@@ -5,6 +5,7 @@
       @update:change="changeView = true"
       @update:preview="changeView = false"
     />
+    <div class="error" v-if="error">{{ error }}</div>
     <transition name="switch" mode="out-in" appear>
       <keep-alive>
         <component
@@ -20,7 +21,6 @@
         />
       </keep-alive>
     </transition>
-    <HelperBoard class="helper-board" v-if="changeView" />
     <div class="submit" v-if="changeView">
       <button class="btn " @click="handleUpdate" :disabled="isPending">Сохранить</button>
     </div>
@@ -33,7 +33,6 @@ import { ref, onMounted, KeepAlive, computed, type Ref } from "vue";
 import SubmitForm from "@/components/TipTap/SubmitForm.vue";
 import PreviewPost from "@/components/Posts/Post/PreviewPost.vue";
 import FormNav from "@/components/Navigation/FormNav.vue";
-import HelperBoard from "@/components/TipTap/HelperBoard.vue";
 
 import getDocument from "@/composables/firestore/getDocument";
 import { useUserStore } from "@/stores/user";
@@ -54,21 +53,13 @@ let changeView = ref(true);
 let isPending = ref(false)
 let imagePreviewUrl = ref('')
 
-const updateDraft = async () => {
-  await getDoc("updateDraft", user.value!.uid);
-};
+onMounted(async () => await getDoc("posts", props.id));
 
-onMounted(async () => {
-  await getDoc("posts", props.id);
-});
+const updateDraft = async () => await getDoc("updateDraft", user.value!.uid);
 
-const handleUpdate = () => {
-  childComponent.value.handleSubmit()
-}
+const handleUpdate = () => childComponent.value.handleSubmit()
 
-const pendingState = (payload: boolean) => {
-  isPending.value = payload
-};
+const pendingState = (payload: boolean) => isPending.value = payload
 
 const setImagePreviewUrl = (payload: Ref<string>) => {
   console.log('payload', payload);

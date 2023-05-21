@@ -51,9 +51,9 @@ $ff-mserrat: "Montserrat", sans-serif;
       @content;
     } //1040px
   }
-  /*   @if $breakpoint == big-desktop {
-    @media only screen and (min-width: 65em) {
+  @if $breakpoint == big-desktop {
+    @media only screen and (min-width: 120em) {
       @content;
-    } //1800
-  } */
+    } //1920px
+  }
 }

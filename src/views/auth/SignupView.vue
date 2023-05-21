@@ -11,7 +11,7 @@
           <span>Google</span>
         </button>
         <button @click="handleGithubSignin">
-          <img src="@/assets/images/github-logo.svg" alt="Google icon" />
+          <img src="@/assets/images/github-logo.svg" alt="Github icon" />
           <span>Github</span>
         </button>
       </div>
@@ -23,11 +23,11 @@
         <Input type="email" v-model="email" placeholder="Email" required />
         <div class="password">
           <Input
-            ref="passwordRef"
             :type="passwordBool ? 'text' : 'password'"
             v-model="password"
             placeholder="Пароль"
             autocomplete="on"
+            ref="passwordRef" 
             required
           />
           <font-awesome-icon
@@ -40,13 +40,13 @@
         <div class="error" v-if="error">{{ error }}</div>
         <div class="error" v-if="googleAuthError">{{ googleAuthError }}</div>
         <div class="error" v-if="githubAuthError">{{ githubAuthError }}</div>
-        <button>Регистрация</button>
+        <button :disabled="isPending">Регистрация</button>
 
         <span>
           Есть аккаунт?
           <router-link class="link" :to="{ name: 'Signin' }">
-            Войдите</router-link
-          >
+            Войдите
+          </router-link>
         </span>
       </form>
     </div>
@@ -66,7 +66,7 @@ import useSigninWithGithub from "@/composables/auth/useSigninWithGithub";
 const userName = ref("");
 const email = ref("");
 const password = ref("");
-let passwordBool = ref(false);
+const passwordBool = ref(false);
 
 const { error, isPending, signup } = useSignup();
 const { error: googleAuthError, signinWithGoogle } = useSigninWithGoogle();
@@ -74,24 +74,18 @@ const { error: githubAuthError, signinWithGithub } = useSigninWithGithub();
 
 const handleSignup = async () => {
   await signup(email.value, password.value, userName.value);
-  if (!error.value) {
-    router.push("/");
-  }
+  if (!error.value) router.push("/all-posts");
 };
 
 const handleGoogleSignin = async () => {
   await signinWithGoogle();
-  if (!googleAuthError.value) {
-    router.push("/");
-  }
+  if (!googleAuthError.value) router.push("/all-posts");
 };
 
 //not working properly
 const handleGithubSignin = async () => {
   await signinWithGithub();
-  if (!githubAuthError.value) {
-    router.push("/");
-  }
+  if (!githubAuthError.value) router.push("/all-posts");
 };
 </script>
 
@@ -99,7 +93,6 @@ const handleGithubSignin = async () => {
 @import '@/globals';
 
 .signup {
-  margin: 4.8rem 0;
   display: grid;
   grid-template-columns: 6fr 7fr;
   text-align: center;
@@ -154,7 +147,6 @@ const handleGithubSignin = async () => {
       font-size: 3.1rem;
       font-weight: 600;
       color: $color-main-1;
-;
       margin-bottom: 4.2rem;
 
       @include respond(phone) {
@@ -164,7 +156,6 @@ const handleGithubSignin = async () => {
     .sign-btns {
       display: flex;
       gap: 3.2rem;
-
       justify-content: center;
 
       & button {
@@ -191,6 +182,7 @@ const handleGithubSignin = async () => {
       font-weight: 700;
       color: $color-gray-3;
       font-family: $ff-mserrat;
+
       @include respond(phone) {
         margin-top: 3.2rem;
       }
@@ -203,7 +195,6 @@ const handleGithubSignin = async () => {
       gap: 4.8rem;
       text-align: left;
       width: 100%;
-      // border: 1px solid $color-gray-2;
 
       input {
         all: unset;

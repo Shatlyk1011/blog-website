@@ -12,6 +12,10 @@ html {
   overflow-x: hidden;
   height: 100%;
 
+  @include respond(big-desktop) {
+    font-size: 75%;
+  }
+
   @include respond(smallest) {
     font-size: 50%;
   }

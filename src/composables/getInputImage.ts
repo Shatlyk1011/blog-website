@@ -8,13 +8,10 @@ let image = ref();
 
 const handleImage = (e: Event) => {
   let selected = e.target as HTMLInputElement;
-  if (
-    selected.files?.length &&
-    allowedImageTypes.includes(selected.files[0].type)
-  ) {
+  if (selected.files?.length && allowedImageTypes.includes(selected.files[0].type)) {
     let img = selected.files[0];
     image.value = img;
-    console.log("image", image.value);
+    // console.log("image", image.value);
     imagePreviewUrl.value = URL.createObjectURL(img);
   } else {
     imageTypeError.value = "Только png/jpen/gif форматы";

@@ -30,7 +30,7 @@ const showFooter = computed(() => {
 <style lang="scss" scoped>
 .app {
   max-width: 144rem; 
-  height: calc(100vh - 9rem);
+  height: 85vh;
   box-sizing: border-box;
   margin: 0 auto;
   position: relative;

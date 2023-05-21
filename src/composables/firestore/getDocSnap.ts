@@ -5,7 +5,6 @@ import { Post } from "@/assets/Types";
 
 import formatRelative from "date-fns/formatRelative";
 import { ru } from "date-fns/locale";
-import { Timestamp } from "firebase/firestore";
 
 const date = new Date();
 

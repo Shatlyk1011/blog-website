@@ -5,19 +5,17 @@
       <form @submit.prevent="handleSignin">
         <Input
           type="email"
-          class="input"
           v-model="email"
           placeholder="Email"
           required
         />
         <div class="password">
           <Input
-            ref="passwordRef"
             :type="togglePassword ? 'text' : 'password'"
-            class="input"
             v-model="password"
             placeholder="Пароль"
             autocomplete="on"
+            ref="passwordRef"
             required
           />
           <font-awesome-icon
@@ -28,13 +26,13 @@
           />
         </div>
         <div class="error" v-if="error">{{ error }}</div>
-        <button>Войти</button>
+        <button :disabled="isPending">Войти</button>
 
         <span>
           Нету аккаунта?
           <router-link class="link" :to="{ name: 'Signup' }">
-            Регистрация</router-link
-          >
+            Регистрация
+          </router-link>
         </span>
       </form>
     </div>
@@ -64,67 +62,21 @@ const handleSignin = async () => {
 </script>
 
 <style lang="scss" scoped>
-$color-black: #000;
-$color-white: #fff;
-$color-text: #e9ecef;
-
-$color-main-1: #d84f2a;
-$color-main-2: #f9744b;
-
-$color-gray-1: #212529;
-$color-gray-2: #495057;
-$color-gray-3: #868e96;
-
-$ff-roboto: "Roboto", sans-serif;
-$ff-mserrat: "Montserrat", sans-serif;
-
+@import '@/globals';
 .signup {
   margin: 6.4rem 0;
-  height: 65%;
   width: 100%;
   text-align: center;
-  border-radius: 4px;
-
   .form-container {
     padding: 4.8rem 3.2rem;
-    border-radius: 4px;
-    background-color: $color-gray-1;
-    width: 45%;
+    width: 40%;
     margin: 0 auto;
     h2 {
       font-size: 3.1rem;
       font-weight: 600;
       color: $color-main-1;
       width: 100%;
-      margin-bottom: 4.2rem;
-    }
-    .sign-btns {
-      display: flex;
-      gap: 3.2rem;
-      margin-top: 4.2rem;
-      justify-content: center;
-
-      & button {
-        border: 1px solid $color-gray-2;
-        padding: 1.6rem 1rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-
-        &:hover {
-          border-color: $color-gray-3;
-          box-shadow: 6.7px 6.7px 8.4px rgba(#fff, 0.06);
-        }
-      }
-    }
-
-    h3 {
-      text-align: center;
-      margin-top: 6.4rem;
-      font-weight: 700;
-      color: $color-gray-3;
-      font-family: $ff-mserrat;
+      margin-bottom: 3.2rem;
     }
 
     form {
@@ -135,13 +87,12 @@ $ff-mserrat: "Montserrat", sans-serif;
       text-align: left;
       width: 100%;
 
-      .input {
+      input {
         all: unset;
         border-bottom: 1px solid $color-gray-2;
         background-color: transparent;
         width: 100%;
         padding: 1rem;
-        outline: none;
         box-sizing: border-box;
 
         &:focus {
@@ -180,7 +131,8 @@ $ff-mserrat: "Montserrat", sans-serif;
 
       button {
         background-color: $color-main-1;
-        padding: 1.8rem 0;
+        padding: 1.4rem ;
+        font-size: 2rem;
         width: 100%;
         text-align: center;
 
