@@ -28,11 +28,10 @@
               <span>Изменить</span>
               <Input @input="handleImage" id="image" type="file" />
             </label>
-            <button
-              class="options__btn options--delete"
-              @click="clearImageValues">
+
+            <div type="button" class="options__btn options--delete" @click="clearImageValues">
               Удалить
-            </button>
+            </div>
           </div>
         </div>
         <div class="error" v-if="imageTypeError">{{ imageTypeError }}</div>
@@ -193,15 +192,6 @@ const handleSubmit = async () => {
     //delete updateDraft
     await deleteDocument("updateDraft", user.value!.uid);
     isPending.value = false;
-    if (!error.value) {
-      editor.value?.destroy();
-      coverImage.value = undefined;
-      imagePreviewUrl.value = "";
-      tags.value = [];
-
-      router.push("/all-posts");
-      isPending.value = false;
-    }
   }
 
   //create post
@@ -228,17 +218,16 @@ const handleSubmit = async () => {
     await addDocument("posts", newPost);
     //delete drafts
     await deleteDocument("createDraft", user.value!.uid);
-
     isPending.value = false;
-    if (!error.value) {
-      editor.value?.destroy();
-      coverImage.value = undefined;
-      imagePreviewUrl.value = "";
-      tags.value = [];
+  }
+  if (!error.value) {
+    editor.value?.destroy();
+    coverImage.value = undefined;
+    imagePreviewUrl.value = "";
+    tags.value = [];
 
-      router.push("/all-posts");
-      isPending.value = false;
-    }
+    router.push("/all-posts");
+    isPending.value = false;
   }
 };
 defineExpose({handleSubmit})

@@ -22,7 +22,7 @@ export interface Post {
     author: string;
     userUid: string;
   };
-  createdAt: string;
+  createdAt: Timestamp | string;
   editedAt?: Timestamp | null;
   readonly id?: string;
 }

@@ -13,7 +13,7 @@ html {
   height: 100%;
 
   @include respond(big-desktop) {
-    font-size: 75%;
+    font-size: 70%;
   }
 
   @include respond(smallest) {

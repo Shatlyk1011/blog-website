@@ -126,8 +126,9 @@ const handleDelete = async () => {
     await deleteImage(post.value!.imageRef); //nonsense
     await deleteDocument("posts", props.postId);
   }
-  if (!error.value && !deleteError.value) router.push("/all-posts");
-
+  if (!error.value && !deleteError.value)  {
+    router.push("/all-posts");
+  }
 };
 </script>
 

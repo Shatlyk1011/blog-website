@@ -3,16 +3,19 @@ import { db } from "@/firebase/config";
 import { addDoc, collection, setDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { Post, PostDraft, Comment } from "@/assets/Types";
 
+import { nanoid } from "nanoid";
+
 const error = ref<string | null>(null);
 
 type Data = Comment | Post | PostDraft;
 
-const addDocument = async (coll: string, data: Data) => {
-  const colRef = collection(db, coll);
+const addDocument = async (coll: string, data: Post) => {
+  let id = data.title.replaceAll(" ", "-") + "-" + nanoid(3);
+  const colRef = doc(db, coll, id);
 
   try {
     error.value = null;
-    await addDoc(colRef, data);
+    await setDoc(colRef, data);
   } catch (err: any) {
     error.value = err.message;
   }

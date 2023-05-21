@@ -16,7 +16,7 @@
         </li>
       </ul>
     </div>
-    <div v-else><code  style="line-height: 1.8">color highlight</code> будет применено после опубликации</div>
+    <div v-else><code  style="line-height: 1.8">code color highlight</code> будет применено после опубликации</div>
   </div>
 </template>
 
