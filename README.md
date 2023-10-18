@@ -15,12 +15,6 @@
 + Авторизация на базе firebase authentication через логин и пароль, либо через google account.
 + update 16.05 поиск по тегам/поиск по названию
 
-### Функционал над которым работаю
-+ Тесты
-+ Light mode (работаю над дизайном)
-+ UX
-
-
 ### live: https://set-web.netlify.app
 Тестовый аккаунт: <br/>
 email: **test@mailru**  <br/>
