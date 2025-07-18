@@ -81,6 +81,16 @@ const nextConfig = () => {
       ],
       unoptimized,
     },
+    async redirects() {
+      return [
+        {
+          source: '/tags',
+          destination: '/tags/next-js',
+          permanent: true,
+        },
+      ]
+    },
+
     async headers() {
       return [
         {
@@ -89,6 +99,7 @@ const nextConfig = () => {
         },
       ]
     },
+
     webpack: (config, options) => {
       config.module.rules.push({
         test: /\.svg$/,
