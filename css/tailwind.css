@@ -13,7 +13,6 @@
   /* Colors */
   /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
 
-
   --color-primary-50: oklch(0.97 0.014 254.604);
   --color-primary-100: oklch(0.932 0.032 255.585);
   --color-primary-200: oklch(0.882 0.059 254.128);
