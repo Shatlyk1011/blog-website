@@ -1,4 +1,4 @@
-## Welcome to my blog repository
+## Blog repository
 
 This project contains the source code and content for my personal blog, where I share thoughts, tutorials, and updates on various topics.
 
