@@ -10,7 +10,7 @@ const siteMetadata = {
   // siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // og image
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/og-image.png`,
   email: 'shatlykabdullayev@mail.ru',
   github: 'https://github.com/shatlyk1011',
   // youtube: 'https://youtube.com',
