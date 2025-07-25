@@ -11,7 +11,7 @@ const siteMetadata = {
   // siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // og image
-  socialBanner: `/static/images/og-image.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/opengraph-image.png`,
   email: 'shatlykabdullayev@mail.ru',
   github: 'https://github.com/shatlyk1011',
   // youtube: 'https://youtube.com',
