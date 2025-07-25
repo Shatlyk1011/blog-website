@@ -8,7 +8,7 @@ This repository was created by using and adapting a blog starter kit from [next-
 
 ## Demo
 
-https://blog.shatlykabdullayev.com/
+https://blog.shatlykabdullayev.com
 
 ## Licence
 This project is licensed under the MIT License.
