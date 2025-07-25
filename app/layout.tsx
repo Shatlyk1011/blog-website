@@ -60,7 +60,14 @@ export const metadata: Metadata = {
   twitter: {
     title: siteMetadata.title,
     card: 'summary_large_image',
-    images: [siteMetadata.socialBanner],
+    images: [
+      {
+        url: siteMetadata.socialBanner,
+        width: 1200,
+        height: 630,
+        alt: siteMetadata.title,
+      },
+    ],
   },
 }
 
