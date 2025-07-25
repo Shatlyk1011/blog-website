@@ -3,7 +3,8 @@ const siteMetadata = {
   title: 'Blog Webite',
   author: 'Shatlyk Abdullayev',
   // headerTitle: 'TailwindBlog',
-  description: 'Blog Website Related to Frontend Development',
+  description:
+    'Explore my blog for expert insights, tips, and tutorials on frontend development, UI/UX, and web design.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://shatlykabdullayev.com',
