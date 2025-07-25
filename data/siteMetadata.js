@@ -3,7 +3,7 @@ const siteMetadata = {
   title: 'Blog Webite',
   author: 'Shatlyk Abdullayev',
   // headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
+  description: 'Blog Website Related to Frontend Development',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://shatlykabdullayev.com',
