@@ -36,6 +36,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/Edil-ozi/edil-ozi',
     figmaUrl: 'https://www.figma.com/design/65gFXT6dvNfDjkX5osjZbu',
   },
+  {
+    title: 'Check out my Instagram to see all my work',
+    description: `Real World websites and many many more `,
+    imgSrc: '/static/images/projects/more-works.png',
+    href: 'https://www.instagram.com/devbyshat',
+  },
 ]
 
 export default projectsData
