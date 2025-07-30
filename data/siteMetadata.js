@@ -14,7 +14,7 @@ const siteMetadata = {
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/opengraph-image.png`,
   email: 'shatlykabdullayev@mail.ru',
   github: 'https://github.com/shatlyk1011',
-  // youtube: 'https://youtube.com',
+  youtube: 'https://www.youtube.com/@devbyshat',
   instagram: 'https://www.instagram.com/devbyshat',
   locale: 'en-US',
   // set to true if you want a navbar fixed to the top
