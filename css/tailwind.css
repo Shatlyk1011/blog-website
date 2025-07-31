@@ -174,3 +174,23 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+/* aspect ratio for ios devices with fallback*/
+/* 2 / 1 */
+.aspect-custom-banner {
+  aspect-ratio: 2 / 1;
+}
+
+/* Fallback for browsers that do not support aspect-ratio */
+@supports not (aspect-ratio: 2 / 1) {
+  .aspect-custom-banner::before {
+    float: left;
+    padding-top: 50%;
+    content: '';
+  }
+  .aspect-custom-banner::after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
