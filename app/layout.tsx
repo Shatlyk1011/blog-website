@@ -29,14 +29,6 @@ export const metadata: Metadata = {
     description: siteMetadata.description,
     url: './',
     siteName: siteMetadata.title,
-    images: [
-      {
-        url: siteMetadata.socialBanner,
-        width: 1200,
-        height: 630,
-        alt: siteMetadata.title,
-      },
-    ],
     locale: 'en_US',
     type: 'website',
   },
