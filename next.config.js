@@ -85,7 +85,7 @@ const nextConfig = () => {
       return [
         {
           source: '/tags',
-          destination: '/tags/next-js',
+          destination: '/tags/web-development',
           permanent: true,
         },
       ]
