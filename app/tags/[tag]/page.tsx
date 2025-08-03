@@ -1,4 +1,5 @@
 import { slug } from 'github-slugger'
+import { notFound } from 'next/navigation'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayoutWithTags'
@@ -7,6 +8,8 @@ import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 
+import { getOgImageUrl } from '@/lib/getOgImageUrl'
+
 const POSTS_PER_PAGE = 5
 
 export async function generateMetadata(props: {
@@ -14,15 +17,24 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const params = await props.params
   const tag = decodeURI(params.tag)
+  const naturalTagName = Object.keys(tagData).find((key) => slug(key) === tag)
+  if (!naturalTagName) {
+    return notFound()
+  }
   return genPageMetadata({
     title: tag,
-    description: `${siteMetadata.title} ${tag} tagged content`,
+    description: `${siteMetadata.title} ${naturalTagName} tagged content - All articles related to ${naturalTagName}`,
     alternates: {
       canonical: './',
       types: {
         'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
       },
     },
+    image: getOgImageUrl({
+      heading: naturalTagName,
+      type: 'Page',
+      mode: 'dark',
+    }),
   })
 }
 

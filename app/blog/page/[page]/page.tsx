@@ -3,6 +3,9 @@ import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
 import { notFound } from 'next/navigation'
 
+import { genPageMetadata } from '@/app/seo'
+import { getOgImageUrl } from '@/lib/getOgImageUrl'
+
 const POSTS_PER_PAGE = 5
 
 export const generateStaticParams = async () => {
@@ -11,6 +14,15 @@ export const generateStaticParams = async () => {
 
   return paths
 }
+
+export const metadata = genPageMetadata({
+  title: 'Blog',
+  image: getOgImageUrl({
+    heading: 'Blog',
+    type: 'Page',
+    mode: 'dark',
+  }),
+})
 
 export default async function Page(props: { params: Promise<{ page: string }> }) {
   const params = await props.params
