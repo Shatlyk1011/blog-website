@@ -7,7 +7,8 @@ const siteMetadata = {
     'Explore my blog for expert insights, tips, and tutorials on frontend development, UI/UX, and web design.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://shatlykabdullayev.com',
+  siteUrl: 'https://blog.shatlykabdullayev.com',
+  website: 'https://shatlykabdullayev.com',
   // siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   // og image
