@@ -1,11 +1,12 @@
 {
-  "web-development": 5,
-  "ui-ux": 1,
-  "code-snippets": 3,
   "performance": 3,
-  "tips": 1,
+  "web-development": 5,
+  "code-snippets": 3,
   "images": 1,
   "video": 1,
   "resources": 1,
-  "ai": 1
+  "ai": 1,
+  "react": 1,
+  "ui-ux": 1,
+  "tips": 1
 }
