@@ -98,7 +98,7 @@
       font-weight: 600;
     }
     & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+      @apply text-[#6200b3] dark:text-[#c879ff];
     }
   }
 
