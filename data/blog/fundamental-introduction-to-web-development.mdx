@@ -6,14 +6,20 @@ draft: false
 summary: Understanding how a browser works is essential. This guide focuses primarily on browser-based development.
 ---
 
+<TOCInline
+  toc={props.toc}
+  toHeading={3}
+
+/>
+
 ## Networking Fundamentals
 
-## Internet
+### Internet
 
 The **Internet** is a global network of computers used to exchange data.  
 It provides access to information, services, and communication across the world.
 
-## Server
+### Server
 
 A **server** is a machine that provides services to other programs or devices, known as **clients**.  
 Its role is to share data, resources, and distribute workloads.
@@ -49,7 +55,7 @@ For example, using the IP [142.250.190.78](http://142.250.190.78/) or the domain
 
 ![Google IP address example](/static/images/blog/google-ip.png)
 
-#### How it works:
+##### How it works
 
 1. **DNS Request:** The browser sends a request to a DNS server to get the IP address of the domain.
 2. **Caching:** Once fetched, the IP address is stored in the browser’s cache to speed up future visits.
@@ -85,7 +91,7 @@ In modern web development, knowing how browsers operate can make your websites f
 
 ## How the Browser Loads a Web Page
 
-### 1. Navigation
+### Navigation
 
 Navigation is the first step in loading a web page.
 
@@ -100,7 +106,7 @@ The server processes your request and sends a response containing files like `HT
 
 ---
 
-### 2. Request, Response, Parsing, Rendering
+### Request, Response, Parsing, Rendering
 
 #### Request
 
@@ -123,7 +129,7 @@ The browser also builds an **Accessibility Tree**, which is essential for assist
 
 ---
 
-### 3. Rendering
+### Rendering
 
 Rendering is turning HTML, CSS, and JavaScript into a visual webpage.
 
