@@ -1,16 +1,19 @@
 import { FC } from 'react'
 
+import { cn } from '@/lib/cn'
+
 interface Props {
   thead: string[]
   tbody: string[][]
   classes?: string
+  elementClass?: string
 }
 
-export const Table: FC<Props> = ({ thead, tbody, classes }) => {
+export const Table: FC<Props> = ({ thead, tbody, classes, elementClass }) => {
   return (
     <div className="no-scrollbar w-full overflow-x-scroll">
-      <table className={`scroll w-full text-lg ${classes}`}>
-        <thead className="leading-8 font-bold">
+      <table className={cn('scroll w-full text-base leading-[135%]', classes)}>
+        <thead className="leading-6 font-bold">
           <tr>
             {thead?.map((text) => (
               <th key={text} className="px-1">
@@ -21,9 +24,9 @@ export const Table: FC<Props> = ({ thead, tbody, classes }) => {
         </thead>
         <tbody>
           {tbody?.map((list, i) => (
-            <tr key={i} className="transition">
+            <tr key={i}>
               {list.map((text, i) => (
-                <td key={i} className="border border-white p-2.5">
+                <td key={i} className={cn(`border border-white/80 p-2.5`, elementClass)}>
                   {text}
                 </td>
               ))}
