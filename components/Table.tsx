@@ -5,11 +5,11 @@ import { cn } from '@/lib/cn'
 interface Props {
   thead: string[]
   tbody: string[][]
+  isHighlight?: boolean
   classes?: string
-  elementClass?: string
 }
 
-export const Table: FC<Props> = ({ thead, tbody, classes, elementClass }) => {
+export const CustomTable: FC<Props> = ({ thead, tbody, isHighlight, classes }) => {
   return (
     <div className="no-scrollbar w-full overflow-x-scroll">
       <table className={cn('scroll w-full text-base leading-[135%]', classes)}>
@@ -26,7 +26,10 @@ export const Table: FC<Props> = ({ thead, tbody, classes, elementClass }) => {
           {tbody?.map((list, i) => (
             <tr key={i}>
               {list.map((text, i) => (
-                <td key={i} className={cn(`border border-white/80 p-2.5`, elementClass)}>
+                <td
+                  key={i}
+                  className={cn('border border-white/80 p-2.5', isHighlight && 'first:font-bold')}
+                >
                   {text}
                 </td>
               ))}

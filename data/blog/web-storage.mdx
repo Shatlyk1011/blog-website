@@ -6,8 +6,6 @@ draft: false
 summary: Learn how debouncing and throttling work in JavaScript, with a detailed implementation and line-by-line explanation.
 ---
 
-import { WebStorageTableHead, WebStorageTableBody } from '../data'
-
 ## Overview
 
 Storing data on the client side is essential for creating seamless user experiences. Whether it's remembering a user's login session, saving preferences, or handling large datasets for offline functionality, choosing the right storage mechanism can make or break your application's performance and security.
@@ -179,4 +177,40 @@ request.onsuccess = function (e) {
 
 Here's a comparison table
 
-<CustomTable thead={WebStorageTableHead} tbody={WebStorageTableBody} />
+<CustomTable
+  isHighlight
+  tHead={['Feature', 'Cookies', 'Local Storage', 'Session Storage', 'IndexedDB']}
+  tbody={[
+    [
+      'Size Limit',
+      '~4KB per cookie',
+      '5-10 MiB per origin',
+      '5-10 MiB per origin',
+      'Up to 10-60% of disk',
+    ],
+    [
+      'Persistence',
+      'Session or set expiration',
+      'Across sessions',
+      'Tab/session only',
+      'Across sessions',
+    ],
+    ['Access', 'Client & Server', 'Client only', 'Client only', 'Client only'],
+    [
+      'Data Type',
+      'Strings',
+      'Strings (JSON for objects)',
+      'Strings (JSON for objects)',
+      'Structured objects/blobs',
+    ],
+    ['Sent with Requests', 'Yes', 'No', 'No', 'No'],
+    ['Async/Sync', 'Sync', 'Sync', 'Sync', 'Async'],
+    [
+      'Use Case',
+      'Sessions, tracking',
+      'Persistent preferences',
+      'Temporary tab data',
+      'Large/offline data',
+    ],
+  ]}
+/>
