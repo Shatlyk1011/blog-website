@@ -6,6 +6,8 @@ draft: false
 summary: Learn how debouncing and throttling work in JavaScript, with a detailed implementation and line-by-line explanation.
 ---
 
+import { WebStorageTableHead, WebStorageTableBody } from '../data'
+
 ## Overview
 
 Storing data on the client side is essential for creating seamless user experiences. Whether it's remembering a user's login session, saving preferences, or handling large datasets for offline functionality, choosing the right storage mechanism can make or break your application's performance and security.
@@ -174,3 +176,7 @@ request.onsuccess = function (e) {
 ```
 
 ## Key Comparisons
+
+Here's a comparison table
+
+<CustomTable thead={WebStorageTableHead} tbody={WebStorageTableBody} />
