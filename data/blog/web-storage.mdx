@@ -214,3 +214,36 @@ Here's a comparison table
     ],
   ]}
 />
+
+## Summary
+
+### Cookies
+
+- Oldest storage mechanism; exchanged between client & server with each request.
+- Ideal for small data (sessions, tokens, preferences).
+- ~4KB per cookie limit, automatically sent to server.
+- Support secure flags: HttpOnly, Secure, SameSite.
+- Best for: authentication sessions, persistent login, user tracking.
+
+### Local Storage
+
+- Part of Web Storage API, stores up to 5–10MB per origin.
+- Data persists until manually removed (or browser cleared).
+- Stores strings only; requires JSON for objects.
+- Not secure for sensitive info (accessible to JavaScript, XSS risk).
+- Best for: user preferences, cached app data, UI state.
+
+### Session Storage
+
+- Works like LocalStorage, but tied to a single browser tab/session.
+- Data clears automatically when the tab/window closes.
+- 5MB limit and string-only, synchronous API.
+- Best for: temporary data like form inputs, filters, or in-progress state.
+
+### IndexedDB
+
+- A full client-side database for structured or large data.
+- Storage quota in gigabytes (10GB+ depending on disk space).
+- Asynchronous API, supports objects, files, and binary data.
+- Persistent data, survives reloads and restarts.
+- Best for: offline apps, large datasets, media storage (e.g., downloaded videos).
