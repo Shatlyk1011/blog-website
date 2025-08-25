@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { cn } from '@/lib/cn'
+import { cn } from './../lib/cn'
 
 interface Props {
   thead: string[]
