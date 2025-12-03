@@ -17,6 +17,7 @@ const siteMetadata = {
   github: 'https://github.com/shatlyk1011',
   youtube: 'https://www.youtube.com/@devbyshat',
   instagram: 'https://www.instagram.com/devbyshat',
+  linkedin: 'https://www.linkedin.com/in/shatlyk1011',
   locale: 'en-US',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
