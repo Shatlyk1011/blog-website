@@ -98,7 +98,7 @@
       font-weight: 600;
     }
     & :where(code):not(pre code) {
-      @apply text-[#6200b3] dark:text-[#c879ff];
+      @apply text-[#3c6105] dark:text-[#ADDB67];
     }
   }
 
