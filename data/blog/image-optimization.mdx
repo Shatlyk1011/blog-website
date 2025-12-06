@@ -56,6 +56,16 @@ The `<picture>` element is a modern HTML feature that allows developers to provi
 
 - The browser reads (from top to bottom) the source element conditions and selects the first matching `<source>` element to load the appropriate image. If no condition satisfies, the fallback `<img/>` will be used.
 
+#### Why this important?
+
+- By serving smaller images to devices with smaller viewports, we reduce the amount of data transferred. Smaller images mean faster load times, especially on mobile devices with limited bandwidth.
+
+- Delivering appropriately sized images ensures that users see visuals tailored to their device’s screen size and resolution.
+
+- Faster-loading pages improve key web performance metrics like Largest Contentful Paint (LCP) and First Contentful Paint (FCP), which are part of Google’s Core Web Vitals. Better scores can boost your site’s search engine rankings.
+
+- The `<picture>` element supports art direction, allowing you to serve different image compositions (e.g., a close-up portrait for mobile vs. a wider shot for desktop). This ensures the image is visually optimized for each context, enhancing both aesthetics and performance.
+
 ### Why next.js build in Image component might be bad choice?
 
 > Why should I use the `<picture>` element for image optimization when built-in components like Next Image already provide image optimization features?
@@ -67,16 +77,6 @@ Next.js’s `<Image>` component, are tightly integrated with specific hosting pl
 - Relying on a platform’s image optimization service can make it harder to migrate to another hosting provider without losing the benefits of automated optimization or needing to reconfigure your setup.
 
 - Potential for Over-Optimization: Automated tools may overly compress images, leading to a noticeable loss in quality that can harm the visual appeal of your site, especially for high-resolution displays. Similarly, [Astro’s](https://docs.astro.build/en/guides/images/#default-image-service) default image optimization with Sharp may not allow for the same level of customization as manual optimization pipelines
-
-#### Why this important?
-
-- By serving smaller images to devices with smaller viewports, we reduce the amount of data transferred. Smaller images mean faster load times, especially on mobile devices with limited bandwidth.
-
-- Delivering appropriately sized images ensures that users see visuals tailored to their device’s screen size and resolution.
-
-- Faster-loading pages improve key web performance metrics like Largest Contentful Paint (LCP) and First Contentful Paint (FCP), which are part of Google’s Core Web Vitals. Better scores can boost your site’s search engine rankings.
-
-- The `<picture>` element supports art direction, allowing you to serve different image compositions (e.g., a close-up portrait for mobile vs. a wider shot for desktop). This ensures the image is visually optimized for each context, enhancing both aesthetics and performance.
 
 _See [browser supports](https://caniuse.com/picture) for `<picture>` element._
 
